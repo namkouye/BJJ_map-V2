@@ -107,6 +107,14 @@ const D = {
     'Técnica avanzada: prohibida en muchas competiciones según el nivel',
     'Técnica avançada: proibida em muitas competições conforme o nível',
   ],
+  riskylock: [
+    'Technique avancée à risque (colonne / aine) : interdite dans de nombreuses compétitions',
+    'Advanced, high-risk technique (spine / groin): banned in many competitions',
+    'Técnica avanzada de riesgo (columna / ingle): prohibida en muchas competiciones',
+    'Técnica avançada de risco (coluna / virilha): proibida em muitas competições',
+  ],
+  tapStar: ['Ajouter à mon jeu', 'Add to my game', 'Añadir a mi juego', 'Adicionar ao meu jogo'],
+  untapStar: ['Retirer de mon jeu', 'Remove from my game', 'Quitar de mi juego', 'Remover do meu jogo'],
   noteFrOnly: ['', 'Note in French', 'Nota en francés', 'Nota em francês'],
 
   profile: ['Profil actif', 'Active profile', 'Perfil activo', 'Perfil ativo'],

@@ -289,4 +289,32 @@ describe('import de profils', () => {
     const subs = bjjMap.positions.flatMap((p) => (['top', 'bottom'] as const).flatMap((r) => p[r]?.moves.filter((m) => m.kind === 'submission') ?? []));
     expect(subs.filter((m) => m.then?.length).length).toBeGreaterThan(subs.length * 0.8);
   });
+
+  it('applique les corrections BJJ (demi-garde, side control, dogfight, SLX…)', () => {
+    const names = (id: string, role: 'top' | 'bottom') =>
+      mapIndex.get(id)![role]!.moves.flatMap((m) => m.techniques.map((t) => t.name));
+    const hgTop = names('half-guard', 'top').join('|');
+    expect(hgTop).not.toMatch(/Back take|Smash pass|high mount|Pressure pass/);
+    expect(hgTop).toMatch(/Over-under pass/);
+    expect(hgTop).toMatch(/Leg weave pass/);
+    expect(mapIndex.get('half-guard')!.top!.moves.some((m) => m.kind === 'transition' && m.to === 'knee-on-belly:top')).toBe(false);
+    const hgBottom = names('half-guard', 'bottom').join('|');
+    expect(hgBottom).toMatch(/Enclave roll to turtle/);
+    expect(hgBottom).toMatch(/Ninja roll/);
+    expect(hgBottom).toMatch(/John Wayne/);
+    expect(hgBottom).not.toMatch(/Dogfight sweep|Back take via underhook|Sweep to mount/);
+    expect(names('dogfight', 'bottom').join('|')).toMatch(/Dive under sweep/);
+    expect(mapIndex.get('half-guard')!.bottom!.moves.some((m) => m.to === 'dogfight:bottom')).toBe(true);
+    const scBottom = mapIndex.get('side-control')!.bottom!;
+    expect(scBottom.moves.some((m) => m.finish === 'Guillotine')).toBe(false);
+    expect(names('side-control', 'bottom').join('|')).toMatch(/Stiff-arm hip escape/);
+    expect(names('side-control', 'bottom').join('|')).not.toMatch(/Underhook reversal/);
+    expect(names('k-guard', 'bottom').join('|')).toMatch(/Choi bar/);
+    expect(names('de-la-riva', 'bottom').join('|')).toMatch(/De La X/);
+    expect(names('de-la-riva', 'bottom').join('|')).toMatch(/Baby bolo/);
+    expect(['short-x', 'false-x', 'truck', 'quarter-mount', 'dogfight'].every((id) => mapIndex.has(id))).toBe(true);
+    const truckSubs = mapIndex.get('truck')!.top!.moves.map((m) => m.finish);
+    expect(truckSubs).toEqual(expect.arrayContaining(['Calf slicer', 'Banana split', 'Twister']));
+    expect(mapIndex.get('single-leg-x')!.top!.moves.some((m) => m.to === 'back-control:top')).toBe(true);
+  });
 });

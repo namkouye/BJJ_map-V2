@@ -70,6 +70,8 @@ interface MapNodeData extends Record<string, unknown> {
   target?: StateId;
   /** technique / soumission à ouvrir au clic (techKey ou finId) */
   item?: string;
+  /** techniques que l'étoile du nœud ajoute / retire de mon jeu */
+  pickKeys?: string[];
 }
 type MapFlowNode = Node<MapNodeData, 'map'>;
 
@@ -83,6 +85,15 @@ const SIDES = [
 const MapNode = memo(function MapNode({ data }: NodeProps<MapFlowNode>) {
   const d = data;
   const { t } = useI18n();
+  const togglePick = useStore((st) => st.togglePick);
+  const picks = useActiveProfile().picks;
+  const keys = d.pickKeys ?? [];
+  const allOn = keys.length > 0 && keys.every((k) => picks.includes(k));
+  const someOn = keys.some((k) => picks.includes(k));
+  const onStar = (e: { stopPropagation: () => void }) => {
+    e.stopPropagation();
+    for (const k of keys) if (allOn === picks.includes(k)) togglePick(k);
+  };
   return (
     <div
       className={`map-node ${d.variant} ${d.dashed ? 'dashed' : ''} ${d.faded ? 'faded' : ''} ${d.selected ? 'selected' : ''} ${d.target || d.item ? 'clickable' : ''}`}
@@ -95,6 +106,18 @@ const MapNode = memo(function MapNode({ data }: NodeProps<MapFlowNode>) {
         <Handle key={`t${k}`} id={`t-${k}`} type="target" position={p} className="handle" />
       ))}
       {d.start && <span className="start-flag">{t('start')}</span>}
+      {keys.length > 0 && (
+        <button
+          type="button"
+          className={`node-star nodrag nopan ${someOn ? 'on' : ''}`}
+          aria-pressed={someOn}
+          aria-label={t(allOn ? 'untapStar' : 'tapStar') + ' : ' + d.title}
+          title={t(allOn ? 'untapStar' : 'tapStar')}
+          onClick={onStar}
+        >
+          {someOn ? '★' : '☆'}
+        </button>
+      )}
       <div className="map-node-title">{d.title}</div>
       {d.subtitle && <div className="map-node-sub">{d.subtitle}</div>}
       <div className="map-node-meta">
@@ -103,7 +126,7 @@ const MapNode = memo(function MapNode({ data }: NodeProps<MapFlowNode>) {
             {d.chip}
           </span>
         )}
-        {!!d.stars && <span className="map-stars">★ {d.stars}</span>}
+        
       </div>
     </div>
   );
@@ -173,6 +196,11 @@ const OVERVIEW_POS: Record<string, { col: number; row: number }> = {
   saddle: { col: 2, row: 2.6 },
   'fifty-fifty': { col: 2, row: 3.7 },
   'k-guard': { col: 2, row: 4.9 },
+  dogfight: { col: 1, row: 5.3 },
+  'short-x': { col: 3, row: 0.2 },
+  'false-x': { col: 3, row: 2.5 },
+  truck: { col: 3, row: 5.4 },
+  'quarter-mount': { col: 4, row: 4.4 },
   headquarters: { col: 3, row: 1.5 },
   turtle: { col: 3, row: 3.4 },
   'front-headlock': { col: 3, row: 4.4 },
@@ -188,11 +216,11 @@ const OVERVIEW_POS: Record<string, { col: number; row: number }> = {
 const COMPACT_ORDER_LEFT = [
   'closed-guard', 'half-guard', 'knee-shield', 'deep-half-guard', 'butterfly-guard',
   'de-la-riva', 'reverse-de-la-riva', 'k-guard', 'spider-guard', 'lasso-guard', 'collar-sleeve-guard',
-  'x-guard', 'single-leg-x', 'saddle', 'fifty-fifty',
+  'x-guard', 'single-leg-x', 'short-x', 'false-x', 'saddle', 'fifty-fifty', 'dogfight',
 ];
 const COMPACT_ORDER_RIGHT = [
   'headquarters', 'side-control', 'kesa-gatame', 'north-south', 'knee-on-belly',
-  'mount', 'back-control', 'turtle', 'front-headlock',
+  'mount', 'back-control', 'quarter-mount', 'turtle', 'truck', 'front-headlock',
 ];
 const OVERVIEW_POS_COMPACT: Record<string, { col: number; row: number }> = {
   ...Object.fromEntries(COMPACT_ORDER_LEFT.map((id, row) => [id, { col: 0, row }])),
@@ -232,6 +260,7 @@ interface Sat {
   item?: string;
   dashed?: boolean;
   kind?: MoveKind;
+  pickKeys?: string[];
 }
 
 /* ------------------------------------------------------------------ */
@@ -277,12 +306,14 @@ function Inner() {
         stars: picked ? 1 : 0,
         item: techKey(mid, tname),
         kind,
+        pickKeys: [techKey(mid, tname)],
       });
 
       let centerTitle = pos.name;
       let centerSub: string | undefined = i18n.sideTitle(centerId);
       let centerColor = ROLE_COLORS[cp.role];
       let centerChip = ROLE_LABELS[cp.role];
+      let centerKeys: string[] | undefined;
 
       if (view === 'focus') {
         for (const m of side.moves) {
@@ -300,6 +331,7 @@ function Inner() {
               stars: picked.length,
               item: finId(mid),
               kind: 'submission',
+              pickKeys: m.techniques.map((x) => techKey(mid, x.name)),
             });
           } else {
             for (const tech of m.techniques) sats.push(techSat(mid, tech.name, m.to, m.kind, picked.includes(tech.name)));
@@ -312,6 +344,8 @@ function Inner() {
         centerSub = `${i18n.posName(pos)} · ${ROLE_LABELS[cp.role]}`;
         centerColor = KIND_COLORS[m.kind];
         centerChip = i18n.kindShort(m.kind);
+        const cmid = moveId(centerId, m);
+        centerKeys = item.tech ? [techKey(cmid, item.tech.name)] : m.techniques.map((x) => techKey(cmid, x.name));
         if (m.to) {
           sats.push({
             key: 'result',
@@ -354,6 +388,7 @@ function Inner() {
                 stars: pickedTechniques(profile, imid, im).length,
                 item: finId(imid),
                 kind: 'submission',
+                pickKeys: im.techniques.map((x) => techKey(imid, x.name)),
               });
             }
           }
@@ -383,6 +418,7 @@ function Inner() {
           variant: 'center',
           chip: centerChip,
           chipColor: centerColor,
+          pickKeys: centerKeys,
         },
       });
 
@@ -411,6 +447,7 @@ function Inner() {
             target: s.target,
             item: s.item,
             dashed: s.dashed,
+            pickKeys: s.pickKeys,
           },
         });
         edges.push(

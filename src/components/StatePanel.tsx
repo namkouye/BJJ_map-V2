@@ -53,7 +53,7 @@ function CustomAdder({ mid }: { mid: string }) {
 }
 
 /** Carte d'un mouvement : destination (ou finition) + techniques à étoiler. `only` limite à une technique. */
-function MoveCard({ from, move, only, open }: { from: StateId; move: Move; only?: string; open?: boolean }) {
+function MoveCard({ from, move, only }: { from: StateId; move: Move; only?: string }) {
   const profile = useActiveProfile();
   const select = useStore((s) => s.select);
   const togglePick = useStore((s) => s.togglePick);
@@ -86,7 +86,7 @@ function MoveCard({ from, move, only, open }: { from: StateId; move: Move; only?
         )}
         {picked.size > 0 && <span className="stars-badge">★ {picked.size}</span>}
       </div>
-      <details className="move-techs" open={open || picked.size > 0}>
+      <details className="move-techs" open>
         <summary>{t('techniqueCount', { n: total })}</summary>
         <ul>
           {techs.map((tech) => {
@@ -188,7 +188,7 @@ function ItemPanel({ from, itemId }: { from: StateId; itemId: string }) {
       </header>
 
       <ul className="moves">
-        <MoveCard from={from} move={m} only={item.tech?.name} open />
+        <MoveCard from={from} move={m} only={item.tech?.name} />
       </ul>
 
       {m.to && (

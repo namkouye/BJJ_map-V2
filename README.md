@@ -6,7 +6,7 @@ une carte intuitive de position à position, et un outil pour construire **son p
 ## Ce que fait l'application
 
 **Explorer** (idéal débutants)
-- Carte globale : 24 positions (gardes, passages, contrôles dominants, tortue…), 240 mouvements et plus de 300 techniques, sans détail technique sur la carte
+- Carte globale : 29 positions (gardes, passages, contrôles dominants, tortue, truck, dogfight…), 270 mouvements et plus de 350 techniques, sans détail technique sur la carte
 - Curseur **On top / On bottom** : on change de point de vue sur toute la carte
 - On touche une position : elle passe au centre et toutes ses possibilités apparaissent autour
   (passages, balayages, progressions, évasions, soumissions). Exemple : *On top → Headquarters*
@@ -15,6 +15,7 @@ une carte intuitive de position à position, et un outil pour construire **son p
 - **Thème de couleur** : bleu quand vous êtes *On top*, ambre quand vous êtes *On bottom*
 - Autour d'une position, ce sont les **techniques** qui apparaissent (scissor sweep, hip bump, arm drag…), pas seulement les positions d'arrivée
 - Touchez une technique ou une soumission : elle passe au centre avec son **résultat** et ses **plans B** (en cas d'échec : autres soumissions, autres balayages, retour en position…)
+- **Étoiles** : chaque technique a une étoile ☆ jaune directement sur la carte (et dans le panneau) pour l'ajouter à « Mon jeu » ; sur une soumission, l'étoile prend toutes ses variantes
 - **Langues** : bouton 🌐 en haut à droite (FR / EN / ES / PT)
 - Les techniques (avec une courte explication) sont dans le panneau de détail
 

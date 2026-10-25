@@ -6,6 +6,7 @@ import { useStore } from '../store/useStore';
 import { plural, translate, type UiKey } from './ui';
 
 const LEGLOCK_FR = 'Technique avancée : interdite dans de nombreuses compétitions selon le niveau';
+const RISK_FR = 'Technique avancée à risque (colonne / aine) : interdite dans de nombreuses compétitions';
 
 export function makeI18n(lang: Lang) {
   const pack = bjjMap.i18n?.[lang];
@@ -43,6 +44,7 @@ export function makeI18n(lang: Lang) {
     note: (tech: Technique): string | undefined => {
       if (!tech.note) return undefined;
       if (tech.note === LEGLOCK_FR) return translate(lang, 'leglock');
+      if (tech.note === RISK_FR) return translate(lang, 'riskylock');
       return tech.note;
     },
     kindLabel: (k: MoveKind) => translate(lang, `kind_${k}` as UiKey),
