@@ -3,6 +3,9 @@ import { bjjMap, mapIndex } from '../data/defaultMap';
 import {
   addCustom,
   entryTarget,
+  findItem,
+  itemThen,
+  resolveRef,
   gameEntries,
   getSide,
   layerGame,
@@ -73,7 +76,7 @@ describe('jeu de données (au sol)', () => {
     const techniques = bjjMap.positions.flatMap((p) =>
       (['top', 'bottom'] as const).flatMap((r) => (p[r]?.moves ?? []).flatMap((m) => m.techniques)),
     );
-    expect(techniques.length).toBeGreaterThanOrEqual(250);
+    expect(techniques.length).toBeGreaterThanOrEqual(300);
   });
 
   it('chaque position est atteignable depuis une autre position', () => {
@@ -257,5 +260,33 @@ describe('import de profils', () => {
     expect(sweeps.every((e) => e.kinds.every((k) => k === 'sweep'))).toBe(true);
     expect(overviewEdges(bjjMap, 'top', ['pass']).length).toBeGreaterThan(0);
     expect(overviewEdges(bjjMap, 'bottom', ['pass']).length).toBe(0);
+  });
+
+  it('retire la DLR de la garde fermée et ajoute la K-guard', () => {
+    const cg = mapIndex.get('closed-guard')!.bottom!;
+    expect(cg.moves.some((m) => m.to?.startsWith('de-la-riva'))).toBe(false);
+    expect(mapIndex.has('k-guard')).toBe(true);
+    expect(cg.moves.some((m) => m.to === 'k-guard:bottom')).toBe(true);
+  });
+
+  it('contient les finitions demandées (reverse triangle, leg scissors, crucifix)', () => {
+    const fins = (id: string, role: 'top' | 'bottom') =>
+      mapIndex.get(id)![role]!.moves.filter((m) => m.kind === 'submission').map((m) => m.finish);
+    expect(fins('north-south', 'top')).toEqual(expect.arrayContaining(['Reverse triangle', 'Leg scissors choke']));
+    expect(fins('turtle', 'top')).toContain('Crucifix');
+    expect(fins('back-control', 'top')).toContain('Crucifix');
+  });
+
+  it('les enchaînements de la garde fermée existent (arm drag → armbar, flower sweep)', () => {
+    const cg = sid('closed-guard', 'bottom');
+    const drag = findItem(mapIndex, cg, techKey(moveId(cg, mapIndex.get('closed-guard')!.bottom!.moves.find((m) => m.techniques.some((t) => t.name === 'Arm drag to back'))!), 'Arm drag to back'))!;
+    const names = itemThen(drag).map((r) => resolveRef(mapIndex, cg, r)).map((n) => (n?.type === 'item' ? (n.item.tech?.name ?? n.item.move.finish) : n?.id));
+    expect(names).toEqual(expect.arrayContaining(['Armbar', 'Flower (pendulum) sweep']));
+  });
+
+  it('chaque soumission a des enchaînements valides', () => {
+    expect(validateMap(bjjMap)).toEqual([]);
+    const subs = bjjMap.positions.flatMap((p) => (['top', 'bottom'] as const).flatMap((r) => p[r]?.moves.filter((m) => m.kind === 'submission') ?? []));
+    expect(subs.filter((m) => m.then?.length).length).toBeGreaterThan(subs.length * 0.8);
   });
 });

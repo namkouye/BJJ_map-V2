@@ -6,13 +6,16 @@ une carte intuitive de position à position, et un outil pour construire **son p
 ## Ce que fait l'application
 
 **Explorer** (idéal débutants)
-- Carte globale : 23 positions (gardes, passages, contrôles dominants, tortue…), 225 mouvements et près de 300 techniques, sans détail technique sur la carte
+- Carte globale : 24 positions (gardes, passages, contrôles dominants, tortue…), 240 mouvements et plus de 300 techniques, sans détail technique sur la carte
 - Curseur **On top / On bottom** : on change de point de vue sur toute la carte
 - On touche une position : elle passe au centre et toutes ses possibilités apparaissent autour
   (passages, balayages, progressions, évasions, soumissions). Exemple : *On top → Headquarters*
   affiche tous les passages de garde
 - **Boutons de filtre** : Tout / Passage / Balayage / Progression / Évasion / Soumission (cumulables) pour une carte plus claire, sur la carte d'ensemble comme autour d'une position
 - **Thème de couleur** : bleu quand vous êtes *On top*, ambre quand vous êtes *On bottom*
+- Autour d'une position, ce sont les **techniques** qui apparaissent (scissor sweep, hip bump, arm drag…), pas seulement les positions d'arrivée
+- Touchez une technique ou une soumission : elle passe au centre avec son **résultat** et ses **plans B** (en cas d'échec : autres soumissions, autres balayages, retour en position…)
+- **Langues** : bouton 🌐 en haut à droite (FR / EN / ES / PT)
 - Les techniques (avec une courte explication) sont dans le panneau de détail
 
 **Mon jeu** (personnalisation)
@@ -76,6 +79,11 @@ vue du joueur. Un « état » est `position:côté` (ex. `closed-guard:bottom`).
 }
 ```
 
+`then` (facultatif, sur une technique ou, pour une soumission, sur le mouvement) liste les enchaînements
+possibles : un état (`"back-control:top"`) ou le nom d'une technique / d'une soumission du même côté
+(`"Armbar"`, `"Flower (pendulum) sweep"`). Les traductions es / pt / en des titres et résumés sont dans
+`i18n` (même fichier) ; les noms de techniques restent en terminologie BJJ.
+
 Types de mouvements : `pass`, `sweep`, `transition`, `escape`, `submission`. Une soumission n'a pas de
 destination (`finish` à la place de `to`). `npm test` vérifie la cohérence (destinations existantes,
 un balayage mène toujours à un état « dessus », un passage part toujours du dessus…).
@@ -89,6 +97,7 @@ placer une nouvelle position sur la vue d'ensemble, complétez `OVERVIEW_POS` da
 ## Limites connues
 
 - Les données (profils) vivent dans le navigateur : exportez régulièrement. Vider les données du site les efface.
+- Les petites explications des techniques (`note`) sont en français uniquement pour l'instant ; l'interface, les positions, les résumés et les soumissions sont traduits.
 - La partie debout (takedowns) est volontairement absente pour l'instant.
 - Le heel hook est inclus à titre éducatif : interdit dans de nombreuses catégories de compétition.
 

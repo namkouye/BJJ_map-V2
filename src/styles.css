@@ -223,3 +223,13 @@ input:focus, select:focus, textarea:focus, button:focus-visible { outline: 2px s
 .map-node.faded { opacity: 0.35; }
 .map-node.pos { width: 150px; min-height: 58px; padding: 6px 8px; }
 .map-node.pos .map-node-title { font-size: 0.8rem; }
+
+/* ---------- Langue ---------- */
+.top-actions { display: flex; align-items: center; gap: 8px; }
+.lang-menu { position: relative; }
+.lang-btn { padding: 6px 10px; font-weight: 600; }
+.lang-list { position: absolute; right: 0; top: calc(100% + 6px); z-index: 50; margin: 0; padding: 4px; list-style: none; min-width: 150px; background: var(--panel-2); border: 1px solid var(--border); border-radius: 10px; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45); }
+.lang-list button { width: 100%; text-align: left; background: none; border: 0; color: var(--text); padding: 9px 10px; border-radius: 7px; cursor: pointer; }
+.lang-list button:hover, .lang-list button.on { background: var(--bg); }
+.lang-list b { display: inline-block; width: 28px; color: var(--accent); }
+.tech-link { text-align: left; font-weight: 600; }

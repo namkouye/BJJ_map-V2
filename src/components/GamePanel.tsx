@@ -1,9 +1,11 @@
 import { bjjMap, mapIndex } from '../data/defaultMap';
 import { GAME_LABELS, KIND_COLORS, ROLE_COLORS } from '../graph/labels';
 import { gameEntries, parseSid, profileStats, sid } from '../graph/model';
+import { useI18n } from '../i18n/useI18n';
 import { useActiveProfile, useStore } from '../store/useStore';
 
 function ProfileBar() {
+  const { t } = useI18n();
   const profiles = useStore((s) => s.profiles);
   const activeId = useStore((s) => s.activeId);
   const setActive = useStore((s) => s.setActive);
@@ -16,7 +18,7 @@ function ProfileBar() {
   return (
     <div className="profile-bar">
       <label>
-        Profil actif
+        {t('profile')}
         <select value={activeId} onChange={(e) => setActive(e.target.value)}>
           {profiles.map((p) => (
             <option key={p.id} value={p.id}>
@@ -29,32 +31,32 @@ function ProfileBar() {
         <button
           className="btn small"
           onClick={() => {
-            const name = window.prompt('Nom du nouveau profil (ex : Jeu compétition, Jeu no-gi)');
+            const name = window.prompt(t('promptNew'));
             if (name !== null) createProfile(name);
           }}
         >
-          + Nouveau
+          {t('newProfile')}
         </button>
         <button
           className="btn small"
           onClick={() => {
-            const name = window.prompt('Nouveau nom du profil', profile.name);
+            const name = window.prompt(t('promptRename'), profile.name);
             if (name) renameProfile(profile.id, name);
           }}
         >
-          Renommer
+          {t('rename')}
         </button>
         <button className="btn small" onClick={() => duplicateProfile(profile.id)}>
-          Dupliquer
+          {t('duplicate')}
         </button>
         <button
           className="btn small danger"
           disabled={profiles.length <= 1}
           onClick={() =>
-            window.confirm(`Supprimer le profil « ${profile.name} » ?`) && deleteProfile(profile.id)
+            window.confirm(t('confirmDelete', { name: profile.name })) && deleteProfile(profile.id)
           }
         >
-          Supprimer
+          {t('deleteBtn')}
         </button>
       </div>
     </div>
@@ -62,6 +64,8 @@ function ProfileBar() {
 }
 
 export function GamePanel() {
+  const i18n = useI18n();
+  const { t } = i18n;
   const role = useStore((s) => s.role);
   const setMode = useStore((s) => s.setMode);
   const setStart = useStore((s) => s.setStart);
@@ -75,7 +79,7 @@ export function GamePanel() {
 
   const startOptions = bjjMap.positions
     .filter((p) => p[role])
-    .map((p) => ({ id: sid(p.id, role), label: `${p.name} — ${p[role]!.titleFr}` }));
+    .map((p) => ({ id: sid(p.id, role), label: `${p.name} — ${i18n.sideTitle(sid(p.id, role))}` }));
 
   const build = (from: string) => {
     setMode('explore');
@@ -89,18 +93,18 @@ export function GamePanel() {
       <div className="stats">
         <div style={{ borderColor: ROLE_COLORS.top }}>
           <strong>{stats.top}</strong>
-          <span>techniques en game top</span>
+          <span>{t('statTop')}</span>
         </div>
         <div style={{ borderColor: ROLE_COLORS.bottom }}>
           <strong>{stats.bottom}</strong>
-          <span>techniques en game bottom</span>
+          <span>{t('statBottom')}</span>
         </div>
       </div>
 
       <section>
-        <h3>Départ du {GAME_LABELS[role].toLowerCase()}</h3>
+        <h3>{t('startOf', { game: GAME_LABELS[role].toLowerCase() })}</h3>
         <select value={start ?? ''} onChange={(e) => setStart(role, e.target.value || null)}>
-          <option value="">— Choisir une position —</option>
+          <option value="">{t('choosePos')}</option>
           {startOptions.map((o) => (
             <option key={o.id} value={o.id}>
               {o.label}
@@ -108,17 +112,14 @@ export function GamePanel() {
           ))}
         </select>
         <button className="btn primary block" disabled={!start} onClick={() => start && build(start)}>
-          {entries.length ? 'Continuer à construire depuis le départ' : 'Construire depuis cette position'}
+          {entries.length ? t('continueBuild') : t('startBuild')}
         </button>
       </section>
 
       <section>
-        <h3>Mes techniques ({GAME_LABELS[role].toLowerCase()})</h3>
+        <h3>{t('myTechs', { game: GAME_LABELS[role].toLowerCase() })}</h3>
         {!entries.length && (
-          <p className="empty">
-            Rien pour l'instant. Choisissez un départ, puis étoilez vos techniques en explorant :
-            chaque étoile ajoute une flèche à votre carte.
-          </p>
+          <p className="empty">{t('gameEmpty')}</p>
         )}
         <ul className="picked-list">
           {entries.map((e) => {
@@ -137,7 +138,7 @@ export function GamePanel() {
                     {mapIndex.get(dest!.position)?.name}
                   </button>
                 ) : (
-                  <strong className="finish-name">{e.move.finish}</strong>
+                  <strong className="finish-name">{i18n.lang === 'fr' ? i18n.finish(e.move) : e.move.finish}</strong>
                 )}
                 <small>{e.names.join(' · ')}</small>
               </li>
@@ -145,10 +146,7 @@ export function GamePanel() {
           })}
         </ul>
         {entries.length > 0 && (
-          <p className="hint-text">
-            Les destinations marquées « ↪ » sur la carte se continuent dans l'autre côté
-            ({GAME_LABELS[role === 'top' ? 'bottom' : 'top'].toLowerCase()}).
-          </p>
+          <p className="hint-text">{t('continueOther', { game: GAME_LABELS[role === 'top' ? 'bottom' : 'top'].toLowerCase() })}</p>
         )}
       </section>
     </div>

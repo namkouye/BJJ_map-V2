@@ -20,6 +20,11 @@ export interface Technique {
   name: string;
   /** Explication courte (français) pour les débutants */
   note?: string;
+  /**
+   * Et ensuite ? Enchaînements possibles (par ex. si la technique échoue) :
+   * un état (`headquarters:top`) ou le nom d'une technique / d'une soumission du même côté.
+   */
+  then?: string[];
 }
 
 /**
@@ -32,6 +37,8 @@ export interface Move {
   to?: StateId;
   finish?: string;
   finishFr?: string;
+  /** Pour une soumission : enchaînements en cas d'échec (même format que Technique.then) */
+  then?: string[];
   techniques: Technique[];
 }
 
@@ -52,8 +59,17 @@ export interface Position {
   bottom?: PositionSide;
 }
 
+/** Traductions facultatives (es / pt) ; le français et l'anglais sont dans les champs de base. */
+export type Lang = 'fr' | 'en' | 'es' | 'pt';
+export interface LangPack {
+  positions: Record<string, string>;
+  sides: Record<StateId, { title: string; summary: string }>;
+  finishes: Record<string, string>;
+}
+
 export interface BJJMap {
   version: number;
+  i18n?: Partial<Record<Lang, LangPack>>;
   positions: Position[];
 }
 

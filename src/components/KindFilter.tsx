@@ -1,6 +1,7 @@
 import { bjjMap, mapIndex } from '../data/defaultMap';
-import { KIND_COLORS, KIND_ORDER, KIND_SHORT } from '../graph/labels';
+import { KIND_COLORS, KIND_ORDER } from '../graph/labels';
 import { countKinds, getSide, roleMoves } from '../graph/model';
+import { useI18n } from '../i18n/useI18n';
 import { useStore } from '../store/useStore';
 
 /**
@@ -8,6 +9,7 @@ import { useStore } from '../store/useStore';
  * (ex. uniquement les soumissions, ou progressions + soumissions).
  */
 export function KindFilter() {
+  const { t, kindShort } = useI18n();
   const role = useStore((s) => s.role);
   const selected = useStore((s) => s.selected);
   const kindFilter = useStore((s) => s.kindFilter);
@@ -19,14 +21,14 @@ export function KindFilter() {
   const kinds = KIND_ORDER.filter((k) => counts[k]);
 
   return (
-    <div className="kind-filter" role="group" aria-label="Types de mouvements">
+    <div className="kind-filter" role="group" aria-label={t('moveTypes')}>
       <button
         type="button"
         className={`kchip ${kindFilter.length === 0 ? 'on' : ''}`}
         aria-pressed={kindFilter.length === 0}
         onClick={clearKinds}
       >
-        Tout
+        {t('all')}
       </button>
       {kinds.map((k) => {
         const on = kindFilter.includes(k);
@@ -39,7 +41,7 @@ export function KindFilter() {
             aria-pressed={on}
             onClick={() => toggleKind(k)}
           >
-            {KIND_SHORT[k]} <span className="kcount">{counts[k]}</span>
+            {kindShort(k)} <span className="kcount">{counts[k]}</span>
           </button>
         );
       })}

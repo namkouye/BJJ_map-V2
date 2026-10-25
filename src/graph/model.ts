@@ -7,6 +7,7 @@ import type {
   Profile,
   Role,
   StateId,
+  Technique,
 } from './types';
 
 /* ------------------------------------------------------------------ */
@@ -55,6 +56,66 @@ export const techKey = (mid: string, name: string): string => `${mid}::${name}`;
 export const finId = (mid: string): string => `fin:${mid}`;
 
 /* ------------------------------------------------------------------ */
+/* Éléments d'un état : techniques et soumissions                      */
+/* ------------------------------------------------------------------ */
+
+export interface Item {
+  /** techKey (technique) ou finId (soumission) */
+  id: string;
+  from: StateId;
+  move: Move;
+  /** absent pour une soumission (on parle alors de la finition) */
+  tech?: Technique;
+}
+
+/** Retrouve un élément (technique ou soumission) à partir de son identifiant. */
+export function findItem(index: MapIndex, from: StateId, itemId: string): Item | undefined {
+  const side = getSide(index, from);
+  if (!side) return undefined;
+  if (itemId.startsWith('fin:')) {
+    const mid = itemId.slice(4);
+    const move = side.moves.find((m) => m.kind === 'submission' && moveId(from, m) === mid);
+    return move ? { id: itemId, from, move } : undefined;
+  }
+  const i = itemId.indexOf('::');
+  if (i < 0) return undefined;
+  const mid = itemId.slice(0, i);
+  const name = itemId.slice(i + 2);
+  for (const move of side.moves) {
+    if (moveId(from, move) !== mid) continue;
+    const tech = move.techniques.find((t) => t.name === name);
+    if (tech) return { id: itemId, from, move, tech };
+  }
+  return undefined;
+}
+
+export type Next =
+  | { type: 'state'; id: StateId }
+  | { type: 'item'; item: Item };
+
+/** Traduit une référence de `then` (état, technique ou soumission du même côté). */
+export function resolveRef(index: MapIndex, from: StateId, ref: string): Next | undefined {
+  const parsed = parseSid(ref);
+  if (parsed && getSide(index, ref)) return { type: 'state', id: ref };
+  const side = getSide(index, from);
+  if (!side) return undefined;
+  for (const move of side.moves) {
+    if (move.kind === 'submission') continue;
+    if (move.techniques.some((t) => t.name === ref)) {
+      return { type: 'item', item: findItem(index, from, techKey(moveId(from, move), ref))! };
+    }
+  }
+  const sub = side.moves.find((m) => m.kind === 'submission' && m.finish === ref);
+  if (sub) return { type: 'item', item: findItem(index, from, finId(moveId(from, sub)))! };
+  return undefined;
+}
+
+/** Enchaînements d'un élément : technique → then de la technique, soumission → then du mouvement. */
+export function itemThen(item: Item): string[] {
+  return (item.tech ? item.tech.then : item.move.then) ?? [];
+}
+
+/* ------------------------------------------------------------------ */
 /* Validation du jeu de données                                        */
 /* ------------------------------------------------------------------ */
 
@@ -84,6 +145,10 @@ export function validateMap(input: unknown): string[] {
         seen.add(mid);
         if (!KINDS.includes(m.kind)) errors.push(`${from} : type invalide (${m.kind})`);
         if (!m.techniques?.length) errors.push(`${mid} : aucune technique`);
+        const refs = [...(m.then ?? []), ...m.techniques.flatMap((t) => t.then ?? [])];
+        for (const r of refs) {
+          if (!resolveRef(index, from, r)) errors.push(`${mid} : enchaînement introuvable (${r})`);
+        }
         if (m.kind === 'submission') {
           if (!m.finish) errors.push(`${mid} : soumission sans "finish"`);
           if (m.to) errors.push(`${mid} : une soumission n'a pas de destination`);

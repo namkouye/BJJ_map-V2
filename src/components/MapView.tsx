@@ -19,26 +19,33 @@ import {
   GAME_LABELS,
   KIND_COLORS,
   KIND_ORDER,
-  KIND_SHORT,
   ROLE_COLORS,
   ROLE_LABELS,
 } from '../graph/labels';
 import {
   entryTarget,
+  finId,
+  findItem,
   gameEntries,
   getSide,
+  itemThen,
   layerGame,
   matchesKinds,
   moveId,
   overviewEdges,
   parseSid,
   pickedTechniques,
+  resolveRef,
   sid,
+  techKey,
 } from '../graph/model';
 import type { MoveKind, Role, StateId } from '../graph/types';
+import { useI18n } from '../i18n/useI18n';
 import { useActiveProfile, useStore } from '../store/useStore';
 import { KindFilter } from './KindFilter';
 import { RoleToggle } from './RoleToggle';
+
+const posEn = (id: StateId): string => mapIndex.get(parseSid(id)?.position ?? '')?.name ?? id;
 
 const NODE_W = 184;
 const NODE_H = 62;
@@ -61,6 +68,8 @@ interface MapNodeData extends Record<string, unknown> {
   selected?: boolean;
   /** état à sélectionner au clic */
   target?: StateId;
+  /** technique / soumission à ouvrir au clic (techKey ou finId) */
+  item?: string;
 }
 type MapFlowNode = Node<MapNodeData, 'map'>;
 
@@ -73,9 +82,10 @@ const SIDES = [
 
 const MapNode = memo(function MapNode({ data }: NodeProps<MapFlowNode>) {
   const d = data;
+  const { t } = useI18n();
   return (
     <div
-      className={`map-node ${d.variant} ${d.dashed ? 'dashed' : ''} ${d.faded ? 'faded' : ''} ${d.selected ? 'selected' : ''} ${d.target ? 'clickable' : ''}`}
+      className={`map-node ${d.variant} ${d.dashed ? 'dashed' : ''} ${d.faded ? 'faded' : ''} ${d.selected ? 'selected' : ''} ${d.target || d.item ? 'clickable' : ''}`}
       style={{ borderColor: d.color }}
     >
       {SIDES.map(([k, p]) => (
@@ -84,7 +94,7 @@ const MapNode = memo(function MapNode({ data }: NodeProps<MapFlowNode>) {
       {SIDES.map(([k, p]) => (
         <Handle key={`t${k}`} id={`t-${k}`} type="target" position={p} className="handle" />
       ))}
-      {d.start && <span className="start-flag">Départ</span>}
+      {d.start && <span className="start-flag">{t('start')}</span>}
       <div className="map-node-title">{d.title}</div>
       {d.subtitle && <div className="map-node-sub">{d.subtitle}</div>}
       <div className="map-node-meta">
@@ -162,6 +172,7 @@ const OVERVIEW_POS: Record<string, { col: number; row: number }> = {
   'single-leg-x': { col: 2, row: 1.5 },
   saddle: { col: 2, row: 2.6 },
   'fifty-fifty': { col: 2, row: 3.7 },
+  'k-guard': { col: 2, row: 4.9 },
   headquarters: { col: 3, row: 1.5 },
   turtle: { col: 3, row: 3.4 },
   'front-headlock': { col: 3, row: 4.4 },
@@ -176,7 +187,7 @@ const OVERVIEW_POS: Record<string, { col: number; row: number }> = {
 /** Variante portrait (téléphone) : deux colonnes, la carte se parcourt en la faisant glisser. */
 const COMPACT_ORDER_LEFT = [
   'closed-guard', 'half-guard', 'knee-shield', 'deep-half-guard', 'butterfly-guard',
-  'de-la-riva', 'reverse-de-la-riva', 'spider-guard', 'lasso-guard', 'collar-sleeve-guard',
+  'de-la-riva', 'reverse-de-la-riva', 'k-guard', 'spider-guard', 'lasso-guard', 'collar-sleeve-guard',
   'x-guard', 'single-leg-x', 'saddle', 'fifty-fifty',
 ];
 const COMPACT_ORDER_RIGHT = [
@@ -211,11 +222,16 @@ function useCompact(): boolean {
 
 interface Sat {
   key: string;
-  kind: MoveKind;
-  to?: StateId;
-  finish?: string;
-  finishFr?: string;
+  title: string;
+  subtitle?: string;
+  color: string;
+  variant: 'sat' | 'finish';
+  chip: string;
   stars: number;
+  target?: StateId;
+  item?: string;
+  dashed?: boolean;
+  kind?: MoveKind;
 }
 
 /* ------------------------------------------------------------------ */
@@ -224,55 +240,149 @@ function Inner() {
   const mode = useStore((s) => s.mode);
   const role = useStore((s) => s.role);
   const selected = useStore((s) => s.selected);
+  const selItem = useStore((s) => s.selItem);
   const select = useStore((s) => s.select);
+  const i18n = useI18n();
+  const { t } = i18n;
   const setMode = useStore((s) => s.setMode);
   const profile = useActiveProfile();
   const { fitView, setViewport } = useReactFlow();
   const compact = useCompact();
+  const lang = i18n.lang;
   const kindFilter = useStore((s) => s.kindFilter);
 
-  const view: 'overview' | 'focus' | 'game' =
-    mode === 'game' ? 'game' : selected && getSide(mapIndex, selected) ? 'focus' : 'overview';
+  const item = selected && selItem ? findItem(mapIndex, selected, selItem) : undefined;
+  const view: 'overview' | 'focus' | 'item' | 'game' =
+    mode === 'game' ? 'game' : selected && getSide(mapIndex, selected) ? (item ? 'item' : 'focus') : 'overview';
 
   const { nodes, edges, empty } = useMemo(() => {
     const nodes: MapFlowNode[] = [];
     const edges: Edge[] = [];
     let empty = false;
 
-    if (view === 'focus') {
+    if (view === 'focus' || view === 'item') {
       const centerId = selected!;
       const cp = parseSid(centerId)!;
       const pos = mapIndex.get(cp.position)!;
       const side = getSide(mapIndex, centerId)!;
-
       const sats: Sat[] = [];
-      for (const m of side.moves) {
-        if (!matchesKinds(m.kind, kindFilter)) continue;
-        const mid = moveId(centerId, m);
-        const stars = pickedTechniques(profile, mid, m).length;
+
+      const techSat = (mid: string, tname: string, to: StateId | undefined, kind: MoveKind, picked: boolean): Sat => ({
+        key: techKey(mid, tname),
+        title: tname,
+        subtitle: to ? `→ ${i18n.stateName(to)}` : undefined,
+        color: KIND_COLORS[kind],
+        variant: 'sat',
+        chip: i18n.kindShort(kind),
+        stars: picked ? 1 : 0,
+        item: techKey(mid, tname),
+        kind,
+      });
+
+      let centerTitle = pos.name;
+      let centerSub: string | undefined = i18n.sideTitle(centerId);
+      let centerColor = ROLE_COLORS[cp.role];
+      let centerChip = ROLE_LABELS[cp.role];
+
+      if (view === 'focus') {
+        for (const m of side.moves) {
+          if (!matchesKinds(m.kind, kindFilter)) continue;
+          const mid = moveId(centerId, m);
+          const picked = pickedTechniques(profile, mid, m);
+          if (m.kind === 'submission') {
+            sats.push({
+              key: finId(mid),
+              title: m.finish ?? '',
+              subtitle: lang === 'en' ? undefined : i18n.finish(m),
+              color: KIND_COLORS.submission,
+              variant: 'finish',
+              chip: i18n.kindShort('submission'),
+              stars: picked.length,
+              item: finId(mid),
+              kind: 'submission',
+            });
+          } else {
+            for (const tech of m.techniques) sats.push(techSat(mid, tech.name, m.to, m.kind, picked.includes(tech.name)));
+          }
+        }
+        sats.sort((a, b) => KIND_ORDER.indexOf(a.kind!) - KIND_ORDER.indexOf(b.kind!));
+      } else if (item) {
+        const m = item.move;
+        centerTitle = item.tech ? item.tech.name : (m.finish ?? '');
+        centerSub = `${i18n.posName(pos)} · ${ROLE_LABELS[cp.role]}`;
+        centerColor = KIND_COLORS[m.kind];
+        centerChip = i18n.kindShort(m.kind);
+        if (m.to) {
+          sats.push({
+            key: 'result',
+            title: posEn(m.to),
+            subtitle: i18n.sideTitle(m.to),
+            color: KIND_COLORS[m.kind],
+            variant: 'sat',
+            chip: t('result'),
+            stars: 0,
+            target: m.to,
+          });
+        }
+        for (const ref of itemThen(item)) {
+          const r = resolveRef(mapIndex, centerId, ref);
+          if (!r) continue;
+          if (r.type === 'state') {
+            sats.push({
+              key: `b-${r.id}`,
+              title: posEn(r.id),
+              subtitle: i18n.sideTitle(r.id),
+              color: '#94a3b8',
+              variant: 'sat',
+              chip: 'Plan B',
+              stars: 0,
+              target: r.id,
+            });
+          } else {
+            const im = r.item.move;
+            const imid = moveId(centerId, im);
+            if (r.item.tech) {
+              sats.push({ ...techSat(imid, r.item.tech.name, im.to, im.kind, pickedTechniques(profile, imid, im).includes(r.item.tech.name)), chip: `Plan B · ${i18n.kindShort(im.kind)}` });
+            } else {
+              sats.push({
+                key: finId(imid),
+                title: im.finish ?? '',
+                subtitle: lang === 'en' ? undefined : i18n.finish(im),
+                color: KIND_COLORS.submission,
+                variant: 'finish',
+                chip: `Plan B · ${i18n.kindShort('submission')}`,
+                stars: pickedTechniques(profile, imid, im).length,
+                item: finId(imid),
+                kind: 'submission',
+              });
+            }
+          }
+        }
         sats.push({
-          key: `${m.kind}:${m.to ?? `fin-${m.finish}`}`,
-          kind: m.kind,
-          to: m.to,
-          finish: m.finish,
-          finishFr: m.finishFr,
-          stars,
+          key: 'back',
+          title: pos.name,
+          subtitle: `${ROLE_LABELS[cp.role]} · ${i18n.sideTitle(centerId)}`,
+          color: ROLE_COLORS[cp.role],
+          variant: 'sat',
+          chip: t('backTo'),
+          stars: 0,
+          target: centerId,
+          dashed: true,
         });
       }
-      sats.sort((a, b) => KIND_ORDER.indexOf(a.kind) - KIND_ORDER.indexOf(b.kind));
 
       nodes.push({
-        id: centerId,
+        id: 'center',
         type: 'map',
         position: { x: -NODE_W / 2 - 16, y: -NODE_H / 2 - 8 },
         draggable: false,
         data: {
-          title: pos.name,
-          subtitle: side.titleFr,
-          color: ROLE_COLORS[cp.role],
+          title: centerTitle,
+          subtitle: centerSub,
+          color: centerColor,
           variant: 'center',
-          chip: ROLE_LABELS[cp.role],
-          chipColor: ROLE_COLORS[cp.role],
+          chip: centerChip,
+          chipColor: centerColor,
         },
       });
 
@@ -285,38 +395,26 @@ function Inner() {
       sats.forEach((s, i) => {
         const angle = -Math.PI / 2 + (i * 2 * Math.PI) / n;
         const p: Pos = { x: Math.cos(angle) * rx, y: Math.sin(angle) * ry };
-        const color = KIND_COLORS[s.kind];
-        const dest = s.to ? parseSid(s.to) : null;
-        const destPos = dest ? mapIndex.get(dest.position) : undefined;
-        const destSide = s.to ? getSide(mapIndex, s.to) : undefined;
         nodes.push({
           id: s.key,
           type: 'map',
           position: { x: p.x - NODE_W / 2, y: p.y - NODE_H / 2 },
           draggable: false,
-          data: s.to
-            ? {
-                title: destPos?.name ?? s.to,
-                subtitle: destSide?.titleFr,
-                color,
-                variant: 'sat',
-                chip: KIND_SHORT[s.kind],
-                chipColor: color,
-                stars: s.stars,
-                target: s.to,
-              }
-            : {
-                title: s.finish ?? 'Soumission',
-                subtitle: s.finishFr,
-                color,
-                variant: 'finish',
-                chip: KIND_SHORT[s.kind],
-                chipColor: color,
-                stars: s.stars,
-              },
+          data: {
+            title: s.title,
+            subtitle: s.subtitle,
+            color: s.color,
+            variant: s.variant,
+            chip: s.chip,
+            chipColor: s.color,
+            stars: s.stars,
+            target: s.target,
+            item: s.item,
+            dashed: s.dashed,
+          },
         });
         edges.push(
-          makeEdge(`e-${s.key}`, centerId, s.key, color, {
+          makeEdge(`e-${s.key}`, 'center', s.key, s.color, {
             handles: faceHandles(center, p),
             width: s.stars ? 3.2 : 2,
           }),
@@ -334,10 +432,10 @@ function Inner() {
           draggable: false,
           data: {
             title: p.name,
-            subtitle: p.nameFr,
+            subtitle: lang === 'en' ? undefined : i18n.posName(p),
             color: FAMILY_COLORS[p.family],
             variant: 'pos',
-            chip: side ? `${shown} option${shown > 1 ? 's' : ''}` : undefined,
+            chip: side ? t('options', { n: shown }) : undefined,
             chipColor: '#cbd5e1',
             faded: kindFilter.length > 0 && shown === 0,
             target,
@@ -362,7 +460,7 @@ function Inner() {
         const f = parseSid(e.from)!;
         labels.set(e.from, {
           title: mapIndex.get(f.position)?.name ?? e.from,
-          subtitle: getSide(mapIndex, e.from)?.titleFr,
+          subtitle: i18n.sideTitle(e.from),
           stateRole: f.role,
         });
         const t = entryTarget(e);
@@ -371,11 +469,11 @@ function Inner() {
           if (!labels.has(t))
             labels.set(t, {
               title: mapIndex.get(d.position)?.name ?? t,
-              subtitle: getSide(mapIndex, t)?.titleFr,
+              subtitle: i18n.sideTitle(t),
               stateRole: d.role,
             });
         } else {
-          labels.set(t, { title: e.move.finish ?? 'Soumission', subtitle: e.move.finishFr, finish: true });
+          labels.set(t, { title: e.move.finish ?? '', subtitle: lang === 'en' ? undefined : i18n.finish(e.move), finish: true });
         }
       }
       // colonnes par profondeur
@@ -398,7 +496,7 @@ function Inner() {
               subtitle: l.subtitle,
               color: l.finish ? KIND_COLORS.submission : l.stateRole ? ROLE_COLORS[l.stateRole] : '#94a3b8',
               variant: l.finish ? 'finish' : 'game',
-              chip: l.finish ? 'Soumission' : otherSide ? `↪ ${GAME_LABELS[l.stateRole!]}` : undefined,
+              chip: l.finish ? i18n.kindShort('submission') : otherSide ? `↪ ${GAME_LABELS[l.stateRole!]}` : undefined,
               chipColor: l.finish ? KIND_COLORS.submission : ROLE_COLORS[l.stateRole ?? role],
               start: id === start,
               dashed: otherSide,
@@ -415,10 +513,10 @@ function Inner() {
       }
     }
     return { nodes, edges, empty };
-  }, [view, selected, role, profile, compact, kindFilter]);
+  }, [view, selected, selItem, role, profile, compact, kindFilter, lang]);
 
   // Recadre la vue quand le mode, la sélection ou le contenu change.
-  const viewKey = `${compact ? 'c' : 'w'}:${kindFilter.join('+')}:${view}:${view === 'focus' ? selected : ''}:${view === 'overview' || view === 'game' ? role : ''}:${nodes.length}`;
+  const viewKey = `${compact ? 'c' : 'w'}:${kindFilter.join('+')}:${view}:${view === 'focus' || view === 'item' ? `${selected}|${selItem}` : ''}:${view === 'overview' || view === 'game' ? role : ''}:${nodes.length}`;
   useEffect(() => {
     const t = setTimeout(() => {
       if (view === 'overview' && compact) {
@@ -442,10 +540,11 @@ function Inner() {
         nodesDraggable={false}
         nodesConnectable={false}
         onNodeClick={(_, n) => {
-          const target = (n.data as MapNodeData).target;
-          if (target) select(target);
+          const d = n.data as MapNodeData;
+          if (d.item && selected) select(selected, d.item);
+          else if (d.target) select(d.target);
         }}
-        onPaneClick={() => view === 'focus' && select(null)}
+        onPaneClick={() => (view === 'focus' ? select(null) : view === 'item' && selected ? select(selected) : undefined)}
         minZoom={0.15}
         maxZoom={2}
         colorMode="dark"
@@ -458,19 +557,29 @@ function Inner() {
 
       <div className="graph-top">
         <RoleToggle />
-        {view !== 'game' && <KindFilter />}
+        {(view === 'overview' || view === 'focus') && <KindFilter />}
         {view === 'focus' && (
           <div className="pill">
             <span>
               {mapIndex.get(selectedParsed!.position)?.name} · {ROLE_LABELS[selectedParsed!.role]}
             </span>
             <button className="btn small" onClick={() => select(null)}>
-              Vue d'ensemble
+              {t('overviewBtn')}
+            </button>
+          </div>
+        )}
+        {view === 'item' && item && (
+          <div className="pill">
+            <span>
+              {mapIndex.get(selectedParsed!.position)?.name} · {ROLE_LABELS[selectedParsed!.role]} › <strong>{item.tech ? item.tech.name : item.move.finish}</strong>
+            </span>
+            <button className="btn small" onClick={() => select(selected)}>
+              ← {t('backTo')}
             </button>
           </div>
         )}
         {view === 'overview' && (
-          <div className="pill hint">Touchez une position pour voir toutes ses possibilités</div>
+          <div className="pill hint">{t('overviewHint')}</div>
         )}
         {view === 'game' && (
           <div className="pill">
@@ -483,13 +592,10 @@ function Inner() {
 
       {view === 'game' && empty && (
         <div className="empty-overlay">
-          <strong>Votre {GAME_LABELS[role].toLowerCase()} est vide.</strong>
-          <p>
-            Choisissez une position de départ dans le panneau, puis étoilez vos techniques
-            favorites en explorant la carte.
-          </p>
+          <strong>{t('emptyGame', { game: GAME_LABELS[role].toLowerCase() })}</strong>
+          <p>{t('emptyGameHelp')}</p>
           <button className="btn primary" onClick={() => setMode('explore')}>
-            Explorer la carte
+            {t('exploreMap')}
           </button>
         </div>
       )}
@@ -498,7 +604,7 @@ function Inner() {
         {KIND_ORDER.map((k) => (
           <span key={k}>
             <i style={{ background: KIND_COLORS[k] }} />
-            {KIND_SHORT[k]}
+            {i18n.kindShort(k)}
           </span>
         ))}
       </div>

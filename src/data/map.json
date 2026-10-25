@@ -1,5 +1,653 @@
 {
- "version": 2,
+ "version": 3,
+ "i18n": {
+  "en": {
+   "sides": {
+    "closed-guard:top": {
+     "summary": "The opponent's legs are locked around you. Keep a strong posture, open the guard without getting caught, then pass."
+    },
+    "closed-guard:bottom": {
+     "summary": "Your legs are locked around the opponent. You control their posture and look for sweeps and submissions."
+    },
+    "half-guard:top": {
+     "summary": "One of your legs is trapped between the opponent's. Win the cross-face and underhook, free the leg, then pass."
+    },
+    "half-guard:bottom": {
+     "summary": "You trap one of the opponent's legs. Keep a frame and an underhook to sweep, recover guard or take the back."
+    },
+    "knee-shield:top": {
+     "summary": "The opponent keeps a knee shield on your chest. Crush the shield or go around it."
+    },
+    "knee-shield:bottom": {
+     "summary": "Side half guard with a knee shield on the opponent's chest. Very solid against passing."
+    },
+    "deep-half-guard:top": {
+     "summary": "The opponent is under your hip with one leg trapped. Lower your hips and don't let the leg be lifted."
+    },
+    "deep-half-guard:bottom": {
+     "summary": "Under the opponent's hip with one of their legs trapped. A very effective sweeping position."
+    },
+    "butterfly-guard:top": {
+     "summary": "The opponent is seated with hooks inside your thighs. Keep your hips low and neutralise the hooks."
+    },
+    "butterfly-guard:bottom": {
+     "summary": "Seated, hooks under the thighs, underhooks. A mobile, explosive guard."
+    },
+    "k-guard:top": {
+     "summary": "The opponent's shin is wedged inside your thigh. Keep your hips low and get out before the leg entries."
+    },
+    "k-guard:bottom": {
+     "summary": "Your shin sits inside the opponent's thigh while your other leg controls the hip. Great for entering X-guard, saddle or the back."
+    },
+    "de-la-riva:top": {
+     "summary": "The opponent's foot hooks your standing leg. Remove the hook, then pass."
+    },
+    "de-la-riva:bottom": {
+     "summary": "Outside hook around the standing leg, grips on the sleeve and ankle."
+    },
+    "reverse-de-la-riva:top": {
+     "summary": "The opponent's hook comes from inside your leg. Clear it and move forward to pass."
+    },
+    "reverse-de-la-riva:bottom": {
+     "summary": "Hook from the inside of the opponent's leg. Useful against an opponent who stays square."
+    },
+    "spider-guard:top": {
+     "summary": "The opponent controls your sleeves and pushes your biceps with their feet. Break the grips before passing."
+    },
+    "spider-guard:bottom": {
+     "summary": "Feet on the biceps, sleeve control. An excellent distance guard in the gi."
+    },
+    "lasso-guard:top": {
+     "summary": "One of the opponent's legs is wrapped around your arm. Free it before moving forward."
+    },
+    "lasso-guard:bottom": {
+     "summary": "Leg wrapped around the arm, sleeve control. Locks the opponent down very well."
+    },
+    "collar-sleeve-guard:top": {
+     "summary": "The opponent holds your collar and sleeve. Break the grips and keep your distance."
+    },
+    "collar-sleeve-guard:bottom": {
+     "summary": "One hand on the collar, one on the sleeve, feet on the hips. A very versatile gi guard."
+    },
+    "x-guard:top": {
+     "summary": "The opponent is under your hip with one leg under your thigh. Unload the bottom hook to stabilise."
+    },
+    "x-guard:bottom": {
+     "summary": "Under the opponent's hip, one leg under their thigh and the other in an outside hook. An excellent sweeping position."
+    },
+    "single-leg-x:top": {
+     "summary": "One of your legs is trapped between the opponent's. Protect the heel and extract the leg."
+    },
+    "single-leg-x:bottom": {
+     "summary": "One of the opponent's legs is trapped between yours, ankle under control. Sweeps and leg locks."
+    },
+    "saddle:top": {
+     "summary": "The opponent controls your leg with theirs in the saddle. Get your knee out before they lock it."
+    },
+    "saddle:bottom": {
+     "summary": "A very strong control for leg locks: the opponent's leg is locked between your thighs."
+    },
+    "fifty-fifty:top": {
+     "summary": "Your legs are crossed with the opponent's, both can attack. Be quick to get out or to attack."
+    },
+    "fifty-fifty:bottom": {
+     "summary": "Legs crossed with the opponent's. A key position for leg attacks and sweeps."
+    },
+    "headquarters:top": {
+     "summary": "One knee between the opponent's legs, the other foot on the floor. The base of most guard passes."
+    },
+    "headquarters:bottom": {
+     "summary": "The passer is in HQ. Stay active with your feet and frames to recover a guard."
+    },
+    "side-control:top": {
+     "summary": "Dominant position perpendicular to the opponent. The starting point towards mount, the back and armlocks."
+    },
+    "side-control:bottom": {
+     "summary": "A difficult position: protect your neck, build frames and look to recover guard."
+    },
+    "kesa-gatame:top": {
+     "summary": "Hip against the shoulder, the opponent's head between your arms. Strong control with good arm attacks."
+    },
+    "kesa-gatame:bottom": {
+     "summary": "The opponent is glued to your shoulder. Bridge, hip escape and frame to free the head."
+    },
+    "north-south:top": {
+     "summary": "Above the opponent's head, facing their legs. Very stable with good finishes."
+    },
+    "north-south:bottom": {
+     "summary": "Your head is stuck under the opponent's hips. Bridge and frame to free the head."
+    },
+    "knee-on-belly:top": {
+     "summary": "One knee on the abdomen, the other foot on the floor. A pressure position with quick transitions."
+    },
+    "knee-on-belly:bottom": {
+     "summary": "Weight on your abdomen. Frame the knee and recover a guard."
+    },
+    "mount:top": {
+     "summary": "Seated on the opponent's torso. A very dominant position with many submissions."
+    },
+    "mount:bottom": {
+     "summary": "The hardest position. Protect your neck and arms, create space."
+    },
+    "back-control:top": {
+     "summary": "Behind the opponent with seatbelt and hooks. The position with the best finishing rate."
+    },
+    "back-control:bottom": {
+     "summary": "Priority: protect the neck, remove the hooks and slide to the floor."
+    },
+    "turtle:top": {
+     "summary": "The opponent is on all fours. Take the back or flatten them out."
+    },
+    "turtle:bottom": {
+     "summary": "On all fours, elbows and knees close together. A defensive position to leave quickly."
+    },
+    "front-headlock:top": {
+     "summary": "You control the opponent's head under your arm, hips low. Choke or go behind."
+    },
+    "front-headlock:bottom": {
+     "summary": "Your head is controlled. Restore your posture and clear it before they attack."
+    }
+   }
+  },
+  "es": {
+   "sides": {
+    "closed-guard:top": {
+     "title": "En la guardia cerrada",
+     "summary": "Las piernas del rival están cerradas a tu alrededor. Mantén una postura firme, abre la guardia sin que te ataquen y pasa."
+    },
+    "closed-guard:bottom": {
+     "title": "Guardia cerrada",
+     "summary": "Tus piernas rodean al rival. Controlas su postura y buscas barridas y sumisiones."
+    },
+    "half-guard:top": {
+     "title": "Media guardia (arriba)",
+     "summary": "Una de tus piernas queda atrapada entre las del rival. Gana el cross-face y el underhook, libera la pierna y pasa."
+    },
+    "half-guard:bottom": {
+     "title": "Media guardia (abajo)",
+     "summary": "Atrapas una pierna del rival. Mantén un frame y un underhook para barrer, recuperar la guardia o tomar la espalda."
+    },
+    "knee-shield:top": {
+     "title": "Frente al escudo de rodilla",
+     "summary": "El rival mantiene la rodilla como escudo en tu pecho. Aplasta el escudo o rodéalo."
+    },
+    "knee-shield:bottom": {
+     "title": "Escudo de rodilla (Z-guard)",
+     "summary": "Media guardia de lado con la rodilla como escudo en el pecho del rival. Muy sólida contra el pase."
+    },
+    "deep-half-guard:top": {
+     "title": "Sobre la deep half",
+     "summary": "El rival está bajo tu cadera con una pierna atrapada. Baja las caderas y no dejes que levante la pierna."
+    },
+    "deep-half-guard:bottom": {
+     "title": "Deep half guard",
+     "summary": "Bajo la cadera del rival con una de sus piernas atrapada. Posición de barrida muy eficaz."
+    },
+    "butterfly-guard:top": {
+     "title": "Frente a la guardia mariposa",
+     "summary": "El rival está sentado con ganchos dentro de tus muslos. Mantén las caderas bajas y neutraliza los ganchos."
+    },
+    "butterfly-guard:bottom": {
+     "title": "Guardia mariposa",
+     "summary": "Sentado, ganchos bajo los muslos, underhooks. Guardia móvil y explosiva."
+    },
+    "k-guard:top": {
+     "title": "Frente a la guardia K",
+     "summary": "La espinilla del rival está encajada dentro de tu muslo. Mantén las caderas bajas y sal antes de las entradas de piernas."
+    },
+    "k-guard:bottom": {
+     "title": "Guardia K",
+     "summary": "Tu espinilla está dentro del muslo del rival y la otra pierna controla la cadera. Excelente para entrar a X-guard, silla o espalda."
+    },
+    "de-la-riva:top": {
+     "title": "Frente a la De La Riva",
+     "summary": "El pie del rival engancha tu pierna de apoyo. Quita el gancho y pasa."
+    },
+    "de-la-riva:bottom": {
+     "title": "Guardia De La Riva",
+     "summary": "Gancho exterior alrededor de la pierna de apoyo, agarres en la manga y el tobillo."
+    },
+    "reverse-de-la-riva:top": {
+     "title": "Frente a la De La Riva invertida",
+     "summary": "El gancho del rival entra por dentro de tu pierna. Libéralo y avanza para pasar."
+    },
+    "reverse-de-la-riva:bottom": {
+     "title": "De La Riva invertida",
+     "summary": "Gancho por dentro de la pierna del rival. Útil contra un rival que se queda de frente."
+    },
+    "spider-guard:top": {
+     "title": "Frente a la guardia araña",
+     "summary": "El rival controla tus mangas y empuja tus bíceps con los pies. Rompe los agarres antes de pasar."
+    },
+    "spider-guard:bottom": {
+     "title": "Guardia araña (kimono)",
+     "summary": "Pies en los bíceps, control de mangas. Excelente guardia de distancia con kimono."
+    },
+    "lasso-guard:top": {
+     "title": "Frente a la guardia lazo",
+     "summary": "Una pierna del rival está enrollada en tu brazo. Libérala antes de avanzar."
+    },
+    "lasso-guard:bottom": {
+     "title": "Guardia lazo (kimono)",
+     "summary": "Pierna enrollada en el brazo, control de la manga. Inmoviliza muy bien al rival."
+    },
+    "collar-sleeve-guard:top": {
+     "title": "Frente a la guardia cuello-manga",
+     "summary": "El rival agarra tu cuello y tu manga. Rompe los agarres y mantén la distancia."
+    },
+    "collar-sleeve-guard:bottom": {
+     "title": "Guardia cuello-manga (kimono)",
+     "summary": "Una mano en el cuello, otra en la manga, pies en las caderas. Guardia muy versátil con kimono."
+    },
+    "x-guard:top": {
+     "title": "Frente a la X-guard",
+     "summary": "El rival está bajo tu cadera con una pierna bajo tu muslo. Descarga el gancho inferior para estabilizarte."
+    },
+    "x-guard:bottom": {
+     "title": "X-guard",
+     "summary": "Bajo la cadera del rival, una pierna bajo su muslo y la otra en gancho exterior. Excelente posición de barrida."
+    },
+    "single-leg-x:top": {
+     "title": "Pierna atrapada (SLX)",
+     "summary": "Una de tus piernas queda atrapada entre las del rival. Protege el talón y saca la pierna."
+    },
+    "single-leg-x:bottom": {
+     "title": "Single leg X",
+     "summary": "Una pierna del rival está atrapada entre las tuyas, tobillo bajo control. Barridas y llaves de pierna."
+    },
+    "saddle:top": {
+     "title": "Atrapado en la silla",
+     "summary": "El rival controla tu pierna con las suyas en la silla. Saca la rodilla antes de que la bloquee."
+    },
+    "saddle:bottom": {
+     "title": "Silla (inside sankaku)",
+     "summary": "Control muy fuerte para llaves de pierna: la pierna del rival queda bloqueada entre tus muslos."
+    },
+    "fifty-fifty:top": {
+     "title": "50/50 (arriba)",
+     "summary": "Tus piernas están cruzadas con las del rival, ambos pueden atacar. Sé rápido para salir o atacar."
+    },
+    "fifty-fifty:bottom": {
+     "title": "Guardia 50/50",
+     "summary": "Piernas cruzadas con las del rival. Posición clave para ataques de pierna y barridas."
+    },
+    "headquarters:top": {
+     "title": "Headquarters (HQ)",
+     "summary": "Una rodilla entre las piernas del rival, el otro pie en el suelo. Es la base de la mayoría de los pases de guardia."
+    },
+    "headquarters:bottom": {
+     "title": "Guardia abierta (frente al HQ)",
+     "summary": "El pasador está en HQ. Mantente activo con los pies y los frames para recuperar una guardia."
+    },
+    "side-control:top": {
+     "title": "Control lateral (arriba)",
+     "summary": "Posición dominante perpendicular al rival. Punto de partida hacia la montada, la espalda y las llaves de brazo."
+    },
+    "side-control:bottom": {
+     "title": "Bajo el control lateral",
+     "summary": "Posición difícil: protege el cuello, crea frames y busca recuperar la guardia."
+    },
+    "kesa-gatame:top": {
+     "title": "Kesa gatame (bufanda)",
+     "summary": "Cadera contra el hombro, la cabeza del rival entre tus brazos. Control fuerte con buenas llaves de brazo."
+    },
+    "kesa-gatame:bottom": {
+     "title": "Bajo el kesa gatame",
+     "summary": "El rival está pegado a tu hombro. Puente, hip escape y frames para liberar la cabeza."
+    },
+    "north-south:top": {
+     "title": "Norte-sur",
+     "summary": "Sobre la cabeza del rival, de cara a sus piernas. Muy estable y con buenas finalizaciones."
+    },
+    "north-south:bottom": {
+     "title": "Bajo el norte-sur",
+     "summary": "Tu cabeza está bloqueada bajo las caderas del rival. Puente y frames para liberar la cabeza."
+    },
+    "knee-on-belly:top": {
+     "title": "Rodilla en el abdomen",
+     "summary": "Una rodilla en el abdomen, el otro pie en el suelo. Posición de presión y de transición rápida."
+    },
+    "knee-on-belly:bottom": {
+     "title": "Bajo la rodilla en el abdomen",
+     "summary": "Peso sobre el abdomen. Haz frame sobre la rodilla y recupera una guardia."
+    },
+    "mount:top": {
+     "title": "Montada",
+     "summary": "Sentado sobre el torso del rival. Posición muy dominante con muchas sumisiones."
+    },
+    "mount:bottom": {
+     "title": "Bajo la montada",
+     "summary": "La posición más difícil. Protege el cuello y los brazos, crea espacio."
+    },
+    "back-control:top": {
+     "title": "Control de espalda",
+     "summary": "Detrás del rival con seatbelt y ganchos. La posición con mejor tasa de finalización."
+    },
+    "back-control:bottom": {
+     "title": "Espalda tomada",
+     "summary": "Prioridad: proteger el cuello, quitar los ganchos y deslizarte al suelo."
+    },
+    "turtle:top": {
+     "title": "Atacar la tortuga",
+     "summary": "El rival está a cuatro apoyos. Toma la espalda o aplástalo."
+    },
+    "turtle:bottom": {
+     "title": "Tortuga",
+     "summary": "A cuatro apoyos, codos y rodillas cerca. Posición defensiva que conviene dejar rápido."
+    },
+    "front-headlock:top": {
+     "title": "Control de cabeza (front headlock)",
+     "summary": "Controlas la cabeza del rival bajo tu brazo, caderas bajas. Estrangula o ve detrás."
+    },
+    "front-headlock:bottom": {
+     "title": "Atrapado en el front headlock",
+     "summary": "Tu cabeza está controlada. Recupera la postura y libérala antes de que ataque."
+    }
+   },
+   "positions": {
+    "closed-guard": "Guardia cerrada",
+    "half-guard": "Media guardia",
+    "knee-shield": "Escudo de rodilla (Z-guard)",
+    "deep-half-guard": "Deep half guard",
+    "butterfly-guard": "Guardia mariposa",
+    "k-guard": "Guardia K",
+    "de-la-riva": "De La Riva",
+    "reverse-de-la-riva": "De La Riva invertida",
+    "spider-guard": "Guardia araña (kimono)",
+    "lasso-guard": "Guardia lazo (kimono)",
+    "collar-sleeve-guard": "Guardia cuello-manga (kimono)",
+    "x-guard": "X-guard",
+    "single-leg-x": "Single leg X",
+    "saddle": "Silla (inside sankaku)",
+    "fifty-fifty": "Guardia 50/50",
+    "headquarters": "Posición HQ",
+    "side-control": "Control lateral",
+    "kesa-gatame": "Kesa gatame (bufanda)",
+    "north-south": "Norte-sur",
+    "knee-on-belly": "Rodilla en el abdomen",
+    "mount": "Montada",
+    "back-control": "Control de espalda",
+    "turtle": "Tortuga",
+    "front-headlock": "Front headlock"
+   },
+   "finishes": {
+    "Armbar": "Llave de brazo",
+    "Triangle choke": "Triángulo",
+    "Kimura": "Kimura",
+    "Omoplata": "Omoplata",
+    "Cross collar choke": "Estrangulación cuello cruzado",
+    "Loop choke": "Estrangulación en lazo",
+    "Guillotine": "Guillotina",
+    "Americana": "Americana",
+    "D'Arce choke": "D'Arce",
+    "Arm triangle choke": "Estrangulación brazo-cabeza",
+    "Paper cutter choke": "Paper cutter",
+    "Straight ankle lock": "Llave de tobillo recta",
+    "Kneebar": "Llave de rodilla",
+    "Heel hook": "Heel hook",
+    "Calf slicer": "Calf slicer",
+    "Baseball bat choke": "Baseball bat choke",
+    "North-south choke": "Estrangulación norte-sur",
+    "Reverse triangle": "Triángulo invertido",
+    "Leg scissors choke": "Estrangulación con tijera de piernas",
+    "Ezekiel choke": "Estrangulación Ezequiel",
+    "Rear naked choke": "Estrangulación desnuda (mata león)",
+    "Bow and arrow choke": "Arco y flecha",
+    "Crucifix": "Crucifijo",
+    "Clock choke": "Clock choke",
+    "Anaconda choke": "Anaconda"
+   }
+  },
+  "pt": {
+   "sides": {
+    "closed-guard:top": {
+     "title": "Na guarda fechada",
+     "summary": "As pernas do adversário estão fechadas em volta de você. Mantenha a postura, abra a guarda sem ser pego e passe."
+    },
+    "closed-guard:bottom": {
+     "title": "Guarda fechada",
+     "summary": "Suas pernas estão fechadas em volta do adversário. Você controla a postura e busca raspagens e finalizações."
+    },
+    "half-guard:top": {
+     "title": "Meia-guarda (por cima)",
+     "summary": "Uma das suas pernas está presa entre as do adversário. Ganhe o cross-face e o underhook, livre a perna e passe."
+    },
+    "half-guard:bottom": {
+     "title": "Meia-guarda (por baixo)",
+     "summary": "Você prende uma perna do adversário. Mantenha um frame e um underhook para raspar, recuperar a guarda ou pegar as costas."
+    },
+    "knee-shield:top": {
+     "title": "Contra o escudo de joelho",
+     "summary": "O adversário mantém o joelho como escudo no seu peito. Esmague o escudo ou contorne-o."
+    },
+    "knee-shield:bottom": {
+     "title": "Escudo de joelho (Z-guard)",
+     "summary": "Meia-guarda de lado com o joelho como escudo no peito do adversário. Muito sólida contra a passagem."
+    },
+    "deep-half-guard:top": {
+     "title": "Sobre a deep half",
+     "summary": "O adversário está sob o seu quadril com uma perna presa. Abaixe o quadril e não deixe levantarem a perna."
+    },
+    "deep-half-guard:bottom": {
+     "title": "Deep half guard",
+     "summary": "Sob o quadril do adversário com uma das pernas dele presa. Posição de raspagem muito eficaz."
+    },
+    "butterfly-guard:top": {
+     "title": "Contra a guarda borboleta",
+     "summary": "O adversário está sentado com ganchos dentro das suas coxas. Mantenha o quadril baixo e neutralize os ganchos."
+    },
+    "butterfly-guard:bottom": {
+     "title": "Guarda borboleta",
+     "summary": "Sentado, ganchos sob as coxas, underhooks. Guarda móvel e explosiva."
+    },
+    "k-guard:top": {
+     "title": "Contra a guarda K",
+     "summary": "A canela do adversário está encaixada na sua coxa. Mantenha o quadril baixo e saia antes das entradas de perna."
+    },
+    "k-guard:bottom": {
+     "title": "Guarda K",
+     "summary": "Sua canela fica dentro da coxa do adversário e a outra perna controla o quadril. Ótima para entrar na X-guard, sela ou costas."
+    },
+    "de-la-riva:top": {
+     "title": "Contra a De La Riva",
+     "summary": "O pé do adversário prende a sua perna de apoio. Retire o gancho e passe."
+    },
+    "de-la-riva:bottom": {
+     "title": "Guarda De La Riva",
+     "summary": "Gancho por fora na perna de apoio, pegadas na manga e no tornozelo."
+    },
+    "reverse-de-la-riva:top": {
+     "title": "Contra a De La Riva invertida",
+     "summary": "O gancho do adversário entra por dentro da sua perna. Livre-o e avance para passar."
+    },
+    "reverse-de-la-riva:bottom": {
+     "title": "De La Riva invertida",
+     "summary": "Gancho por dentro da perna do adversário. Útil contra quem fica de frente."
+    },
+    "spider-guard:top": {
+     "title": "Contra a guarda aranha",
+     "summary": "O adversário controla suas mangas e empurra seus bíceps com os pés. Quebre as pegadas antes de passar."
+    },
+    "spider-guard:bottom": {
+     "title": "Guarda aranha (kimono)",
+     "summary": "Pés nos bíceps, controle das mangas. Excelente guarda de distância no kimono."
+    },
+    "lasso-guard:top": {
+     "title": "Contra a guarda laço",
+     "summary": "Uma perna do adversário está enrolada no seu braço. Livre-a antes de avançar."
+    },
+    "lasso-guard:bottom": {
+     "title": "Guarda laço (kimono)",
+     "summary": "Perna enrolada no braço, controle da manga. Prende muito bem o adversário."
+    },
+    "collar-sleeve-guard:top": {
+     "title": "Contra a guarda gola-manga",
+     "summary": "O adversário segura sua gola e sua manga. Quebre as pegadas e mantenha a distância."
+    },
+    "collar-sleeve-guard:bottom": {
+     "title": "Guarda gola-manga (kimono)",
+     "summary": "Uma mão na gola, outra na manga, pés nos quadris. Guarda muito versátil no kimono."
+    },
+    "x-guard:top": {
+     "title": "Contra a X-guard",
+     "summary": "O adversário está sob o seu quadril com uma perna sob a sua coxa. Descarregue o gancho de baixo para se estabilizar."
+    },
+    "x-guard:bottom": {
+     "title": "X-guard",
+     "summary": "Sob o quadril do adversário, uma perna sob a coxa dele e a outra em gancho por fora. Excelente posição de raspagem."
+    },
+    "single-leg-x:top": {
+     "title": "Perna presa (SLX)",
+     "summary": "Uma das suas pernas está presa entre as do adversário. Proteja o calcanhar e retire a perna."
+    },
+    "single-leg-x:bottom": {
+     "title": "Single leg X",
+     "summary": "Uma perna do adversário está presa entre as suas, tornozelo sob controle. Raspagens e finalizações de perna."
+    },
+    "saddle:top": {
+     "title": "Preso na sela",
+     "summary": "O adversário controla sua perna com as dele na sela. Tire o joelho antes que ele trave."
+    },
+    "saddle:bottom": {
+     "title": "Sela (inside sankaku)",
+     "summary": "Controle muito forte para finalizações de perna: a perna do adversário fica travada entre suas coxas."
+    },
+    "fifty-fifty:top": {
+     "title": "50/50 (por cima)",
+     "summary": "Suas pernas estão cruzadas com as do adversário, ambos podem atacar. Seja rápido para sair ou atacar."
+    },
+    "fifty-fifty:bottom": {
+     "title": "Guarda 50/50",
+     "summary": "Pernas cruzadas com as do adversário. Posição-chave para ataques de perna e raspagens."
+    },
+    "headquarters:top": {
+     "title": "Headquarters (HQ)",
+     "summary": "Um joelho entre as pernas do adversário, o outro pé no chão. É a base da maioria das passagens de guarda."
+    },
+    "headquarters:bottom": {
+     "title": "Guarda aberta (contra o HQ)",
+     "summary": "O passador está no HQ. Fique ativo com os pés e os frames para recuperar uma guarda."
+    },
+    "side-control:top": {
+     "title": "Cem quilos (por cima)",
+     "summary": "Posição dominante perpendicular ao adversário. Ponto de partida para a montada, as costas e as chaves de braço."
+    },
+    "side-control:bottom": {
+     "title": "Sob o cem quilos",
+     "summary": "Posição difícil: proteja o pescoço, crie frames e busque recuperar a guarda."
+    },
+    "kesa-gatame:top": {
+     "title": "Kesa gatame (lenço)",
+     "summary": "Quadril contra o ombro, a cabeça do adversário entre seus braços. Controle forte com boas chaves de braço."
+    },
+    "kesa-gatame:bottom": {
+     "title": "Sob o kesa gatame",
+     "summary": "O adversário está colado no seu ombro. Ponte, fuga de quadril e frames para liberar a cabeça."
+    },
+    "north-south:top": {
+     "title": "Norte-sul",
+     "summary": "Sobre a cabeça do adversário, de frente para as pernas. Muito estável e com boas finalizações."
+    },
+    "north-south:bottom": {
+     "title": "Sob o norte-sul",
+     "summary": "Sua cabeça está presa sob o quadril do adversário. Ponte e frames para liberar a cabeça."
+    },
+    "knee-on-belly:top": {
+     "title": "Joelho na barriga",
+     "summary": "Um joelho no abdômen, o outro pé no chão. Posição de pressão e de transição rápida."
+    },
+    "knee-on-belly:bottom": {
+     "title": "Sob o joelho na barriga",
+     "summary": "Peso sobre o abdômen. Faça frame no joelho e recupere uma guarda."
+    },
+    "mount:top": {
+     "title": "Montada",
+     "summary": "Sentado sobre o tronco do adversário. Posição muito dominante com muitas finalizações."
+    },
+    "mount:bottom": {
+     "title": "Sob a montada",
+     "summary": "A posição mais difícil. Proteja o pescoço e os braços, crie espaço."
+    },
+    "back-control:top": {
+     "title": "Controle das costas",
+     "summary": "Atrás do adversário com seatbelt e ganchos. A posição com melhor taxa de finalização."
+    },
+    "back-control:bottom": {
+     "title": "Costas pegas",
+     "summary": "Prioridade: proteger o pescoço, tirar os ganchos e deslizar para o chão."
+    },
+    "turtle:top": {
+     "title": "Atacar a tartaruga",
+     "summary": "O adversário está de quatro apoios. Pegue as costas ou achate-o."
+    },
+    "turtle:bottom": {
+     "title": "Tartaruga",
+     "summary": "De quatro apoios, cotovelos e joelhos próximos. Posição defensiva da qual convém sair rápido."
+    },
+    "front-headlock:top": {
+     "title": "Controle de cabeça (front headlock)",
+     "summary": "Você controla a cabeça do adversário sob o braço, quadril baixo. Estrangule ou vá para trás."
+    },
+    "front-headlock:bottom": {
+     "title": "Preso no front headlock",
+     "summary": "Sua cabeça está controlada. Recupere a postura e libere-a antes que ele ataque."
+    }
+   },
+   "positions": {
+    "closed-guard": "Guarda fechada",
+    "half-guard": "Meia-guarda",
+    "knee-shield": "Escudo de joelho (Z-guard)",
+    "deep-half-guard": "Deep half guard",
+    "butterfly-guard": "Guarda borboleta",
+    "k-guard": "Guarda K",
+    "de-la-riva": "De La Riva",
+    "reverse-de-la-riva": "De La Riva invertida",
+    "spider-guard": "Guarda aranha (kimono)",
+    "lasso-guard": "Guarda laço (kimono)",
+    "collar-sleeve-guard": "Guarda gola-manga (kimono)",
+    "x-guard": "X-guard",
+    "single-leg-x": "Single leg X",
+    "saddle": "Sela (inside sankaku)",
+    "fifty-fifty": "Guarda 50/50",
+    "headquarters": "Posição HQ",
+    "side-control": "Cem quilos",
+    "kesa-gatame": "Kesa gatame (lenço)",
+    "north-south": "Norte-sul",
+    "knee-on-belly": "Joelho na barriga",
+    "mount": "Montada",
+    "back-control": "Controle das costas",
+    "turtle": "Tartaruga",
+    "front-headlock": "Front headlock"
+   },
+   "finishes": {
+    "Armbar": "Chave de braço",
+    "Triangle choke": "Triângulo",
+    "Kimura": "Kimura",
+    "Omoplata": "Omoplata",
+    "Cross collar choke": "Estrangulamento de gola cruzada",
+    "Loop choke": "Estrangulamento em laço",
+    "Guillotine": "Guilhotina",
+    "Americana": "Americana",
+    "D'Arce choke": "D'Arce",
+    "Arm triangle choke": "Estrangulamento braço-cabeça",
+    "Paper cutter choke": "Paper cutter",
+    "Straight ankle lock": "Chave de tornozelo reta",
+    "Kneebar": "Chave de joelho",
+    "Heel hook": "Heel hook",
+    "Calf slicer": "Calf slicer",
+    "Baseball bat choke": "Baseball bat choke",
+    "North-south choke": "Estrangulamento norte-sul",
+    "Reverse triangle": "Triângulo invertido",
+    "Leg scissors choke": "Estrangulamento com tesoura de pernas",
+    "Ezekiel choke": "Estrangulamento Ezequiel",
+    "Rear naked choke": "Mata-leão",
+    "Bow and arrow choke": "Arco e flecha",
+    "Crucifix": "Crucifixo",
+    "Clock choke": "Clock choke",
+    "Anaconda choke": "Anaconda"
+   }
+  }
+ },
  "positions": [
   {
    "id": "closed-guard",
@@ -17,15 +665,27 @@
       "techniques": [
        {
         "name": "Standing guard break (tailbone)",
-        "note": "Debout : une main sur le coccyx, reculer pour ouvrir les chevilles"
+        "note": "Debout : une main sur le coccyx, reculer pour ouvrir les chevilles",
+        "then": [
+         "Kneeling hip break",
+         "Collar-sleeve grip break (gi)"
+        ]
        },
        {
         "name": "Kneeling hip break",
-        "note": "À genoux : mains sur les hanches, se redresser pour ouvrir"
+        "note": "À genoux : mains sur les hanches, se redresser pour ouvrir",
+        "then": [
+         "Standing guard break (tailbone)",
+         "Collar-sleeve grip break (gi)"
+        ]
        },
        {
         "name": "Collar-sleeve grip break (gi)",
-        "note": "Kimono : tenir les manches, ouvrir en posture droite"
+        "note": "Kimono : tenir les manches, ouvrir en posture droite",
+        "then": [
+         "Standing guard break (tailbone)",
+         "Kneeling hip break"
+        ]
        }
       ]
      },
@@ -35,7 +695,11 @@
       "techniques": [
        {
         "name": "Guard break + knee slide",
-        "note": "Ouvrir les jambes et glisser un genou à l'intérieur"
+        "note": "Ouvrir les jambes et glisser un genou à l'intérieur",
+        "then": [
+         "Standing guard break (tailbone)",
+         "Kneeling hip break"
+        ]
        }
       ]
      },
@@ -45,11 +709,19 @@
       "techniques": [
        {
         "name": "Double under stack pass",
-        "note": "Bras sous les cuisses, empiler puis contourner"
+        "note": "Bras sous les cuisses, empiler puis contourner",
+        "then": [
+         "Standing guard break (tailbone)",
+         "Kneeling hip break"
+        ]
        },
        {
         "name": "Stack pass (hips over shoulders)",
-        "note": "Monter les hanches au-dessus des épaules de l'adversaire"
+        "note": "Monter les hanches au-dessus des épaules de l'adversaire",
+        "then": [
+         "Standing guard break (tailbone)",
+         "Kneeling hip break"
+        ]
        }
       ]
      }
@@ -66,15 +738,30 @@
       "techniques": [
        {
         "name": "Scissor sweep",
-        "note": "Manche + col, ciseaux avec les jambes"
+        "note": "Manche + col, ciseaux avec les jambes",
+        "then": [
+         "Hip bump sweep",
+         "Kimura",
+         "Triangle choke"
+        ]
        },
        {
         "name": "Hip bump sweep",
-        "note": "S'asseoir, bloquer un bras et basculer par-dessus"
+        "note": "S'asseoir, bloquer un bras et basculer par-dessus",
+        "then": [
+         "Guillotine",
+         "Kimura",
+         "Scissor sweep"
+        ]
        },
        {
         "name": "Flower (pendulum) sweep",
-        "note": "Soulever une jambe en pivotant"
+        "note": "Soulever une jambe en pivotant",
+        "then": [
+         "Armbar",
+         "Triangle choke",
+         "Scissor sweep"
+        ]
        }
       ]
      },
@@ -84,11 +771,20 @@
       "techniques": [
        {
         "name": "Arm drag to back",
-        "note": "Tirer un bras pour gagner l'angle"
+        "note": "Tirer un bras pour gagner l'angle",
+        "then": [
+         "Armbar",
+         "Flower (pendulum) sweep",
+         "Triangle choke"
+        ]
        },
        {
         "name": "Clamp guard back take",
-        "note": "Piéger un bras, pivoter vers le dos"
+        "note": "Piéger un bras, pivoter vers le dos",
+        "then": [
+         "Omoplata",
+         "Armbar"
+        ]
        }
       ]
      },
@@ -98,7 +794,11 @@
       "techniques": [
        {
         "name": "Sit up to butterfly",
-        "note": "S'asseoir et passer les crochets à l'intérieur des cuisses"
+        "note": "S'asseoir et passer les crochets à l'intérieur des cuisses",
+        "then": [
+         "Armbar",
+         "Triangle choke"
+        ]
        }
       ]
      },
@@ -108,7 +808,11 @@
       "techniques": [
        {
         "name": "Open to spider guard (gi)",
-        "note": "Ouvrir et poser les pieds sur les biceps"
+        "note": "Ouvrir et poser les pieds sur les biceps",
+        "then": [
+         "Armbar",
+         "Triangle choke"
+        ]
        }
       ]
      },
@@ -118,7 +822,11 @@
       "techniques": [
        {
         "name": "Open to lasso guard (gi)",
-        "note": "Ouvrir et enrouler la jambe autour du bras"
+        "note": "Ouvrir et enrouler la jambe autour du bras",
+        "then": [
+         "Armbar",
+         "Triangle choke"
+        ]
        }
       ]
      },
@@ -128,17 +836,25 @@
       "techniques": [
        {
         "name": "Open to collar-sleeve guard (gi)",
-        "note": "Ouvrir avec une prise de col et de manche"
+        "note": "Ouvrir avec une prise de col et de manche",
+        "then": [
+         "Armbar",
+         "Triangle choke"
+        ]
        }
       ]
      },
      {
       "kind": "transition",
-      "to": "de-la-riva:bottom",
+      "to": "k-guard:bottom",
       "techniques": [
        {
-        "name": "DLR hook when they stand",
-        "note": "Quand l'adversaire se lève, crocheter la jambe d'appui"
+        "name": "Open to K-guard when they stand",
+        "note": "L'adversaire ouvre votre garde : glisser le tibia à l'intérieur de sa cuisse",
+        "then": [
+         "Armbar",
+         "Triangle choke"
+        ]
        }
       ]
      },
@@ -155,6 +871,11 @@
         "name": "Push armbar (gi)",
         "note": "Prise de col, pousser le bras puis pivoter"
        }
+      ],
+      "then": [
+       "Triangle choke",
+       "Omoplata",
+       "Scissor sweep"
       ]
      },
      {
@@ -170,6 +891,11 @@
         "name": "Triangle from arm drag",
         "note": "Après avoir tiré le bras, croiser les jambes"
        }
+      ],
+      "then": [
+       "Armbar",
+       "Omoplata",
+       "Hip bump sweep"
       ]
      },
      {
@@ -181,6 +907,11 @@
         "name": "Kimura from closed guard",
         "note": "Main de l'adversaire posée sur votre hanche"
        }
+      ],
+      "then": [
+       "Hip bump sweep",
+       "Armbar",
+       "Omoplata"
       ]
      },
      {
@@ -192,6 +923,11 @@
         "name": "Omoplata",
         "note": "Bras piégé entre vos jambes, pivoter"
        }
+      ],
+      "then": [
+       "Triangle choke",
+       "Armbar",
+       "closed-guard:bottom"
       ]
      },
      {
@@ -203,6 +939,10 @@
         "name": "Cross collar choke (gi)",
         "note": "Deux prises profondes dans le col"
        }
+      ],
+      "then": [
+       "Armbar",
+       "Triangle choke"
       ]
      },
      {
@@ -214,6 +954,10 @@
         "name": "Loop choke (gi)",
         "note": "Passer le revers du col autour du cou en roulant"
        }
+      ],
+      "then": [
+       "Armbar",
+       "Triangle choke"
       ]
      },
      {
@@ -229,6 +973,10 @@
         "name": "Arm-in guillotine",
         "note": "Le bras de l'adversaire est piégé dans la prise"
        }
+      ],
+      "then": [
+       "Hip bump sweep",
+       "Arm drag to back"
       ]
      }
     ]
@@ -250,23 +998,43 @@
       "techniques": [
        {
         "name": "Knee cut pass",
-        "note": "Le genou coupe sur la cuisse, cross-face + underhook"
+        "note": "Le genou coupe sur la cuisse, cross-face + underhook",
+        "then": [
+         "Pressure pass (over-under)",
+         "Smash pass"
+        ]
        },
        {
         "name": "Pressure pass (over-under)",
-        "note": "Épaule dans la mâchoire, hanches lourdes"
+        "note": "Épaule dans la mâchoire, hanches lourdes",
+        "then": [
+         "Knee cut pass",
+         "Smash pass"
+        ]
        },
        {
         "name": "Smash pass",
-        "note": "Écraser sa jambe avec la pression du corps"
+        "note": "Écraser sa jambe avec la pression du corps",
+        "then": [
+         "Knee cut pass",
+         "Pressure pass (over-under)"
+        ]
        },
        {
         "name": "Double under pass",
-        "note": "Bras sous les cuisses une fois la jambe libérée"
+        "note": "Bras sous les cuisses une fois la jambe libérée",
+        "then": [
+         "Knee cut pass",
+         "Pressure pass (over-under)"
+        ]
        },
        {
         "name": "Back-step pass",
-        "note": "Tourner le dos pour libérer la jambe"
+        "note": "Tourner le dos pour libérer la jambe",
+        "then": [
+         "Knee cut pass",
+         "Pressure pass (over-under)"
+        ]
        }
       ]
      },
@@ -276,11 +1044,19 @@
       "techniques": [
        {
         "name": "Smash pass to mount",
-        "note": "Libérer la jambe puis monter en montée"
+        "note": "Libérer la jambe puis monter en montée",
+        "then": [
+         "Knee cut pass",
+         "Pressure pass (over-under)"
+        ]
        },
        {
         "name": "Knee cut to high mount",
-        "note": "Couper le genou et grimper sur le torse"
+        "note": "Couper le genou et grimper sur le torse",
+        "then": [
+         "Knee cut pass",
+         "Pressure pass (over-under)"
+        ]
        }
       ]
      },
@@ -290,7 +1066,11 @@
       "techniques": [
        {
         "name": "Pass to scarf hold",
-        "note": "Libérer la jambe en gardant la tête, circuler en kesa"
+        "note": "Libérer la jambe en gardant la tête, circuler en kesa",
+        "then": [
+         "Knee cut pass",
+         "Pressure pass (over-under)"
+        ]
        }
       ]
      },
@@ -300,7 +1080,10 @@
       "techniques": [
        {
         "name": "Knee on belly from half guard",
-        "note": "Poser le genou sur le ventre en gardant la posture"
+        "note": "Poser le genou sur le ventre en gardant la posture",
+        "then": [
+         "Back take from half guard"
+        ]
        }
       ]
      },
@@ -310,7 +1093,10 @@
       "techniques": [
        {
         "name": "Back take from half guard",
-        "note": "Quand l'adversaire se retourne ou expose son dos"
+        "note": "Quand l'adversaire se retourne ou expose son dos",
+        "then": [
+         "Knee on belly from half guard"
+        ]
        }
       ]
      },
@@ -323,6 +1109,10 @@
         "name": "Kimura from top half guard",
         "note": "Bras piégé en figure-4"
        }
+      ],
+      "then": [
+       "Americana",
+       "Arm triangle choke"
       ]
      },
      {
@@ -334,6 +1124,10 @@
         "name": "Americana from half guard",
         "note": "Poignet cloué au sol, coude rapproché"
        }
+      ],
+      "then": [
+       "Kimura",
+       "Arm triangle choke"
       ]
      },
      {
@@ -345,6 +1139,10 @@
         "name": "D'Arce from top half guard",
         "note": "Bras de l'adversaire coincé sous sa propre tête"
        }
+      ],
+      "then": [
+       "Paper cutter choke",
+       "Kimura"
       ]
      },
      {
@@ -356,6 +1154,10 @@
         "name": "Head and arm choke from half guard",
         "note": "Épaule contre le cou"
        }
+      ],
+      "then": [
+       "Kimura",
+       "Americana"
       ]
      },
      {
@@ -367,6 +1169,10 @@
         "name": "Paper cutter choke (gi)",
         "note": "Prise de col et pression de l'avant-bras"
        }
+      ],
+      "then": [
+       "D'Arce choke",
+       "Kimura"
       ]
      }
     ]
@@ -382,15 +1188,27 @@
       "techniques": [
        {
         "name": "Old school sweep",
-        "note": "Attraper la jambe libre et basculer vers l'avant"
+        "note": "Attraper la jambe libre et basculer vers l'avant",
+        "then": [
+         "Kimura",
+         "Guillotine"
+        ]
        },
        {
         "name": "Dogfight sweep",
-        "note": "Underhook, se redresser sur le côté, faire basculer"
+        "note": "Underhook, se redresser sur le côté, faire basculer",
+        "then": [
+         "Kimura",
+         "Guillotine"
+        ]
        },
        {
         "name": "Plan B sweep",
-        "note": "Underhook profond et pivot vers la jambe de l'adversaire"
+        "note": "Underhook profond et pivot vers la jambe de l'adversaire",
+        "then": [
+         "Kimura",
+         "Guillotine"
+        ]
        }
       ]
      },
@@ -400,7 +1218,11 @@
       "techniques": [
        {
         "name": "Sweep to mount (cross-grip)",
-        "note": "Basculer l'adversaire et monter directement"
+        "note": "Basculer l'adversaire et monter directement",
+        "then": [
+         "Kimura",
+         "Guillotine"
+        ]
        }
       ]
      },
@@ -410,7 +1232,11 @@
       "techniques": [
        {
         "name": "Recompose closed guard",
-        "note": "Frames et hanches pour retrouver la garde fermée"
+        "note": "Frames et hanches pour retrouver la garde fermée",
+        "then": [
+         "Kimura",
+         "Guillotine"
+        ]
        }
       ]
      },
@@ -420,7 +1246,11 @@
       "techniques": [
        {
         "name": "Insert the knee shield",
-        "note": "Poser le genou sur son torse pour créer de l'espace"
+        "note": "Poser le genou sur son torse pour créer de l'espace",
+        "then": [
+         "Kimura",
+         "Guillotine"
+        ]
        }
       ]
      },
@@ -430,7 +1260,11 @@
       "techniques": [
        {
         "name": "Dive into deep half",
-        "note": "Plonger sous la hanche de l'adversaire"
+        "note": "Plonger sous la hanche de l'adversaire",
+        "then": [
+         "Kimura",
+         "Guillotine"
+        ]
        }
       ]
      },
@@ -440,7 +1274,11 @@
       "techniques": [
        {
         "name": "Back take via underhook",
-        "note": "Underhook, se lever sur le côté, prendre le dos"
+        "note": "Underhook, se lever sur le côté, prendre le dos",
+        "then": [
+         "Kimura",
+         "Guillotine"
+        ]
        }
       ]
      },
@@ -450,7 +1288,11 @@
       "techniques": [
        {
         "name": "Roll to turtle",
-        "note": "Se retourner sur les genoux quand le passage arrive"
+        "note": "Se retourner sur les genoux quand le passage arrive",
+        "then": [
+         "Kimura",
+         "Guillotine"
+        ]
        }
       ]
      },
@@ -463,6 +1305,9 @@
         "name": "Kimura from half guard",
         "note": "Le bras de l'adversaire est posé en cross-face"
        }
+      ],
+      "then": [
+       "Guillotine"
       ]
      },
      {
@@ -474,6 +1319,9 @@
         "name": "Guillotine from half guard",
         "note": "Quand l'adversaire baisse la tête"
        }
+      ],
+      "then": [
+       "Kimura"
       ]
      }
     ]
@@ -495,15 +1343,27 @@
       "techniques": [
        {
         "name": "Flatten and knee cut",
-        "note": "Aplatir l'adversaire puis couper le genou"
+        "note": "Aplatir l'adversaire puis couper le genou",
+        "then": [
+         "Smash the shield and pass",
+         "Crossface + underhook pass"
+        ]
        },
        {
         "name": "Smash the shield and pass",
-        "note": "Pousser le bouclier vers le sol et passer"
+        "note": "Pousser le bouclier vers le sol et passer",
+        "then": [
+         "Flatten and knee cut",
+         "Crossface + underhook pass"
+        ]
        },
        {
         "name": "Crossface + underhook pass",
-        "note": "Prendre cross-face et underhook avant de passer"
+        "note": "Prendre cross-face et underhook avant de passer",
+        "then": [
+         "Flatten and knee cut",
+         "Smash the shield and pass"
+        ]
        }
       ]
      },
@@ -513,7 +1373,11 @@
       "techniques": [
        {
         "name": "Remove the shield (to half guard)",
-        "note": "Retirer le genou et entrer en demi-garde classique"
+        "note": "Retirer le genou et entrer en demi-garde classique",
+        "then": [
+         "Flatten and knee cut",
+         "Smash the shield and pass"
+        ]
        }
       ]
      }
@@ -530,11 +1394,17 @@
       "techniques": [
        {
         "name": "Knee shield sweep",
-        "note": "Crochet extérieur, basculer l'adversaire sur le côté"
+        "note": "Crochet extérieur, basculer l'adversaire sur le côté",
+        "then": [
+         "Kimura"
+        ]
        },
        {
         "name": "Z-guard dogfight sweep",
-        "note": "Se redresser avec l'underhook et finir au-dessus"
+        "note": "Se redresser avec l'underhook et finir au-dessus",
+        "then": [
+         "Kimura"
+        ]
        }
       ]
      },
@@ -544,7 +1414,10 @@
       "techniques": [
        {
         "name": "Back to half guard",
-        "note": "Si le bouclier est écrasé"
+        "note": "Si le bouclier est écrasé",
+        "then": [
+         "Kimura"
+        ]
        }
       ]
      },
@@ -554,7 +1427,10 @@
       "techniques": [
        {
         "name": "Recompose closed guard",
-        "note": "Faire pivoter les hanches pour refermer"
+        "note": "Faire pivoter les hanches pour refermer",
+        "then": [
+         "Kimura"
+        ]
        }
       ]
      },
@@ -564,7 +1440,10 @@
       "techniques": [
        {
         "name": "Arm drag back take from Z-guard",
-        "note": "Tirer le bras, prendre l'angle et le dos"
+        "note": "Tirer le bras, prendre l'angle et le dos",
+        "then": [
+         "Kimura"
+        ]
        }
       ]
      },
@@ -598,11 +1477,17 @@
       "techniques": [
        {
         "name": "Back-step free",
-        "note": "Pivoter pour libérer la jambe et finir en side control"
+        "note": "Pivoter pour libérer la jambe et finir en side control",
+        "then": [
+         "Sprawl and free the leg"
+        ]
        },
        {
         "name": "Sprawl and free the leg",
-        "note": "Étendre les hanches en arrière et dégager la jambe"
+        "note": "Étendre les hanches en arrière et dégager la jambe",
+        "then": [
+         "Back-step free"
+        ]
        }
       ]
      },
@@ -676,23 +1561,43 @@
       "techniques": [
        {
         "name": "Toreando pass",
-        "note": "Contrôler les genoux ou le pantalon et contourner"
+        "note": "Contrôler les genoux ou le pantalon et contourner",
+        "then": [
+         "Knee cut pass",
+         "Double under pass"
+        ]
        },
        {
         "name": "Knee cut pass",
-        "note": "Genou qui coupe, cross-face"
+        "note": "Genou qui coupe, cross-face",
+        "then": [
+         "Toreando pass",
+         "Double under pass"
+        ]
        },
        {
         "name": "Double under pass",
-        "note": "Hanches basses, bras sous les cuisses"
+        "note": "Hanches basses, bras sous les cuisses",
+        "then": [
+         "Toreando pass",
+         "Knee cut pass"
+        ]
        },
        {
         "name": "Leg drag pass",
-        "note": "Traîner les jambes d'un côté et poser les hanches"
+        "note": "Traîner les jambes d'un côté et poser les hanches",
+        "then": [
+         "Toreando pass",
+         "Knee cut pass"
+        ]
        },
        {
         "name": "Body lock pass",
-        "note": "Verrouiller la taille et marcher autour"
+        "note": "Verrouiller la taille et marcher autour",
+        "then": [
+         "Toreando pass",
+         "Knee cut pass"
+        ]
        }
       ]
      },
@@ -702,7 +1607,11 @@
       "techniques": [
        {
         "name": "Knee wedge to half guard",
-        "note": "Genou coincé entre eux pour entrer en demi-garde"
+        "note": "Genou coincé entre eux pour entrer en demi-garde",
+        "then": [
+         "Toreando pass",
+         "Knee cut pass"
+        ]
        }
       ]
      },
@@ -712,7 +1621,11 @@
       "techniques": [
        {
         "name": "Pummel to headquarters",
-        "note": "Retirer un crochet et reculer en HQ"
+        "note": "Retirer un crochet et reculer en HQ",
+        "then": [
+         "Toreando pass",
+         "Knee cut pass"
+        ]
        }
       ]
      }
@@ -729,15 +1642,24 @@
       "techniques": [
        {
         "name": "Butterfly sweep",
-        "note": "Underhook, soulever la jambe et tomber sur le côté"
+        "note": "Underhook, soulever la jambe et tomber sur le côté",
+        "then": [
+         "Guillotine"
+        ]
        },
        {
         "name": "Hook sweep",
-        "note": "Crochet sous la cuisse, faire basculer"
+        "note": "Crochet sous la cuisse, faire basculer",
+        "then": [
+         "Guillotine"
+        ]
        },
        {
         "name": "Arm drag sweep",
-        "note": "Tirer le bras et basculer au-dessus"
+        "note": "Tirer le bras et basculer au-dessus",
+        "then": [
+         "Guillotine"
+        ]
        }
       ]
      },
@@ -747,7 +1669,10 @@
       "techniques": [
        {
         "name": "Elevator sweep to mount",
-        "note": "Soulever les deux jambes et monter"
+        "note": "Soulever les deux jambes et monter",
+        "then": [
+         "Guillotine"
+        ]
        }
       ]
      },
@@ -757,7 +1682,10 @@
       "techniques": [
        {
         "name": "Entry to X-guard",
-        "note": "Adversaire penché en arrière, glisser sous la hanche"
+        "note": "Adversaire penché en arrière, glisser sous la hanche",
+        "then": [
+         "Guillotine"
+        ]
        }
       ]
      },
@@ -767,7 +1695,10 @@
       "techniques": [
        {
         "name": "Entry to single leg X",
-        "note": "Attraper une jambe, glisser la hanche dessous"
+        "note": "Attraper une jambe, glisser la hanche dessous",
+        "then": [
+         "Guillotine"
+        ]
        }
       ]
      },
@@ -777,11 +1708,17 @@
       "techniques": [
        {
         "name": "Arm drag to back",
-        "note": "Contrôler un bras, prendre l'angle"
+        "note": "Contrôler un bras, prendre l'angle",
+        "then": [
+         "Guillotine"
+        ]
        },
        {
         "name": "Hip heist to back",
-        "note": "Pivoter les hanches derrière l'adversaire"
+        "note": "Pivoter les hanches derrière l'adversaire",
+        "then": [
+         "Guillotine"
+        ]
        }
       ]
      },
@@ -791,7 +1728,10 @@
       "techniques": [
        {
         "name": "Close the guard",
-        "note": "Rapprocher l'adversaire et fermer les jambes"
+        "note": "Rapprocher l'adversaire et fermer les jambes",
+        "then": [
+         "Guillotine"
+        ]
        }
       ]
      },
@@ -801,7 +1741,10 @@
       "techniques": [
        {
         "name": "Butterfly to DLR",
-        "note": "Quand l'adversaire recule, crocheter la jambe d'appui"
+        "note": "Quand l'adversaire recule, crocheter la jambe d'appui",
+        "then": [
+         "Guillotine"
+        ]
        }
       ]
      },
@@ -824,6 +1767,134 @@
    }
   },
   {
+   "id": "k-guard",
+   "name": "K-Guard",
+   "nameFr": "Garde K",
+   "family": "guard",
+   "top": {
+    "title": "Facing K-guard",
+    "titleFr": "Face à la garde K",
+    "summary": "Le tibia de l'adversaire est coincé à l'intérieur de votre cuisse. Gardez les hanches basses et sortez avant les entrées de jambes.",
+    "moves": [
+     {
+      "kind": "escape",
+      "to": "headquarters:top",
+      "techniques": [
+       {
+        "name": "Knee-line pass out of K-guard",
+        "note": "Aligner le genou sur la ligne des hanches et reculer en HQ",
+        "then": [
+         "Step over the shin"
+        ]
+       },
+       {
+        "name": "Step over the shin",
+        "note": "Passer la jambe par-dessus le tibia piégé",
+        "then": [
+         "Knee-line pass out of K-guard"
+        ]
+       }
+      ]
+     },
+     {
+      "kind": "pass",
+      "to": "side-control:top",
+      "techniques": [
+       {
+        "name": "Pass over the K-guard",
+        "note": "Pression sur les hanches puis contournement"
+       }
+      ]
+     }
+    ]
+   },
+   "bottom": {
+    "title": "K-guard",
+    "titleFr": "Garde K",
+    "summary": "Votre tibia est posé à l'intérieur de la cuisse de l'adversaire, l'autre jambe contrôle la hanche. Excellent pour entrer vers X-guard, selle ou dos.",
+    "moves": [
+     {
+      "kind": "sweep",
+      "to": "headquarters:top",
+      "techniques": [
+       {
+        "name": "K-guard tripod sweep",
+        "note": "Pousser la hanche et tirer la cheville pour le déséquilibrer"
+       }
+      ]
+     },
+     {
+      "kind": "transition",
+      "to": "x-guard:bottom",
+      "techniques": [
+       {
+        "name": "K-guard to X-guard",
+        "note": "Passer sous la cuisse pour entrer en X"
+       }
+      ]
+     },
+     {
+      "kind": "transition",
+      "to": "saddle:bottom",
+      "techniques": [
+       {
+        "name": "K-guard to saddle (inside sankaku)",
+        "note": "Croiser les jambes pour verrouiller la selle"
+       }
+      ]
+     },
+     {
+      "kind": "transition",
+      "to": "single-leg-x:bottom",
+      "techniques": [
+       {
+        "name": "K-guard to single leg X",
+        "note": "Remonter sous la hanche et attraper la jambe"
+       }
+      ]
+     },
+     {
+      "kind": "transition",
+      "to": "back-control:top",
+      "techniques": [
+       {
+        "name": "K-guard back take (berimbolo)",
+        "note": "Tourner derrière la jambe et prendre le dos"
+       }
+      ]
+     },
+     {
+      "kind": "submission",
+      "finish": "Straight ankle lock",
+      "finishFr": "Clé de cheville droite",
+      "techniques": [
+       {
+        "name": "Ankle lock from K-guard",
+        "note": "Pied sous l'aisselle, hanches vers l'avant"
+       }
+      ],
+      "then": [
+       "Kneebar"
+      ]
+     },
+     {
+      "kind": "submission",
+      "finish": "Kneebar",
+      "finishFr": "Clé de genou",
+      "techniques": [
+       {
+        "name": "Kneebar from K-guard",
+        "note": "Technique avancée : interdite dans de nombreuses compétitions selon le niveau"
+       }
+      ],
+      "then": [
+       "Straight ankle lock"
+      ]
+     }
+    ]
+   }
+  },
+  {
    "id": "de-la-riva",
    "name": "De La Riva",
    "nameFr": "De La Riva",
@@ -839,11 +1910,19 @@
       "techniques": [
        {
         "name": "DLR hook removal",
-        "note": "Retirer le crochet pour revenir en HQ"
+        "note": "Retirer le crochet pour revenir en HQ",
+        "then": [
+         "Step-back hook strip",
+         "Toreando pass"
+        ]
        },
        {
         "name": "Step-back hook strip",
-        "note": "Reculer la jambe pour dégager le crochet"
+        "note": "Reculer la jambe pour dégager le crochet",
+        "then": [
+         "DLR hook removal",
+         "Toreando pass"
+        ]
        }
       ]
      },
@@ -853,15 +1932,27 @@
       "techniques": [
        {
         "name": "Toreando pass",
-        "note": "Dévier les jambes sur le côté"
+        "note": "Dévier les jambes sur le côté",
+        "then": [
+         "DLR hook removal",
+         "Step-back hook strip"
+        ]
        },
        {
         "name": "Knee cut pass",
-        "note": "Crochet dégagé, genou glisse vers l'intérieur"
+        "note": "Crochet dégagé, genou glisse vers l'intérieur",
+        "then": [
+         "DLR hook removal",
+         "Step-back hook strip"
+        ]
        },
        {
         "name": "Leg drag pass",
-        "note": "Traîner les jambes d'un côté et poser les hanches"
+        "note": "Traîner les jambes d'un côté et poser les hanches",
+        "then": [
+         "DLR hook removal",
+         "Step-back hook strip"
+        ]
        }
       ]
      }
@@ -963,7 +2054,11 @@
       "techniques": [
        {
         "name": "Reverse DLR hook removal",
-        "note": "Retirer le crochet intérieur et reculer en HQ"
+        "note": "Retirer le crochet intérieur et reculer en HQ",
+        "then": [
+         "Toreando pass",
+         "Knee cut pass"
+        ]
        }
       ]
      },
@@ -973,11 +2068,19 @@
       "techniques": [
        {
         "name": "Toreando pass",
-        "note": "Dévier la jambe crochetée"
+        "note": "Dévier la jambe crochetée",
+        "then": [
+         "Reverse DLR hook removal",
+         "Knee cut pass"
+        ]
        },
        {
         "name": "Knee cut pass",
-        "note": "Genou qui coupe vers l'intérieur"
+        "note": "Genou qui coupe vers l'intérieur",
+        "then": [
+         "Reverse DLR hook removal",
+         "Toreando pass"
+        ]
        }
       ]
      }
@@ -1051,11 +2154,19 @@
       "techniques": [
        {
         "name": "Break spider grips (stack & step)",
-        "note": "Se pencher en avant pour faire lâcher les pieds"
+        "note": "Se pencher en avant pour faire lâcher les pieds",
+        "then": [
+         "Sleeve grip strip",
+         "Toreando after grip strip"
+        ]
        },
        {
         "name": "Sleeve grip strip",
-        "note": "Retirer les prises de manche puis reculer en HQ"
+        "note": "Retirer les prises de manche puis reculer en HQ",
+        "then": [
+         "Break spider grips (stack & step)",
+         "Toreando after grip strip"
+        ]
        }
       ]
      },
@@ -1065,11 +2176,19 @@
       "techniques": [
        {
         "name": "Toreando after grip strip",
-        "note": "Dévier les jambes une fois les prises cassées"
+        "note": "Dévier les jambes une fois les prises cassées",
+        "then": [
+         "Break spider grips (stack & step)",
+         "Sleeve grip strip"
+        ]
        },
        {
         "name": "Knee cut after grip strip",
-        "note": "Genou qui coupe une fois les prises cassées"
+        "note": "Genou qui coupe une fois les prises cassées",
+        "then": [
+         "Break spider grips (stack & step)",
+         "Sleeve grip strip"
+        ]
        }
       ]
      }
@@ -1086,7 +2205,11 @@
       "techniques": [
        {
         "name": "Spider scissor sweep",
-        "note": "Pousser un bras, tirer l'autre, ciseau"
+        "note": "Pousser un bras, tirer l'autre, ciseau",
+        "then": [
+         "Omoplata",
+         "Triangle choke"
+        ]
        }
       ]
      },
@@ -1096,11 +2219,19 @@
       "techniques": [
        {
         "name": "Spider tripod sweep",
-        "note": "Pied sur la hanche, déséquilibrer en tirant la manche"
+        "note": "Pied sur la hanche, déséquilibrer en tirant la manche",
+        "then": [
+         "Omoplata",
+         "Triangle choke"
+        ]
        },
        {
         "name": "Spider push-pull sweep",
-        "note": "Pousser un pied et tirer la manche opposée"
+        "note": "Pousser un pied et tirer la manche opposée",
+        "then": [
+         "Omoplata",
+         "Triangle choke"
+        ]
        }
       ]
      },
@@ -1110,7 +2241,11 @@
       "techniques": [
        {
         "name": "Add the lasso",
-        "note": "Enrouler la jambe autour du bras"
+        "note": "Enrouler la jambe autour du bras",
+        "then": [
+         "Omoplata",
+         "Triangle choke"
+        ]
        }
       ]
      },
@@ -1120,7 +2255,11 @@
       "techniques": [
        {
         "name": "Switch to collar-sleeve",
-        "note": "Ajouter une prise de col"
+        "note": "Ajouter une prise de col",
+        "then": [
+         "Omoplata",
+         "Triangle choke"
+        ]
        }
       ]
      },
@@ -1130,7 +2269,11 @@
       "techniques": [
        {
         "name": "Close the guard",
-        "note": "Quand l'adversaire se rapproche, refermer les jambes"
+        "note": "Quand l'adversaire se rapproche, refermer les jambes",
+        "then": [
+         "Omoplata",
+         "Triangle choke"
+        ]
        }
       ]
      },
@@ -1140,7 +2283,11 @@
       "techniques": [
        {
         "name": "Spider to DLR",
-        "note": "Changer pour un crochet de De La Riva"
+        "note": "Changer pour un crochet de De La Riva",
+        "then": [
+         "Omoplata",
+         "Triangle choke"
+        ]
        }
       ]
      },
@@ -1153,6 +2300,10 @@
         "name": "Triangle from spider guard",
         "note": "Un bras dedans, un dehors, pivot"
        }
+      ],
+      "then": [
+       "Omoplata",
+       "Armbar"
       ]
      },
      {
@@ -1164,6 +2315,10 @@
         "name": "Omoplata from spider guard",
         "note": "Piéger le bras entre les jambes"
        }
+      ],
+      "then": [
+       "Armbar",
+       "Triangle choke"
       ]
      },
      {
@@ -1175,6 +2330,10 @@
         "name": "Armbar from spider guard",
         "note": "Étendre le bras, hanche haute"
        }
+      ],
+      "then": [
+       "Omoplata",
+       "Triangle choke"
       ]
      }
     ]
@@ -1196,11 +2355,17 @@
       "techniques": [
        {
         "name": "Lasso strip",
-        "note": "Tirer le bras en tournant pour sortir de l'enroulement"
+        "note": "Tirer le bras en tournant pour sortir de l'enroulement",
+        "then": [
+         "Posture and step back"
+        ]
        },
        {
         "name": "Posture and step back",
-        "note": "Reculer en se redressant pour casser le lasso"
+        "note": "Reculer en se redressant pour casser le lasso",
+        "then": [
+         "Lasso strip"
+        ]
        }
       ]
      }
@@ -1217,7 +2382,11 @@
       "techniques": [
        {
         "name": "Basic lasso sweep",
-        "note": "Tirer la manche en poussant sur la hanche"
+        "note": "Tirer la manche en poussant sur la hanche",
+        "then": [
+         "Omoplata",
+         "Triangle choke"
+        ]
        }
       ]
      },
@@ -1227,7 +2396,11 @@
       "techniques": [
        {
         "name": "Lasso tripod sweep",
-        "note": "Pied sur la hanche, faucher la jambe d'appui"
+        "note": "Pied sur la hanche, faucher la jambe d'appui",
+        "then": [
+         "Omoplata",
+         "Triangle choke"
+        ]
        }
       ]
      },
@@ -1237,7 +2410,11 @@
       "techniques": [
        {
         "name": "Lasso to spider",
-        "note": "Placer le deuxième pied sur le biceps"
+        "note": "Placer le deuxième pied sur le biceps",
+        "then": [
+         "Omoplata",
+         "Triangle choke"
+        ]
        }
       ]
      },
@@ -1247,7 +2424,11 @@
       "techniques": [
        {
         "name": "Lasso to collar-sleeve",
-        "note": "Ajouter la prise de col"
+        "note": "Ajouter la prise de col",
+        "then": [
+         "Omoplata",
+         "Triangle choke"
+        ]
        }
       ]
      },
@@ -1257,7 +2438,11 @@
       "techniques": [
        {
         "name": "Close the guard",
-        "note": "Refermer quand l'adversaire approche"
+        "note": "Refermer quand l'adversaire approche",
+        "then": [
+         "Omoplata",
+         "Triangle choke"
+        ]
        }
       ]
      },
@@ -1267,7 +2452,11 @@
       "techniques": [
        {
         "name": "Lasso arm drag to back",
-        "note": "Tirer le bras et prendre le dos"
+        "note": "Tirer le bras et prendre le dos",
+        "then": [
+         "Omoplata",
+         "Triangle choke"
+        ]
        }
       ]
      },
@@ -1280,6 +2469,9 @@
         "name": "Lasso omoplata",
         "note": "Pivoter en gardant le lasso"
        }
+      ],
+      "then": [
+       "Triangle choke"
       ]
      },
      {
@@ -1291,6 +2483,9 @@
         "name": "Triangle from lasso",
         "note": "Passer la jambe libre autour de la nuque"
        }
+      ],
+      "then": [
+       "Omoplata"
       ]
      }
     ]
@@ -1312,7 +2507,11 @@
       "techniques": [
        {
         "name": "Break the collar-sleeve grips",
-        "note": "Retirer les prises et reculer en HQ"
+        "note": "Retirer les prises et reculer en HQ",
+        "then": [
+         "Toreando vs collar-sleeve",
+         "Knee cut vs collar-sleeve"
+        ]
        }
       ]
      },
@@ -1322,11 +2521,19 @@
       "techniques": [
        {
         "name": "Toreando vs collar-sleeve",
-        "note": "Dévier les jambes après avoir cassé les prises"
+        "note": "Dévier les jambes après avoir cassé les prises",
+        "then": [
+         "Break the collar-sleeve grips",
+         "Knee cut vs collar-sleeve"
+        ]
        },
        {
         "name": "Knee cut vs collar-sleeve",
-        "note": "Genou qui coupe après avoir cassé les prises"
+        "note": "Genou qui coupe après avoir cassé les prises",
+        "then": [
+         "Break the collar-sleeve grips",
+         "Toreando vs collar-sleeve"
+        ]
        }
       ]
      }
@@ -1343,11 +2550,19 @@
       "techniques": [
        {
         "name": "Tripod sweep",
-        "note": "Pied sur la hanche, faucher la jambe d'appui"
+        "note": "Pied sur la hanche, faucher la jambe d'appui",
+        "then": [
+         "Omoplata",
+         "Triangle choke"
+        ]
        },
        {
         "name": "Sickle sweep",
-        "note": "Faucher la jambe d'appui par l'extérieur"
+        "note": "Faucher la jambe d'appui par l'extérieur",
+        "then": [
+         "Omoplata",
+         "Triangle choke"
+        ]
        }
       ]
      },
@@ -1357,7 +2572,11 @@
       "techniques": [
        {
         "name": "Scissor sweep from collar-sleeve",
-        "note": "Ciseau avec le contrôle du col et de la manche"
+        "note": "Ciseau avec le contrôle du col et de la manche",
+        "then": [
+         "Omoplata",
+         "Triangle choke"
+        ]
        }
       ]
      },
@@ -1367,7 +2586,11 @@
       "techniques": [
        {
         "name": "Switch to spider",
-        "note": "Passer les pieds sur les biceps"
+        "note": "Passer les pieds sur les biceps",
+        "then": [
+         "Omoplata",
+         "Triangle choke"
+        ]
        }
       ]
      },
@@ -1377,7 +2600,11 @@
       "techniques": [
        {
         "name": "Switch to lasso",
-        "note": "Enrouler la jambe autour du bras"
+        "note": "Enrouler la jambe autour du bras",
+        "then": [
+         "Omoplata",
+         "Triangle choke"
+        ]
        }
       ]
      },
@@ -1387,7 +2614,11 @@
       "techniques": [
        {
         "name": "Close the guard",
-        "note": "Refermer la garde"
+        "note": "Refermer la garde",
+        "then": [
+         "Omoplata",
+         "Triangle choke"
+        ]
        }
       ]
      },
@@ -1397,7 +2628,11 @@
       "techniques": [
        {
         "name": "Armdrag to back",
-        "note": "Tirer le bras et prendre le dos"
+        "note": "Tirer le bras et prendre le dos",
+        "then": [
+         "Omoplata",
+         "Triangle choke"
+        ]
        }
       ]
      },
@@ -1410,6 +2645,10 @@
         "name": "Omoplata from collar-sleeve",
         "note": "Pivoter sous le bras contrôlé"
        }
+      ],
+      "then": [
+       "Armbar",
+       "Triangle choke"
       ]
      },
      {
@@ -1421,6 +2660,10 @@
         "name": "Triangle from collar-sleeve",
         "note": "Piéger bras et tête avec les jambes"
        }
+      ],
+      "then": [
+       "Omoplata",
+       "Armbar"
       ]
      },
      {
@@ -1432,6 +2675,10 @@
         "name": "Armbar from collar-sleeve",
         "note": "Étendre le bras tenu à la manche"
        }
+      ],
+      "then": [
+       "Omoplata",
+       "Triangle choke"
       ]
      }
     ]
@@ -1453,11 +2700,19 @@
       "techniques": [
        {
         "name": "Clear the bottom hook",
-        "note": "Décharger le crochet inférieur et reculer en HQ"
+        "note": "Décharger le crochet inférieur et reculer en HQ",
+        "then": [
+         "Step-over escape",
+         "Cut through the X"
+        ]
        },
        {
         "name": "Step-over escape",
-        "note": "Passer la jambe par-dessus pour sortir de l'X"
+        "note": "Passer la jambe par-dessus pour sortir de l'X",
+        "then": [
+         "Clear the bottom hook",
+         "Cut through the X"
+        ]
        }
       ]
      },
@@ -1467,7 +2722,11 @@
       "techniques": [
        {
         "name": "Cut through the X",
-        "note": "Dégager la jambe et couper vers le contrôle latéral"
+        "note": "Dégager la jambe et couper vers le contrôle latéral",
+        "then": [
+         "Clear the bottom hook",
+         "Step-over escape"
+        ]
        }
       ]
      }
@@ -1552,11 +2811,17 @@
       "techniques": [
        {
         "name": "Leg extraction",
-        "note": "Fléchir la jambe et sortir le pied"
+        "note": "Fléchir la jambe et sortir le pied",
+        "then": [
+         "Step-over escape"
+        ]
        },
        {
         "name": "Step-over escape",
-        "note": "Passer par-dessus la jambe de l'adversaire"
+        "note": "Passer par-dessus la jambe de l'adversaire",
+        "then": [
+         "Leg extraction"
+        ]
        }
       ]
      }
@@ -1620,6 +2885,10 @@
         "name": "Straight ankle lock",
         "note": "Pied sous l'aisselle, hanches vers l'avant"
        }
+      ],
+      "then": [
+       "Kneebar",
+       "Heel hook"
       ]
      },
      {
@@ -1631,6 +2900,10 @@
         "name": "Kneebar from SLX",
         "note": "Jambe tendue, hanches sous le genou"
        }
+      ],
+      "then": [
+       "Straight ankle lock",
+       "Heel hook"
       ]
      },
      {
@@ -1646,6 +2919,10 @@
         "name": "Outside heel hook",
         "note": "Technique avancée : interdite dans de nombreuses compétitions selon le niveau"
        }
+      ],
+      "then": [
+       "Straight ankle lock",
+       "Kneebar"
       ]
      }
     ]
@@ -1667,11 +2944,17 @@
       "techniques": [
        {
         "name": "Clear the knee line and extract",
-        "note": "Dégager la ligne du genou et retirer la jambe"
+        "note": "Dégager la ligne du genou et retirer la jambe",
+        "then": [
+         "Boot out (hip turn)"
+        ]
        },
        {
         "name": "Boot out (hip turn)",
-        "note": "Tourner les hanches pour sortir le pied"
+        "note": "Tourner les hanches pour sortir le pied",
+        "then": [
+         "Clear the knee line and extract"
+        ]
        }
       ]
      }
@@ -1705,6 +2988,10 @@
         "name": "Outside heel hook",
         "note": "Technique avancée : interdite dans de nombreuses compétitions selon le niveau"
        }
+      ],
+      "then": [
+       "Kneebar",
+       "Calf slicer"
       ]
      },
      {
@@ -1716,6 +3003,10 @@
         "name": "Kneebar from saddle",
         "note": "Jambe tendue, hanche sous le genou"
        }
+      ],
+      "then": [
+       "Heel hook",
+       "Calf slicer"
       ]
      },
      {
@@ -1727,6 +3018,10 @@
         "name": "Calf slicer from saddle",
         "note": "Écraser le mollet contre le tibia"
        }
+      ],
+      "then": [
+       "Heel hook",
+       "Kneebar"
       ]
      },
      {
@@ -1738,6 +3033,10 @@
         "name": "Ankle lock from saddle",
         "note": "Compresser la cheville"
        }
+      ],
+      "then": [
+       "Heel hook",
+       "Kneebar"
       ]
      }
     ]
@@ -1772,6 +3071,9 @@
         "name": "Counter heel hook",
         "note": "Technique avancée : interdite dans de nombreuses compétitions selon le niveau"
        }
+      ],
+      "then": [
+       "Kneebar"
       ]
      },
      {
@@ -1783,6 +3085,9 @@
         "name": "Counter kneebar",
         "note": "Étendre la jambe adverse avec les hanches"
        }
+      ],
+      "then": [
+       "Heel hook"
       ]
      }
     ]
@@ -1825,6 +3130,10 @@
         "name": "Outside heel hook",
         "note": "Technique avancée : interdite dans de nombreuses compétitions selon le niveau"
        }
+      ],
+      "then": [
+       "Kneebar",
+       "Straight ankle lock"
       ]
      },
      {
@@ -1836,6 +3145,10 @@
         "name": "Kneebar from 50/50",
         "note": "Hanches sous le genou"
        }
+      ],
+      "then": [
+       "Heel hook",
+       "Straight ankle lock"
       ]
      },
      {
@@ -1847,6 +3160,10 @@
         "name": "Ankle lock from 50/50",
         "note": "Compresser la cheville"
        }
+      ],
+      "then": [
+       "Heel hook",
+       "Kneebar"
       ]
      }
     ]
@@ -1868,35 +3185,115 @@
       "techniques": [
        {
         "name": "Knee cut pass",
-        "note": "Le genou coupe l'espace, cross-face"
+        "note": "Le genou coupe l'espace, cross-face",
+        "then": [
+         "Toreando pass",
+         "Leg drag pass"
+        ]
        },
        {
         "name": "Toreando pass",
-        "note": "Dévier les jambes et contourner"
+        "note": "Dévier les jambes et contourner",
+        "then": [
+         "Knee cut pass",
+         "Leg drag pass"
+        ]
        },
        {
         "name": "Leg drag pass",
-        "note": "Traîner les jambes d'un côté"
+        "note": "Traîner les jambes d'un côté",
+        "then": [
+         "Knee cut pass",
+         "Toreando pass"
+        ]
        },
        {
         "name": "Long step pass",
-        "note": "Grand pas autour de la jambe"
+        "note": "Grand pas autour de la jambe",
+        "then": [
+         "Knee cut pass",
+         "Toreando pass"
+        ]
        },
        {
         "name": "X-pass",
-        "note": "Croiser les pas pour passer de l'autre côté"
+        "note": "Croiser les pas pour passer de l'autre côté",
+        "then": [
+         "Knee cut pass",
+         "Toreando pass"
+        ]
        },
        {
         "name": "Pressure pass",
-        "note": "Poids du corps sur les hanches, sans se soulever"
+        "note": "Poids du corps sur les hanches, sans se soulever",
+        "then": [
+         "Knee cut pass",
+         "Toreando pass"
+        ]
        },
        {
         "name": "Double under pass",
-        "note": "Bras sous les cuisses, empiler"
+        "note": "Bras sous les cuisses, empiler",
+        "then": [
+         "Knee cut pass",
+         "Toreando pass"
+        ]
        },
        {
         "name": "Over-under pass",
-        "note": "Un bras dessus, un bras dessous les jambes"
+        "note": "Un bras dessus, un bras dessous les jambes",
+        "then": [
+         "Knee cut pass",
+         "Toreando pass"
+        ]
+       },
+       {
+        "name": "Body lock pass",
+        "note": "Verrouiller les hanches et avancer pas à pas",
+        "then": [
+         "Knee cut pass",
+         "Toreando pass"
+        ]
+       },
+       {
+        "name": "Folding pass",
+        "note": "Plier les jambes vers l'épaule puis contourner",
+        "then": [
+         "Knee cut pass",
+         "Toreando pass"
+        ]
+       },
+       {
+        "name": "Leg weave pass",
+        "note": "Tisser le bras entre ses jambes pour avancer",
+        "then": [
+         "Knee cut pass",
+         "Toreando pass"
+        ]
+       },
+       {
+        "name": "Smash pass",
+        "note": "Écraser les jambes contre le sol et glisser",
+        "then": [
+         "Knee cut pass",
+         "Toreando pass"
+        ]
+       },
+       {
+        "name": "Stack pass",
+        "note": "Empiler l'adversaire et passer par-dessus les jambes",
+        "then": [
+         "Knee cut pass",
+         "Toreando pass"
+        ]
+       },
+       {
+        "name": "Outside step (camping) pass",
+        "note": "Rester à l'extérieur des jambes, contrôler le pied et contourner",
+        "then": [
+         "Knee cut pass",
+         "Toreando pass"
+        ]
        }
       ]
      },
@@ -1906,11 +3303,19 @@
       "techniques": [
        {
         "name": "Pass to half guard",
-        "note": "Entrer en demi-garde en contrôlant une jambe"
+        "note": "Entrer en demi-garde en contrôlant une jambe",
+        "then": [
+         "Knee cut pass",
+         "Toreando pass"
+        ]
        },
        {
         "name": "Backstep to half guard",
-        "note": "Pivoter et clouer la jambe"
+        "note": "Pivoter et clouer la jambe",
+        "then": [
+         "Knee cut pass",
+         "Toreando pass"
+        ]
        }
       ]
      },
@@ -1920,7 +3325,19 @@
       "techniques": [
        {
         "name": "Pressure pass to mount",
-        "note": "Passer les jambes et monter directement"
+        "note": "Passer les jambes et monter directement",
+        "then": [
+         "Knee cut pass",
+         "Toreando pass"
+        ]
+       },
+       {
+        "name": "Leg drag to mount",
+        "note": "Traîner les jambes puis monter sur le torse",
+        "then": [
+         "Knee cut pass",
+         "Toreando pass"
+        ]
        }
       ]
      },
@@ -1930,7 +3347,11 @@
       "techniques": [
        {
         "name": "Pass to scarf hold",
-        "note": "Contourner les jambes et finir en kesa gatame"
+        "note": "Contourner les jambes et finir en kesa gatame",
+        "then": [
+         "Knee cut pass",
+         "Toreando pass"
+        ]
        }
       ]
      },
@@ -1940,7 +3361,19 @@
       "techniques": [
        {
         "name": "Pass to north-south",
-        "note": "Tourner autour de la tête"
+        "note": "Tourner autour de la tête",
+        "then": [
+         "Knee cut pass",
+         "Toreando pass"
+        ]
+       },
+       {
+        "name": "Over-under to north-south",
+        "note": "Après le over-under, tourner vers la tête",
+        "then": [
+         "Knee cut pass",
+         "Toreando pass"
+        ]
        }
       ]
      },
@@ -1950,7 +3383,25 @@
       "techniques": [
        {
         "name": "Pass to knee on belly",
-        "note": "Passer et poser le genou sur le ventre"
+        "note": "Passer et poser le genou sur le ventre",
+        "then": [
+         "Knee cut pass",
+         "Toreando pass"
+        ]
+       }
+      ]
+     },
+     {
+      "kind": "pass",
+      "to": "back-control:top",
+      "techniques": [
+       {
+        "name": "Leg drag to back take",
+        "note": "Traîner les jambes puis prendre le dos",
+        "then": [
+         "Knee cut pass",
+         "Toreando pass"
+        ]
        }
       ]
      }
@@ -1967,7 +3418,11 @@
       "techniques": [
        {
         "name": "Recover closed guard",
-        "note": "Jambes autour de la taille, refermer"
+        "note": "Jambes autour de la taille, refermer",
+        "then": [
+         "Recover half guard",
+         "Knee shield recovery"
+        ]
        }
       ]
      },
@@ -1977,7 +3432,11 @@
       "techniques": [
        {
         "name": "Recover half guard",
-        "note": "Piéger une jambe en demi-garde"
+        "note": "Piéger une jambe en demi-garde",
+        "then": [
+         "Recover closed guard",
+         "Knee shield recovery"
+        ]
        }
       ]
      },
@@ -1987,7 +3446,11 @@
       "techniques": [
        {
         "name": "Knee shield recovery",
-        "note": "Genou en bouclier pour stopper le passage"
+        "note": "Genou en bouclier pour stopper le passage",
+        "then": [
+         "Recover closed guard",
+         "Recover half guard"
+        ]
        }
       ]
      },
@@ -1998,6 +3461,16 @@
        {
         "name": "Re-guard to DLR",
         "note": "Crochet extérieur sur la jambe d'appui"
+       }
+      ]
+     },
+     {
+      "kind": "transition",
+      "to": "k-guard:bottom",
+      "techniques": [
+       {
+        "name": "Re-guard to K-guard",
+        "note": "Tibia à l'intérieur de la cuisse quand il avance"
        }
       ]
      },
@@ -2050,11 +3523,19 @@
       "techniques": [
        {
         "name": "Knee slide to mount",
-        "note": "Le genou glisse sur le ventre"
+        "note": "Le genou glisse sur le ventre",
+        "then": [
+         "Technical mount (step-over)",
+         "Switch to scarf hold"
+        ]
        },
        {
         "name": "Technical mount (step-over)",
-        "note": "Passer la jambe par-dessus en gardant la pression"
+        "note": "Passer la jambe par-dessus en gardant la pression",
+        "then": [
+         "Knee slide to mount",
+         "Switch to scarf hold"
+        ]
        }
       ]
      },
@@ -2064,7 +3545,11 @@
       "techniques": [
        {
         "name": "Switch to scarf hold",
-        "note": "Glisser la hanche contre l'épaule"
+        "note": "Glisser la hanche contre l'épaule",
+        "then": [
+         "Knee slide to mount",
+         "Technical mount (step-over)"
+        ]
        }
       ]
      },
@@ -2074,7 +3559,11 @@
       "techniques": [
        {
         "name": "Walk to north-south",
-        "note": "Faire le tour de la tête en gardant la pression"
+        "note": "Faire le tour de la tête en gardant la pression",
+        "then": [
+         "Knee slide to mount",
+         "Technical mount (step-over)"
+        ]
        }
       ]
      },
@@ -2084,7 +3573,11 @@
       "techniques": [
        {
         "name": "Knee on belly",
-        "note": "Poser le genou sur le ventre"
+        "note": "Poser le genou sur le ventre",
+        "then": [
+         "Knee slide to mount",
+         "Technical mount (step-over)"
+        ]
        }
       ]
      },
@@ -2094,7 +3587,11 @@
       "techniques": [
        {
         "name": "Back take when they turn",
-        "note": "Quand l'adversaire se retourne en tortue"
+        "note": "Quand l'adversaire se retourne en tortue",
+        "then": [
+         "Knee slide to mount",
+         "Technical mount (step-over)"
+        ]
        }
       ]
      },
@@ -2107,6 +3604,10 @@
         "name": "Kimura from side control",
         "note": "Bras collé au sol, figure-4"
        }
+      ],
+      "then": [
+       "Americana",
+       "Arm triangle choke"
       ]
      },
      {
@@ -2118,6 +3619,10 @@
         "name": "Americana from side control",
         "note": "Poignet cloué au sol"
        }
+      ],
+      "then": [
+       "Kimura",
+       "Arm triangle choke"
       ]
      },
      {
@@ -2129,6 +3634,10 @@
         "name": "Head and arm choke",
         "note": "Épaule contre le cou, bras de l'adversaire contre sa tête"
        }
+      ],
+      "then": [
+       "Kimura",
+       "Americana"
       ]
      },
      {
@@ -2140,6 +3649,10 @@
         "name": "Paper cutter choke (gi)",
         "note": "Prise de col, avant-bras sur le cou"
        }
+      ],
+      "then": [
+       "Baseball bat choke",
+       "Kimura"
       ]
      },
      {
@@ -2151,6 +3664,10 @@
         "name": "Baseball bat choke (gi)",
         "note": "Deux mains dans le col, rotation"
        }
+      ],
+      "then": [
+       "Paper cutter choke",
+       "Kimura"
       ]
      },
      {
@@ -2162,6 +3679,10 @@
         "name": "Armbar from side control",
         "note": "Passer la jambe par-dessus la tête"
        }
+      ],
+      "then": [
+       "Kimura",
+       "Americana"
       ]
      }
     ]
@@ -2177,11 +3698,19 @@
       "techniques": [
        {
         "name": "Shrimp to half guard",
-        "note": "Frame sur la hanche, glisser le genou devant"
+        "note": "Frame sur la hanche, glisser le genou devant",
+        "then": [
+         "Underhook escape to half guard",
+         "Hip escape to full guard"
+        ]
        },
        {
         "name": "Underhook escape to half guard",
-        "note": "Prendre l'underhook et revenir en demi-garde"
+        "note": "Prendre l'underhook et revenir en demi-garde",
+        "then": [
+         "Shrimp to half guard",
+         "Hip escape to full guard"
+        ]
        }
       ]
      },
@@ -2191,11 +3720,19 @@
       "techniques": [
        {
         "name": "Hip escape to full guard",
-        "note": "Double frames, créer l'espace, ramener les jambes"
+        "note": "Double frames, créer l'espace, ramener les jambes",
+        "then": [
+         "Shrimp to half guard",
+         "Underhook escape to half guard"
+        ]
        },
        {
         "name": "Bridge and shrimp to guard",
-        "note": "Pont puis shrimp pour libérer les hanches"
+        "note": "Pont puis shrimp pour libérer les hanches",
+        "then": [
+         "Shrimp to half guard",
+         "Underhook escape to half guard"
+        ]
        }
       ]
      },
@@ -2205,7 +3742,11 @@
       "techniques": [
        {
         "name": "Knee shield frame",
-        "note": "Glisser le genou pour créer un bouclier"
+        "note": "Glisser le genou pour créer un bouclier",
+        "then": [
+         "Shrimp to half guard",
+         "Underhook escape to half guard"
+        ]
        }
       ]
      },
@@ -2215,7 +3756,11 @@
       "techniques": [
        {
         "name": "Turn to turtle",
-        "note": "Libérer le coude intérieur et se retourner"
+        "note": "Libérer le coude intérieur et se retourner",
+        "then": [
+         "Shrimp to half guard",
+         "Underhook escape to half guard"
+        ]
        }
       ]
      },
@@ -2225,11 +3770,17 @@
       "techniques": [
        {
         "name": "Bridge and roll reversal",
-        "note": "Pont explosif et rotation sur l'adversaire"
+        "note": "Pont explosif et rotation sur l'adversaire",
+        "then": [
+         "Guillotine"
+        ]
        },
        {
         "name": "Underhook reversal",
-        "note": "Underhook profond et roulade par-dessus"
+        "note": "Underhook profond et roulade par-dessus",
+        "then": [
+         "Guillotine"
+        ]
        }
       ]
      },
@@ -2263,7 +3814,11 @@
       "techniques": [
        {
         "name": "Return to side control",
-        "note": "Reculer les hanches pour couper le bras"
+        "note": "Reculer les hanches pour couper le bras",
+        "then": [
+         "Spin to mount",
+         "Spin to north-south"
+        ]
        }
       ]
      },
@@ -2273,7 +3828,11 @@
       "techniques": [
        {
         "name": "Spin to mount",
-        "note": "Pivoter les jambes pour monter"
+        "note": "Pivoter les jambes pour monter",
+        "then": [
+         "Return to side control",
+         "Spin to north-south"
+        ]
        }
       ]
      },
@@ -2283,7 +3842,11 @@
       "techniques": [
        {
         "name": "Spin to north-south",
-        "note": "Tourner autour de la tête"
+        "note": "Tourner autour de la tête",
+        "then": [
+         "Return to side control",
+         "Spin to mount"
+        ]
        }
       ]
      },
@@ -2293,7 +3856,11 @@
       "techniques": [
        {
         "name": "Back take when they turn",
-        "note": "L'adversaire se retourne pour échapper"
+        "note": "L'adversaire se retourne pour échapper",
+        "then": [
+         "Return to side control",
+         "Spin to mount"
+        ]
        }
       ]
      },
@@ -2306,6 +3873,10 @@
         "name": "Kimura from scarf hold",
         "note": "Bras isolé, figure-4"
        }
+      ],
+      "then": [
+       "Armbar",
+       "Arm triangle choke"
       ]
      },
      {
@@ -2317,6 +3888,10 @@
         "name": "Scarf hold armbar",
         "note": "Piéger le bras et pivoter"
        }
+      ],
+      "then": [
+       "Kimura",
+       "Arm triangle choke"
       ]
      },
      {
@@ -2328,6 +3903,10 @@
         "name": "Arm triangle from scarf hold",
         "note": "Épaule contre le cou"
        }
+      ],
+      "then": [
+       "Kimura",
+       "Armbar"
       ]
      }
     ]
@@ -2343,7 +3922,11 @@
       "techniques": [
        {
         "name": "Bridge and shrimp (turn in)",
-        "note": "Pont puis rentrer sous l'adversaire"
+        "note": "Pont puis rentrer sous l'adversaire",
+        "then": [
+         "Hip escape to guard",
+         "Turn to turtle"
+        ]
        }
       ]
      },
@@ -2353,7 +3936,11 @@
       "techniques": [
        {
         "name": "Hip escape to guard",
-        "note": "Frame sur la hanche et ramener les jambes"
+        "note": "Frame sur la hanche et ramener les jambes",
+        "then": [
+         "Bridge and shrimp (turn in)",
+         "Turn to turtle"
+        ]
        }
       ]
      },
@@ -2363,7 +3950,11 @@
       "techniques": [
        {
         "name": "Turn to turtle",
-        "note": "Quand l'adversaire lâche la tête"
+        "note": "Quand l'adversaire lâche la tête",
+        "then": [
+         "Bridge and shrimp (turn in)",
+         "Hip escape to guard"
+        ]
        }
       ]
      },
@@ -2396,7 +3987,10 @@
       "techniques": [
        {
         "name": "Return to side control",
-        "note": "Faire le tour pour revenir à côté"
+        "note": "Faire le tour pour revenir à côté",
+        "then": [
+         "Knee on belly from north-south"
+        ]
        }
       ]
      },
@@ -2406,7 +4000,10 @@
       "techniques": [
        {
         "name": "Knee on belly from north-south",
-        "note": "Poser un genou sur le ventre"
+        "note": "Poser un genou sur le ventre",
+        "then": [
+         "Return to side control"
+        ]
        }
       ]
      },
@@ -2419,6 +4016,10 @@
         "name": "North-south choke",
         "note": "Épaule contre le cou, prises du bras"
        }
+      ],
+      "then": [
+       "Reverse triangle",
+       "Leg scissors choke"
       ]
      },
      {
@@ -2430,6 +4031,10 @@
         "name": "Kimura from north-south",
         "note": "Isoler le bras en figure-4"
        }
+      ],
+      "then": [
+       "Armbar",
+       "North-south choke"
       ]
      },
      {
@@ -2441,6 +4046,40 @@
         "name": "Straight armlock from north-south",
         "note": "Étendre le bras sur la poitrine"
        }
+      ],
+      "then": [
+       "Kimura",
+       "North-south choke"
+      ]
+     },
+     {
+      "kind": "submission",
+      "finish": "Reverse triangle",
+      "finishFr": "Triangle inversé",
+      "techniques": [
+       {
+        "name": "Reverse triangle from north-south",
+        "note": "Passer la jambe sous le cou et sur le bras, serrer en triangle"
+       }
+      ],
+      "then": [
+       "North-south choke",
+       "Leg scissors choke"
+      ]
+     },
+     {
+      "kind": "submission",
+      "finish": "Leg scissors choke",
+      "finishFr": "Étranglement ciseaux de jambes",
+      "techniques": [
+       {
+        "name": "Leg scissors choke (north-south)",
+        "note": "Entourer le cou avec les jambes en gardant la tête sous contrôle"
+       }
+      ],
+      "then": [
+       "North-south choke",
+       "Reverse triangle"
       ]
      }
     ]
@@ -2456,7 +4095,11 @@
       "techniques": [
        {
         "name": "Shrimp out to half guard",
-        "note": "Frame et glisser le genou"
+        "note": "Frame et glisser le genou",
+        "then": [
+         "Hip escape to guard",
+         "Turn to turtle"
+        ]
        }
       ]
      },
@@ -2466,7 +4109,11 @@
       "techniques": [
        {
         "name": "Hip escape to guard",
-        "note": "Rouler sur le côté et ramener les jambes"
+        "note": "Rouler sur le côté et ramener les jambes",
+        "then": [
+         "Shrimp out to half guard",
+         "Turn to turtle"
+        ]
        }
       ]
      },
@@ -2476,7 +4123,11 @@
       "techniques": [
        {
         "name": "Turn to turtle",
-        "note": "Se retourner sur les genoux"
+        "note": "Se retourner sur les genoux",
+        "then": [
+         "Shrimp out to half guard",
+         "Hip escape to guard"
+        ]
        }
       ]
      }
@@ -2499,7 +4150,11 @@
       "techniques": [
        {
         "name": "Step over to mount",
-        "note": "Passer la jambe libre par-dessus"
+        "note": "Passer la jambe libre par-dessus",
+        "then": [
+         "Back to side control",
+         "Back take when they turn"
+        ]
        }
       ]
      },
@@ -2509,7 +4164,11 @@
       "techniques": [
        {
         "name": "Back to side control",
-        "note": "Reposer le genou à côté"
+        "note": "Reposer le genou à côté",
+        "then": [
+         "Step over to mount",
+         "Back take when they turn"
+        ]
        }
       ]
      },
@@ -2519,7 +4178,11 @@
       "techniques": [
        {
         "name": "Back take when they turn",
-        "note": "L'adversaire s'enfuit en se retournant"
+        "note": "L'adversaire s'enfuit en se retournant",
+        "then": [
+         "Step over to mount",
+         "Back to side control"
+        ]
        }
       ]
      },
@@ -2532,6 +4195,9 @@
         "name": "Armbar from knee on belly",
         "note": "Saisir le bras et pivoter"
        }
+      ],
+      "then": [
+       "Baseball bat choke"
       ]
      },
      {
@@ -2543,6 +4209,9 @@
         "name": "Baseball bat choke (gi)",
         "note": "Deux prises de col"
        }
+      ],
+      "then": [
+       "Armbar"
       ]
      }
     ]
@@ -2558,7 +4227,11 @@
       "techniques": [
        {
         "name": "Push the knee and shrimp",
-        "note": "Pousser le genou et glisser les hanches"
+        "note": "Pousser le genou et glisser les hanches",
+        "then": [
+         "Frame and hip escape to guard",
+         "Turn to turtle"
+        ]
        }
       ]
      },
@@ -2568,7 +4241,11 @@
       "techniques": [
        {
         "name": "Frame and hip escape to guard",
-        "note": "Frame sur le genou, hip escape"
+        "note": "Frame sur le genou, hip escape",
+        "then": [
+         "Push the knee and shrimp",
+         "Turn to turtle"
+        ]
        }
       ]
      },
@@ -2578,7 +4255,11 @@
       "techniques": [
        {
         "name": "Turn to turtle",
-        "note": "Rouler vers le ventre"
+        "note": "Rouler vers le ventre",
+        "then": [
+         "Push the knee and shrimp",
+         "Frame and hip escape to guard"
+        ]
        }
       ]
      }
@@ -2601,7 +4282,10 @@
       "techniques": [
        {
         "name": "Back take from mount",
-        "note": "Quand l'adversaire se retourne pour fuir"
+        "note": "Quand l'adversaire se retourne pour fuir",
+        "then": [
+         "Dismount to side control"
+        ]
        }
       ]
      },
@@ -2611,7 +4295,10 @@
       "techniques": [
        {
         "name": "Dismount to side control",
-        "note": "Descendre quand il pont fort"
+        "note": "Descendre quand il pont fort",
+        "then": [
+         "Back take from mount"
+        ]
        }
       ]
      },
@@ -2628,6 +4315,10 @@
         "name": "S-mount armbar",
         "note": "Monter en S-mount puis passer la jambe"
        }
+      ],
+      "then": [
+       "Americana",
+       "Arm triangle choke"
       ]
      },
      {
@@ -2639,6 +4330,10 @@
         "name": "Americana from mount",
         "note": "Poignet cloué au sol, genoux serrés"
        }
+      ],
+      "then": [
+       "Armbar",
+       "Arm triangle choke"
       ]
      },
      {
@@ -2650,6 +4345,10 @@
         "name": "Cross collar choke from mount",
         "note": "Prise profonde dans le col"
        }
+      ],
+      "then": [
+       "Ezekiel choke",
+       "Triangle choke"
       ]
      },
      {
@@ -2661,6 +4360,10 @@
         "name": "Ezekiel choke",
         "note": "Main cachée dans la manche, sans prise de col"
        }
+      ],
+      "then": [
+       "Cross collar choke",
+       "Triangle choke"
       ]
      },
      {
@@ -2672,6 +4375,10 @@
         "name": "Triangle from mount",
         "note": "Passer la jambe sur la nuque"
        }
+      ],
+      "then": [
+       "Cross collar choke",
+       "Ezekiel choke"
       ]
      },
      {
@@ -2683,6 +4390,10 @@
         "name": "Arm triangle from mount",
         "note": "Glisser le bras sous le cou"
        }
+      ],
+      "then": [
+       "Armbar",
+       "Americana"
       ]
      }
     ]
@@ -2698,7 +4409,11 @@
       "techniques": [
        {
         "name": "Elbow-knee escape",
-        "note": "Hanches décalées, genou inséré"
+        "note": "Hanches décalées, genou inséré",
+        "then": [
+         "Elbow escape to full guard",
+         "Turn away to turtle"
+        ]
        }
       ]
      },
@@ -2708,7 +4423,11 @@
       "techniques": [
        {
         "name": "Elbow escape to full guard",
-        "note": "Récupérer la garde complète"
+        "note": "Récupérer la garde complète",
+        "then": [
+         "Elbow-knee escape",
+         "Turn away to turtle"
+        ]
        }
       ]
      },
@@ -2718,7 +4437,11 @@
       "techniques": [
        {
         "name": "Turn away to turtle",
-        "note": "Quand l'adversaire monte trop haut"
+        "note": "Quand l'adversaire monte trop haut",
+        "then": [
+         "Elbow-knee escape",
+         "Elbow escape to full guard"
+        ]
        }
       ]
      },
@@ -2772,6 +4495,10 @@
         "name": "Short choke",
         "note": "Bras plus court pour éviter la défense"
        }
+      ],
+      "then": [
+       "Bow and arrow choke",
+       "Cross collar choke"
       ]
      },
      {
@@ -2783,6 +4510,10 @@
         "name": "Bow and arrow choke (gi)",
         "note": "Prise de col et contrôle de la jambe"
        }
+      ],
+      "then": [
+       "Rear naked choke",
+       "Cross collar choke"
       ]
      },
      {
@@ -2794,6 +4525,10 @@
         "name": "Collar choke from the back (gi)",
         "note": "Prise profonde dans le col"
        }
+      ],
+      "then": [
+       "Rear naked choke",
+       "Bow and arrow choke"
       ]
      },
      {
@@ -2805,6 +4540,29 @@
         "name": "Armbar from back",
         "note": "Bras isolé en défense du cou"
        }
+      ],
+      "then": [
+       "Rear naked choke",
+       "Bow and arrow choke"
+      ]
+     },
+     {
+      "kind": "submission",
+      "finish": "Crucifix",
+      "finishFr": "Crucifix",
+      "techniques": [
+       {
+        "name": "Crucifix armbar",
+        "note": "Piéger un bras avec vos jambes, l'autre avec vos mains, puis étendre"
+       },
+       {
+        "name": "Crucifix choke",
+        "note": "Depuis le crucifix, étrangler avec le bras libre"
+       }
+      ],
+      "then": [
+       "Rear naked choke",
+       "Bow and arrow choke"
       ]
      }
     ]
@@ -2820,7 +4578,11 @@
       "techniques": [
        {
         "name": "Hip escape to guard",
-        "note": "Épaules au sol, hanches glissées sous l'adversaire"
+        "note": "Épaules au sol, hanches glissées sous l'adversaire",
+        "then": [
+         "Clear the hook to half guard",
+         "Slide off to turtle"
+        ]
        }
       ]
      },
@@ -2830,7 +4592,11 @@
       "techniques": [
        {
         "name": "Clear the hook to half guard",
-        "note": "Retirer un crochet et glisser en demi-garde"
+        "note": "Retirer un crochet et glisser en demi-garde",
+        "then": [
+         "Hip escape to guard",
+         "Slide off to turtle"
+        ]
        }
       ]
      },
@@ -2840,7 +4606,11 @@
       "techniques": [
        {
         "name": "Slide off to turtle",
-        "note": "Un crochet est perdu, se retourner"
+        "note": "Un crochet est perdu, se retourner",
+        "then": [
+         "Hip escape to guard",
+         "Clear the hook to half guard"
+        ]
        }
       ]
      }
@@ -2863,7 +4633,11 @@
       "techniques": [
        {
         "name": "Seatbelt + hooks",
-        "note": "Poitrine collée au dos, un crochet planté"
+        "note": "Poitrine collée au dos, un crochet planté",
+        "then": [
+         "Flatten out",
+         "Sprawl into front headlock"
+        ]
        }
       ]
      },
@@ -2873,7 +4647,11 @@
       "techniques": [
        {
         "name": "Flatten out",
-        "note": "Couper les hanches et l'aplatir"
+        "note": "Couper les hanches et l'aplatir",
+        "then": [
+         "Seatbelt + hooks",
+         "Sprawl into front headlock"
+        ]
        }
       ]
      },
@@ -2883,7 +4661,11 @@
       "techniques": [
        {
         "name": "Sprawl into front headlock",
-        "note": "Étendre les hanches et saisir la tête"
+        "note": "Étendre les hanches et saisir la tête",
+        "then": [
+         "Seatbelt + hooks",
+         "Flatten out"
+        ]
        }
       ]
      },
@@ -2896,6 +4678,27 @@
         "name": "Clock choke",
         "note": "Étranglement par le côté sur une tortue"
        }
+      ],
+      "then": [
+       "Crucifix"
+      ]
+     },
+     {
+      "kind": "submission",
+      "finish": "Crucifix",
+      "finishFr": "Crucifix",
+      "techniques": [
+       {
+        "name": "Crucifix from turtle",
+        "note": "Piéger le bras d'un côté avec les jambes puis rouler pour le crucifix"
+       },
+       {
+        "name": "Crucifix armbar",
+        "note": "Étendre le bras piégé pour finir en clé de bras"
+       }
+      ],
+      "then": [
+       "Clock choke"
       ]
      }
     ]
@@ -2911,11 +4714,19 @@
       "techniques": [
        {
         "name": "Granby roll to guard",
-        "note": "Rouler sur l'épaule pour ramener les jambes devant"
+        "note": "Rouler sur l'épaule pour ramener les jambes devant",
+        "then": [
+         "Peek-out to guard",
+         "Sit-out to butterfly"
+        ]
        },
        {
         "name": "Peek-out to guard",
-        "note": "Tourner la tête et glisser les hanches"
+        "note": "Tourner la tête et glisser les hanches",
+        "then": [
+         "Granby roll to guard",
+         "Sit-out to butterfly"
+        ]
        }
       ]
      },
@@ -2925,7 +4736,11 @@
       "techniques": [
        {
         "name": "Sit-out to butterfly",
-        "note": "Sortir les hanches et s'asseoir en papillon"
+        "note": "Sortir les hanches et s'asseoir en papillon",
+        "then": [
+         "Granby roll to guard",
+         "Peek-out to guard"
+        ]
        }
       ]
      },
@@ -2962,7 +4777,10 @@
       "techniques": [
        {
         "name": "Go-behind to the back",
-        "note": "Contourner derrière l'adversaire"
+        "note": "Contourner derrière l'adversaire",
+        "then": [
+         "Spin to side control"
+        ]
        }
       ]
      },
@@ -2972,7 +4790,10 @@
       "techniques": [
        {
         "name": "Spin to side control",
-        "note": "Pivoter les hanches pour finir à côté"
+        "note": "Pivoter les hanches pour finir à côté",
+        "then": [
+         "Go-behind to the back"
+        ]
        }
       ]
      },
@@ -2985,6 +4806,10 @@
         "name": "Front headlock guillotine",
         "note": "Bras sous le menton"
        }
+      ],
+      "then": [
+       "D'Arce choke",
+       "Anaconda choke"
       ]
      },
      {
@@ -2996,6 +4821,10 @@
         "name": "D'Arce choke",
         "note": "Bras de l'adversaire sous sa propre tête"
        }
+      ],
+      "then": [
+       "Guillotine",
+       "Anaconda choke"
       ]
      },
      {
@@ -3007,6 +4836,10 @@
         "name": "Anaconda choke",
         "note": "Bras passé sous le cou, rouler"
        }
+      ],
+      "then": [
+       "Guillotine",
+       "D'Arce choke"
       ]
      }
     ]
@@ -3022,7 +4855,10 @@
       "techniques": [
        {
         "name": "Posture up and clear the head",
-        "note": "Se redresser et dégager la tête"
+        "note": "Se redresser et dégager la tête",
+        "then": [
+         "Pull guard under the headlock"
+        ]
        }
       ]
      },
@@ -3032,7 +4868,10 @@
       "techniques": [
        {
         "name": "Pull guard under the headlock",
-        "note": "Rouler en arrière pour fermer la garde"
+        "note": "Rouler en arrière pour fermer la garde",
+        "then": [
+         "Posture up and clear the head"
+        ]
        }
       ]
      },

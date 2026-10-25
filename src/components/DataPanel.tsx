@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react';
+import { useI18n } from '../i18n/useI18n';
 import { useStore } from '../store/useStore';
 import { Modal } from './Modal';
 
@@ -9,6 +10,7 @@ interface Props {
 }
 
 export function DataPanel({ onClose, canInstall, onInstall }: Props) {
+  const { t } = useI18n();
   const exportData = useStore((s) => s.exportData);
   const importData = useStore((s) => s.importData);
   const resetProfiles = useStore((s) => s.resetProfiles);
@@ -25,7 +27,7 @@ export function DataPanel({ onClose, canInstall, onInstall }: Props) {
     a.download = `bjj-mes-profils-${new Date().toISOString().slice(0, 10)}.json`;
     a.click();
     URL.revokeObjectURL(url);
-    setOk('Export téléchargé.');
+    setOk(t('exported'));
     setErrors([]);
   };
 
@@ -35,26 +37,23 @@ export function DataPanel({ onClose, canInstall, onInstall }: Props) {
     try {
       const errs = importData(JSON.parse(await file.text()));
       setErrors(errs.slice(0, 8));
-      if (!errs.length) setOk('Profils importés : ils ont été ajoutés à vos profils.');
+      if (!errs.length) setOk(t('imported'));
     } catch {
-      setErrors(['Fichier JSON illisible.']);
+      setErrors([t('badJson')]);
     }
     if (fileRef.current) fileRef.current.value = '';
   };
 
   return (
-    <Modal title="Mes données" onClose={onClose}>
+    <Modal title={t('myData')} onClose={onClose}>
       <div className="data-panel">
-        <p>
-          Vos profils ({profileCount}) sont stockés <strong>uniquement sur cet appareil</strong>.
-          Exportez-les pour les sauvegarder ou les transférer vers un autre appareil.
-        </p>
+        <p>{t('dataIntro', { n: profileCount })}</p>
         <div className="btn-col">
           <button className="btn primary" onClick={download}>
-            Exporter mes profils
+            {t('exportBtn')}
           </button>
           <button className="btn" onClick={() => fileRef.current?.click()}>
-            Importer des profils (JSON)
+            {t('importBtn')}
           </button>
           <input
             ref={fileRef}
@@ -65,7 +64,7 @@ export function DataPanel({ onClose, canInstall, onInstall }: Props) {
           />
           {canInstall && (
             <button className="btn" onClick={onInstall}>
-              Installer l'application
+              {t('installBtn')}
             </button>
           )}
         </div>
@@ -79,14 +78,14 @@ export function DataPanel({ onClose, canInstall, onInstall }: Props) {
           </ul>
         )}
 
-        <h3>Zone de réinitialisation</h3>
+        <h3>{t('resetZone')}</h3>
         <button
           className="btn danger"
           onClick={() =>
-            window.confirm('Supprimer TOUS vos profils et repartir de zéro ?') && resetProfiles()
+            window.confirm(t('resetConfirm')) && resetProfiles()
           }
         >
-          Effacer tous mes profils
+          {t('resetBtn')}
         </button>
       </div>
     </Modal>

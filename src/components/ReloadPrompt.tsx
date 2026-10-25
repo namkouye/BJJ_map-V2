@@ -1,8 +1,10 @@
 import { useEffect } from 'react';
 import { useRegisterSW } from 'virtual:pwa-register/react';
+import { useI18n } from '../i18n/useI18n';
 
 /** Bandeau discret : "prêt hors-ligne" et "nouvelle version disponible". */
 export function ReloadPrompt() {
+  const { t } = useI18n();
   const {
     offlineReady: [offlineReady, setOfflineReady],
     needRefresh: [needRefresh, setNeedRefresh],
@@ -27,12 +29,12 @@ export function ReloadPrompt() {
     <div className="toast" role="status">
       <span>
         {needRefresh
-          ? 'Une nouvelle version est disponible.'
-          : 'Application prête : elle fonctionne hors-ligne.'}
+          ? t('updateAvail')
+          : t('offlineReady')}
       </span>
       {needRefresh && (
         <button className="btn small primary" onClick={() => updateServiceWorker(true)}>
-          Mettre à jour
+          {t('update')}
         </button>
       )}
       <button className="btn small" onClick={close}>

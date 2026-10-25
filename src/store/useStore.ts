@@ -12,7 +12,8 @@ import {
   sid,
   togglePick,
 } from '../graph/model';
-import type { MoveKind, Profile, ProfilesExport, Role, StateId } from '../graph/types';
+import type { Lang, MoveKind, Profile, ProfilesExport, Role, StateId } from '../graph/types';
+import { detectLang } from '../i18n/ui';
 
 export type Mode = 'explore' | 'game';
 
@@ -25,14 +26,18 @@ interface State {
   activeId: string;
   role: Role;
   mode: Mode;
+  lang: Lang;
+  /** Technique ou soumission ouverte au centre de la carte (techKey / finId) ; non persistée */
+  selItem: string | null;
   /** Position sélectionnée (non persistée) */
   selected: StateId | null;
   /** Types de mouvements affichés ; vide = tous (non persisté) */
   kindFilter: MoveKind[];
 
   setMode: (mode: Mode) => void;
+  setLang: (lang: Lang) => void;
   setRole: (role: Role) => void;
-  select: (id: StateId | null) => void;
+  select: (id: StateId | null, item?: string | null) => void;
   toggleKind: (kind: MoveKind) => void;
   clearKinds: () => void;
 
@@ -66,10 +71,13 @@ export const useStore = create<State>()(
       activeId: initial.id,
       role: 'bottom',
       mode: 'explore',
+      lang: detectLang(),
+      selItem: null,
       selected: null,
       kindFilter: [],
 
       setMode: (mode) => set({ mode }),
+      setLang: (lang) => set({ lang }),
 
       setRole: (role) =>
         set((s) => {
@@ -79,13 +87,13 @@ export const useStore = create<State>()(
             const mirrored = sid(cur.position, role);
             selected = getSide(mapIndex, mirrored) ? mirrored : null;
           }
-          return { role, selected };
+          return { role, selected, selItem: null };
         }),
 
-      select: (id) =>
+      select: (id, item = null) =>
         set((s) => {
           const p = id ? parseSid(id) : null;
-          return { selected: id, role: p ? p.role : s.role };
+          return { selected: id, selItem: id ? item : null, role: p ? p.role : s.role };
         }),
 
       toggleKind: (kind) =>
@@ -164,7 +172,7 @@ export const useStore = create<State>()(
 
       resetProfiles: () => {
         const p = firstProfile();
-        set({ profiles: [p], activeId: p.id, selected: null });
+        set({ profiles: [p], activeId: p.id, selected: null, selItem: null });
       },
     }),
     {
@@ -175,12 +183,13 @@ export const useStore = create<State>()(
         activeId: s.activeId,
         role: s.role,
         mode: s.mode,
+        lang: s.lang,
       }),
       merge: (persisted, current) => {
         const p = persisted as Partial<State> | undefined;
         if (!p?.profiles?.length) return current;
         const activeId = p.profiles.some((x) => x.id === p.activeId) ? p.activeId! : p.profiles[0].id;
-        return { ...current, ...p, activeId, selected: null };
+        return { ...current, ...p, activeId, selected: null, selItem: null };
       },
     },
   ),

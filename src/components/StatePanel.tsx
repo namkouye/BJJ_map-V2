@@ -4,18 +4,31 @@ import {
   FAMILY_COLORS,
   GAME_LABELS,
   KIND_COLORS,
-  KIND_LABELS,
   KIND_ORDER,
   ROLE_COLORS,
   ROLE_LABELS,
-  ROLE_LABELS_FR,
 } from '../graph/labels';
-import { getSide, matchesKinds, moveId, otherRole, parseSid, pickedTechniques, sid, techKey } from '../graph/model';
+import {
+  finId,
+  findItem,
+  getSide,
+  itemThen,
+  matchesKinds,
+  moveId,
+  otherRole,
+  parseSid,
+  pickedTechniques,
+  resolveRef,
+  sid,
+  techKey,
+} from '../graph/model';
 import type { Move, StateId } from '../graph/types';
+import { useI18n } from '../i18n/useI18n';
 import { useActiveProfile, useStore } from '../store/useStore';
 
 function CustomAdder({ mid }: { mid: string }) {
   const addCustom = useStore((s) => s.addCustom);
+  const { t } = useI18n();
   const [value, setValue] = useState('');
   return (
     <form
@@ -29,8 +42,8 @@ function CustomAdder({ mid }: { mid: string }) {
       <input
         value={value}
         onChange={(e) => setValue(e.target.value)}
-        placeholder="Ajouter ma propre technique…"
-        aria-label="Ajouter ma propre technique"
+        placeholder={t('addOwn')}
+        aria-label={t('addOwn')}
       />
       <button className="btn small" type="submit" disabled={!value.trim()}>
         +
@@ -39,19 +52,22 @@ function CustomAdder({ mid }: { mid: string }) {
   );
 }
 
-function MoveCard({ from, move }: { from: StateId; move: Move }) {
+/** Carte d'un mouvement : destination (ou finition) + techniques à étoiler. `only` limite à une technique. */
+function MoveCard({ from, move, only, open }: { from: StateId; move: Move; only?: string; open?: boolean }) {
   const profile = useActiveProfile();
   const select = useStore((s) => s.select);
   const togglePick = useStore((s) => s.togglePick);
   const removeCustom = useStore((s) => s.removeCustom);
+  const i18n = useI18n();
+  const { t } = i18n;
 
   const mid = moveId(from, move);
   const picked = new Set(pickedTechniques(profile, mid, move));
-  const custom = profile.custom[mid] ?? [];
-  const total = move.techniques.length + custom.length;
+  const custom = only ? [] : (profile.custom[mid] ?? []);
+  const techs = only ? move.techniques.filter((x) => x.name === only) : move.techniques;
+  const total = techs.length + custom.length;
   const dest = move.to ? parseSid(move.to) : null;
   const destPos = dest ? mapIndex.get(dest.position) : undefined;
-  const destSide = move.to ? getSide(mapIndex, move.to) : undefined;
   const color = KIND_COLORS[move.kind];
 
   return (
@@ -60,37 +76,42 @@ function MoveCard({ from, move }: { from: StateId; move: Move }) {
         {move.to ? (
           <button className="move-dest" onClick={() => select(move.to!)}>
             <strong>{destPos?.name}</strong>
-            <small>{destSide?.titleFr}</small>
+            <small>{i18n.sideTitle(move.to)}</small>
           </button>
         ) : (
-          <div className="move-dest static">
+          <button className="move-dest" onClick={() => select(from, finId(mid))}>
             <strong>{move.finish}</strong>
-            <small>{move.finishFr}</small>
-          </div>
+            {i18n.lang !== 'en' && <small>{i18n.finish(move)}</small>}
+          </button>
         )}
         {picked.size > 0 && <span className="stars-badge">★ {picked.size}</span>}
       </div>
-      <details className="move-techs" open={picked.size > 0}>
-        <summary>
-          {total} technique{total > 1 ? 's' : ''}
-        </summary>
+      <details className="move-techs" open={open || picked.size > 0}>
+        <summary>{t('techniqueCount', { n: total })}</summary>
         <ul>
-          {move.techniques.map((t) => {
-            const key = techKey(mid, t.name);
-            const on = picked.has(t.name);
+          {techs.map((tech) => {
+            const key = techKey(mid, tech.name);
+            const on = picked.has(tech.name);
+            const note = i18n.note(tech);
             return (
-              <li key={t.name}>
+              <li key={tech.name}>
                 <button
                   className={`star ${on ? 'on' : ''}`}
                   aria-pressed={on}
-                  aria-label={`${on ? 'Retirer' : 'Ajouter'} « ${t.name} » ${on ? 'de' : 'à'} mon jeu`}
+                  aria-label={t(on ? 'removeFromGame' : 'addToGame', { name: tech.name })}
                   onClick={() => togglePick(key)}
                 >
                   {on ? '★' : '☆'}
                 </button>
                 <span>
-                  {t.name}
-                  {t.note && <small>{t.note}</small>}
+                  {move.kind === 'submission' || only ? (
+                    tech.name
+                  ) : (
+                    <button className="linkish tech-link" onClick={() => select(from, key)}>
+                      {tech.name}
+                    </button>
+                  )}
+                  {note && <small>{note}</small>}
                 </span>
               </li>
             );
@@ -102,18 +123,18 @@ function MoveCard({ from, move }: { from: StateId; move: Move }) {
                 <button
                   className={`star ${on ? 'on' : ''}`}
                   aria-pressed={on}
-                  aria-label={`${on ? 'Retirer' : 'Ajouter'} « ${name} »`}
+                  aria-label={t(on ? 'removeFromGame' : 'addToGame', { name })}
                   onClick={() => togglePick(techKey(mid, name))}
                 >
                   {on ? '★' : '☆'}
                 </button>
                 <span>
                   {name}
-                  <small>Ma technique</small>
+                  <small>{t('myTechnique')}</small>
                 </span>
                 <button
                   className="btn ghost small"
-                  aria-label={`Supprimer « ${name} »`}
+                  aria-label={t('delete', { name })}
                   onClick={() => removeCustom(mid, name)}
                 >
                   ✕
@@ -128,13 +149,107 @@ function MoveCard({ from, move }: { from: StateId; move: Move }) {
   );
 }
 
+/** Détail d'une technique ou d'une soumission : son résultat et ses plans B. */
+function ItemPanel({ from, itemId }: { from: StateId; itemId: string }) {
+  const select = useStore((s) => s.select);
+  const i18n = useI18n();
+  const { t } = i18n;
+  const item = findItem(mapIndex, from, itemId);
+  if (!item) return null;
+  const parsed = parseSid(from)!;
+  const pos = mapIndex.get(parsed.position)!;
+  const m = item.move;
+  const color = KIND_COLORS[m.kind];
+  const name = item.tech ? item.tech.name : (m.finish ?? '');
+
+  const nexts = itemThen(item)
+    .map((r) => resolveRef(mapIndex, from, r))
+    .filter((r): r is NonNullable<typeof r> => !!r);
+
+  return (
+    <div className="state-panel">
+      <header className="state-head">
+        <div className="chips-row">
+          <span className="badge" style={{ background: color }}>
+            {i18n.kindLabel(m.kind)}
+          </span>
+          <span className="badge soft" style={{ color: ROLE_COLORS[parsed.role] }}>
+            {pos.name} · {ROLE_LABELS[parsed.role]}
+          </span>
+        </div>
+        <h2>{name}</h2>
+        {!item.tech && i18n.lang !== 'en' && <p className="fr">{i18n.finish(m)}</p>}
+        {item.tech && i18n.note(item.tech) && <p className="summary">{i18n.note(item.tech)}</p>}
+        <div className="head-actions">
+          <button className="btn small" onClick={() => select(from)}>
+            ← {t('leaveItem')} {pos.name}
+          </button>
+        </div>
+      </header>
+
+      <ul className="moves">
+        <MoveCard from={from} move={m} only={item.tech?.name} open />
+      </ul>
+
+      {m.to && (
+        <section>
+          <h3 style={{ color }}>{t('result')}</h3>
+          <ul className="moves">
+            <li className="move-card" style={{ borderLeftColor: color }}>
+              <button className="move-dest" onClick={() => select(m.to!)}>
+                <strong>{mapIndex.get(parseSid(m.to)!.position)?.name}</strong>
+                <small>{i18n.sideTitle(m.to)}</small>
+              </button>
+            </li>
+          </ul>
+        </section>
+      )}
+
+      {nexts.length > 0 && (
+        <section>
+          <h3 style={{ color: '#94a3b8' }}>{t('ifItFails')}</h3>
+          <ul className="moves">
+            {nexts.map((n, i) => {
+              if (n.type === 'state') {
+                return (
+                  <li key={i} className="move-card" style={{ borderLeftColor: '#94a3b8' }}>
+                    <button className="move-dest" onClick={() => select(n.id)}>
+                      <strong>{mapIndex.get(parseSid(n.id)!.position)?.name}</strong>
+                      <small>{i18n.sideTitle(n.id)}</small>
+                    </button>
+                  </li>
+                );
+              }
+              const im = n.item.move;
+              return (
+                <li key={i} className="move-card" style={{ borderLeftColor: KIND_COLORS[im.kind] }}>
+                  <button className="move-dest" onClick={() => select(from, n.item.id)}>
+                    <strong>{n.item.tech ? n.item.tech.name : im.finish}</strong>
+                    <small>
+                      {i18n.kindShort(im.kind)}
+                      {im.to ? ` → ${i18n.stateName(im.to)}` : ''}
+                    </small>
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        </section>
+      )}
+    </div>
+  );
+}
+
 export function StatePanel() {
   const selected = useStore((s) => s.selected);
+  const selItem = useStore((s) => s.selItem);
   const select = useStore((s) => s.select);
   const setStart = useStore((s) => s.setStart);
   const kindFilter = useStore((s) => s.kindFilter);
   const clearKinds = useStore((s) => s.clearKinds);
   const profile = useActiveProfile();
+  const i18n = useI18n();
+  const { t } = i18n;
 
   const parsed = selected ? parseSid(selected) : null;
   const pos = parsed ? mapIndex.get(parsed.position) : undefined;
@@ -143,24 +258,24 @@ export function StatePanel() {
   if (!selected || !parsed || !pos || !side) {
     return (
       <div className="state-panel intro">
-        <h3>Comment ça marche</h3>
+        <h3>{t('howTitle')}</h3>
         <ol>
-          <li>Touchez une position sur la carte.</li>
-          <li>
-            Choisissez votre point de vue avec le curseur <b>On top</b> / <b>On bottom</b>.
-          </li>
-          <li>
-            La position passe au centre : toutes vos options apparaissent autour (passages,
-            balayages, soumissions…).
-          </li>
-          <li>Touchez une option pour continuer, et étoilez vos techniques préférées pour bâtir votre jeu.</li>
+          <li>{t('how1')}</li>
+          <li>{t('how2')}</li>
+          <li>{t('how3')}</li>
+          <li>{t('how4')}</li>
         </ol>
       </div>
     );
   }
 
+  if (selItem && findItem(mapIndex, selected, selItem)) {
+    return <ItemPanel from={selected} itemId={selItem} />;
+  }
+
   const isStart = profile.starts[parsed.role] === selected;
   const mirror = sid(pos.id, otherRole(parsed.role));
+  const game = GAME_LABELS[parsed.role].toLowerCase();
   const groups = KIND_ORDER.filter((kind) => matchesKinds(kind, kindFilter))
     .map((kind) => ({ kind, moves: side.moves.filter((m) => m.kind === kind) }))
     .filter((g) => g.moves.length);
@@ -170,41 +285,40 @@ export function StatePanel() {
       <header className="state-head">
         <div className="chips-row">
           <span className="badge" style={{ background: ROLE_COLORS[parsed.role] }}>
-            {ROLE_LABELS[parsed.role]} · {ROLE_LABELS_FR[parsed.role]}
+            {ROLE_LABELS[parsed.role]} · {i18n.roleSub(parsed.role)}
           </span>
           <span className="badge soft" style={{ color: FAMILY_COLORS[pos.family] }}>
-            {pos.nameFr}
+            {i18n.posName(pos)}
           </span>
         </div>
         <h2>{side.title}</h2>
-        <p className="fr">{side.titleFr}</p>
-        <p className="summary">{side.summary}</p>
+        {i18n.lang !== 'en' && <p className="fr">{i18n.sideTitle(selected)}</p>}
+        <p className="summary">{i18n.sideSummary(selected)}</p>
         <div className="head-actions">
           <button className="btn small" onClick={() => select(mirror)} disabled={!getSide(mapIndex, mirror)}>
-            Voir côté {ROLE_LABELS[otherRole(parsed.role)]}
+            {t('seeSide', { role: ROLE_LABELS[otherRole(parsed.role)] })}
           </button>
           <button
             className={`btn small ${isStart ? 'primary' : ''}`}
             onClick={() => setStart(parsed.role, isStart ? null : selected)}
           >
-            {isStart ? `✓ Départ de mon ${GAME_LABELS[parsed.role].toLowerCase()}` : `Définir comme départ (${GAME_LABELS[parsed.role].toLowerCase()})`}
+            {isStart ? t('isStart', { game }) : t('setStart', { game })}
           </button>
         </div>
       </header>
 
       {kindFilter.length > 0 && (
         <p className="filter-note">
-          Filtre actif :{' '}
-          {kindFilter.map((k) => KIND_LABELS[k]).join(' + ')}.{' '}
+          {t('filterActive')} {kindFilter.map((k) => i18n.kindLabel(k)).join(' + ')}.{' '}
           <button className="linkish" onClick={clearKinds}>
-            Tout afficher
+            {t('showAll')}
           </button>
         </p>
       )}
 
       {groups.map((g) => (
         <section key={g.kind}>
-          <h3 style={{ color: KIND_COLORS[g.kind] }}>{KIND_LABELS[g.kind]}</h3>
+          <h3 style={{ color: KIND_COLORS[g.kind] }}>{i18n.kindLabel(g.kind)}</h3>
           <ul className="moves">
             {g.moves.map((m) => (
               <MoveCard key={moveId(selected, m)} from={selected} move={m} />
@@ -212,14 +326,8 @@ export function StatePanel() {
           </ul>
         </section>
       ))}
-      {!groups.length && (
-        <p className="empty">
-          {kindFilter.length ? 'Aucune option de ce type depuis cette position.' : 'Aucune option depuis cette position.'}
-        </p>
-      )}
-      <p className="hint-text">
-        ☆ Étoilez une technique pour l'ajouter au profil « {profile.name} ».
-      </p>
+      {!groups.length && <p className="empty">{kindFilter.length ? t('noOptionsKind') : t('noOptions')}</p>}
+      <p className="hint-text">{t('starHint', { name: profile.name })}</p>
     </div>
   );
 }

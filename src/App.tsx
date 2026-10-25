@@ -5,13 +5,15 @@ import { MapView } from './components/MapView';
 import { ReloadPrompt } from './components/ReloadPrompt';
 import { StatePanel } from './components/StatePanel';
 import { useInstallPrompt } from './hooks/useInstallPrompt';
+import { useI18n } from './i18n/useI18n';
+import { LanguageMenu } from './components/LanguageMenu';
 import { useActiveProfile, useStore, type Mode } from './store/useStore';
 
 type Tab = 'map' | 'panel';
 
-const MODES: Array<{ id: Mode; label: string }> = [
-  { id: 'explore', label: 'Explorer' },
-  { id: 'game', label: 'Mon jeu' },
+const MODES: Array<{ id: Mode; key: 'modeExplore' | 'modeGame' }> = [
+  { id: 'explore', key: 'modeExplore' },
+  { id: 'game', key: 'modeGame' },
 ];
 
 export default function App() {
@@ -21,16 +23,18 @@ export default function App() {
   const setMode = useStore((s) => s.setMode);
   const selected = useStore((s) => s.selected);
   const role = useStore((s) => s.role);
+  const { t, lang } = useI18n();
   const profile = useActiveProfile();
   const { canInstall, install } = useInstallPrompt();
 
   // Le thème de couleur suit le côté choisi (bleu = dessus, ambre = dessous).
   useEffect(() => {
     document.documentElement.dataset.role = role;
+    document.documentElement.lang = lang;
     document
       .querySelector('meta[name="theme-color"]')
       ?.setAttribute('content', role === 'top' ? '#0b1a2e' : '#1b120c');
-  }, [role]);
+  }, [role, lang]);
 
   return (
     <div className="app" data-role={role}>
@@ -42,7 +46,7 @@ export default function App() {
           <span>BJJ Game Map</span>
         </h1>
 
-        <div className="mode-switch" role="tablist" aria-label="Mode">
+        <div className="mode-switch" role="tablist" aria-label={t('mode')}>
           {MODES.map((m) => (
             <button
               key={m.id}
@@ -51,27 +55,28 @@ export default function App() {
               className={mode === m.id ? 'on' : ''}
               onClick={() => setMode(m.id)}
             >
-              {m.label}
+              {t(m.key)}
             </button>
           ))}
         </div>
 
         <div className="top-actions">
-          <span className="profile-chip" title="Profil actif">
+          <span className="profile-chip" title={t('activeProfileTitle')}>
             {profile.name}
           </span>
+          <LanguageMenu />
           <button className="btn" onClick={() => setShowData(true)}>
-            Données
+            {t('data')}
           </button>
         </div>
       </header>
 
-      <nav className="tabs" aria-label="Sections">
+      <nav className="tabs" aria-label={t('sections')}>
         <button className={tab === 'map' ? 'on' : ''} onClick={() => setTab('map')}>
-          Carte
+          {t('tabMap')}
         </button>
         <button className={tab === 'panel' ? 'on' : ''} onClick={() => setTab('panel')}>
-          {mode === 'game' ? 'Mon jeu' : 'Détail'}
+          {mode === 'game' ? t('modeGame') : t('tabDetail')}
           {selected ? ' •' : ''}
         </button>
       </nav>
