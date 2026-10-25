@@ -37,6 +37,9 @@ describe('jeu de données (au sol)', () => {
     for (const id of [
       'closed-guard', 'half-guard', 'side-control', 'mount', 'back-control', 'turtle',
       'butterfly-guard', 'de-la-riva', 'x-guard', 'single-leg-x', 'headquarters',
+      'knee-shield', 'deep-half-guard', 'reverse-de-la-riva', 'spider-guard', 'lasso-guard',
+      'collar-sleeve-guard', 'saddle', 'fifty-fifty', 'kesa-gatame', 'north-south',
+      'knee-on-belly', 'front-headlock',
     ]) {
       expect(mapIndex.has(id), id).toBe(true);
     }
@@ -64,6 +67,44 @@ describe('jeu de données (au sol)', () => {
     for (const p of bjjMap.positions)
       for (const m of p.bottom?.moves ?? [])
         if (m.kind === 'sweep') expect(parseSid(m.to!)?.role).toBe('top');
+  });
+
+  it('contient une base riche de techniques', () => {
+    const techniques = bjjMap.positions.flatMap((p) =>
+      (['top', 'bottom'] as const).flatMap((r) => (p[r]?.moves ?? []).flatMap((m) => m.techniques)),
+    );
+    expect(techniques.length).toBeGreaterThanOrEqual(250);
+  });
+
+  it('chaque position est atteignable depuis une autre position', () => {
+    const incoming = new Set<string>();
+    for (const p of bjjMap.positions)
+      for (const r of ['top', 'bottom'] as const)
+        for (const m of p[r]?.moves ?? []) if (m.to) incoming.add(parseSid(m.to)!.position);
+    for (const p of bjjMap.positions) expect(incoming.has(p.id), p.id).toBe(true);
+  });
+
+  it('chaque garde propose au moins un balayage et une soumission ou une transition', () => {
+    for (const p of bjjMap.positions.filter((x) => x.family === 'guard')) {
+      const kinds = new Set(p.bottom!.moves.map((m) => m.kind));
+      expect(kinds.has('sweep') || kinds.has('transition'), p.id).toBe(true);
+    }
+  });
+
+  it('chaque position dominante et chaque garde ont des options des deux côtés', () => {
+    for (const p of bjjMap.positions) {
+      expect(p.top!.moves.length, `${p.id} top`).toBeGreaterThan(0);
+      expect(p.bottom!.moves.length, `${p.id} bottom`).toBeGreaterThan(0);
+    }
+  });
+
+  it('les noms de techniques sont uniques à l\'intérieur d\'un mouvement', () => {
+    for (const p of bjjMap.positions)
+      for (const r of ['top', 'bottom'] as const)
+        for (const m of p[r]?.moves ?? []) {
+          const names = m.techniques.map((t) => t.name);
+          expect(new Set(names).size, `${p.id}:${r}`).toBe(names.length);
+        }
   });
 
   it('un passage de garde part toujours du dessus', () => {
@@ -155,7 +196,7 @@ describe('profils', () => {
   it('sépare game top et game bottom', () => {
     let p = newProfile('p1', 'Test');
     p = togglePick(p, techKey(mid, 'Scissor sweep'));
-    const hqMove = getSide(mapIndex, 'headquarters:top')!.moves[0];
+    const hqMove = getSide(mapIndex, 'headquarters:top')!.moves.find((m) => m.to === 'side-control:top')!;
     p = togglePick(p, techKey(moveId('headquarters:top', hqMove), hqMove.techniques[0].name));
     expect(gameEntries(bjjMap, p, 'bottom').map((e) => e.from)).toEqual([from]);
     expect(gameEntries(bjjMap, p, 'top').map((e) => e.from)).toEqual(['headquarters:top']);
@@ -164,13 +205,13 @@ describe('profils', () => {
 
   it('calcule les couches du jeu à partir du départ', () => {
     let p = newProfile('p1', 'Test');
-    const pick = (stateId: string, index: number, tech = 0) => {
-      const m = getSide(mapIndex, stateId)!.moves[index];
-      p = togglePick(p, techKey(moveId(stateId, m), m.techniques[tech].name));
+    const pick = (stateId: string, to: string) => {
+      const m = getSide(mapIndex, stateId)!.moves.find((x) => x.to === to)!;
+      p = togglePick(p, techKey(moveId(stateId, m), m.techniques[0].name));
     };
-    pick('closed-guard:top', 1); // -> headquarters:top
-    pick('headquarters:top', 0); // -> side-control:top
-    pick('side-control:top', 0); // -> mount:top
+    pick('closed-guard:top', 'headquarters:top');
+    pick('headquarters:top', 'side-control:top');
+    pick('side-control:top', 'mount:top');
     const entries = gameEntries(bjjMap, p, 'top');
     const depth = layerGame(entries, 'closed-guard:top');
     expect(depth.get('closed-guard:top')).toBe(0);
@@ -182,12 +223,12 @@ describe('profils', () => {
 
   it('gère les cycles et les départs inconnus', () => {
     let p = newProfile('p1', 'Test');
-    const pick = (stateId: string, index: number) => {
-      const m = getSide(mapIndex, stateId)!.moves[index];
+    const pick = (stateId: string, to: string) => {
+      const m = getSide(mapIndex, stateId)!.moves.find((x) => x.to === to)!;
       p = togglePick(p, techKey(moveId(stateId, m), m.techniques[0].name));
     };
-    pick('closed-guard:bottom', 2); // -> butterfly-guard:bottom
-    pick('butterfly-guard:bottom', 4); // -> closed-guard:bottom (cycle)
+    pick('closed-guard:bottom', 'butterfly-guard:bottom');
+    pick('butterfly-guard:bottom', 'closed-guard:bottom'); // cycle
     const depth = layerGame(gameEntries(bjjMap, p, 'bottom'), 'nope:bottom');
     expect(depth.size).toBe(2);
   });
@@ -206,5 +247,15 @@ describe('import de profils', () => {
     expect(parseProfiles(null).errors).not.toEqual([]);
     expect(parseProfiles({ profiles: [{ name: '', picks: [] }] }).errors).not.toEqual([]);
     expect(parseProfiles({ profiles: [{ name: 'x', picks: [1] }] }).errors).not.toEqual([]);
+  });
+
+  it("filtre les arêtes de la vue d'ensemble par type", () => {
+    const all = overviewEdges(bjjMap, 'bottom');
+    const sweeps = overviewEdges(bjjMap, 'bottom', ['sweep']);
+    expect(sweeps.length).toBeGreaterThan(0);
+    expect(sweeps.length).toBeLessThanOrEqual(all.length);
+    expect(sweeps.every((e) => e.kinds.every((k) => k === 'sweep'))).toBe(true);
+    expect(overviewEdges(bjjMap, 'top', ['pass']).length).toBeGreaterThan(0);
+    expect(overviewEdges(bjjMap, 'bottom', ['pass']).length).toBe(0);
   });
 });

@@ -109,12 +109,27 @@ export interface OverviewEdge {
   kinds: MoveKind[];
 }
 
+/** Une liste de types vide signifie « tous les types ». */
+export const matchesKinds = (kind: MoveKind, kinds: readonly MoveKind[]): boolean =>
+  kinds.length === 0 || kinds.includes(kind);
+
+/** Nombre de mouvements par type pour un côté (ou pour tout un côté de la carte). */
+export function countKinds(moves: readonly Move[]): Partial<Record<MoveKind, number>> {
+  const out: Partial<Record<MoveKind, number>> = {};
+  for (const m of moves) out[m.kind] = (out[m.kind] ?? 0) + 1;
+  return out;
+}
+
+export function roleMoves(map: BJJMap, role: Role): Move[] {
+  return map.positions.flatMap((p) => p[role]?.moves ?? []);
+}
+
 /** Arêtes position → position pour les mouvements d'un côté donné (sans techniques). */
-export function overviewEdges(map: BJJMap, role: Role): OverviewEdge[] {
+export function overviewEdges(map: BJJMap, role: Role, kinds: readonly MoveKind[] = []): OverviewEdge[] {
   const out = new Map<string, OverviewEdge>();
   for (const p of map.positions) {
     for (const m of p[role]?.moves ?? []) {
-      if (!m.to) continue;
+      if (!m.to || !matchesKinds(m.kind, kinds)) continue;
       const target = parseSid(m.to);
       if (!target || target.position === p.id) continue;
       const key = `${p.id}>${target.position}`;

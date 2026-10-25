@@ -10,7 +10,7 @@ import {
   ROLE_LABELS,
   ROLE_LABELS_FR,
 } from '../graph/labels';
-import { getSide, moveId, otherRole, parseSid, pickedTechniques, sid, techKey } from '../graph/model';
+import { getSide, matchesKinds, moveId, otherRole, parseSid, pickedTechniques, sid, techKey } from '../graph/model';
 import type { Move, StateId } from '../graph/types';
 import { useActiveProfile, useStore } from '../store/useStore';
 
@@ -132,6 +132,8 @@ export function StatePanel() {
   const selected = useStore((s) => s.selected);
   const select = useStore((s) => s.select);
   const setStart = useStore((s) => s.setStart);
+  const kindFilter = useStore((s) => s.kindFilter);
+  const clearKinds = useStore((s) => s.clearKinds);
   const profile = useActiveProfile();
 
   const parsed = selected ? parseSid(selected) : null;
@@ -159,10 +161,9 @@ export function StatePanel() {
 
   const isStart = profile.starts[parsed.role] === selected;
   const mirror = sid(pos.id, otherRole(parsed.role));
-  const groups = KIND_ORDER.map((kind) => ({
-    kind,
-    moves: side.moves.filter((m) => m.kind === kind),
-  })).filter((g) => g.moves.length);
+  const groups = KIND_ORDER.filter((kind) => matchesKinds(kind, kindFilter))
+    .map((kind) => ({ kind, moves: side.moves.filter((m) => m.kind === kind) }))
+    .filter((g) => g.moves.length);
 
   return (
     <div className="state-panel">
@@ -191,6 +192,16 @@ export function StatePanel() {
         </div>
       </header>
 
+      {kindFilter.length > 0 && (
+        <p className="filter-note">
+          Filtre actif :{' '}
+          {kindFilter.map((k) => KIND_LABELS[k]).join(' + ')}.{' '}
+          <button className="linkish" onClick={clearKinds}>
+            Tout afficher
+          </button>
+        </p>
+      )}
+
       {groups.map((g) => (
         <section key={g.kind}>
           <h3 style={{ color: KIND_COLORS[g.kind] }}>{KIND_LABELS[g.kind]}</h3>
@@ -201,7 +212,11 @@ export function StatePanel() {
           </ul>
         </section>
       ))}
-      {!groups.length && <p className="empty">Aucune option depuis cette position.</p>}
+      {!groups.length && (
+        <p className="empty">
+          {kindFilter.length ? 'Aucune option de ce type depuis cette position.' : 'Aucune option depuis cette position.'}
+        </p>
+      )}
       <p className="hint-text">
         ☆ Étoilez une technique pour l'ajouter au profil « {profile.name} ».
       </p>

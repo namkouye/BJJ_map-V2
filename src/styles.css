@@ -185,3 +185,41 @@ input:focus, select:focus, textarea:focus, button:focus-visible { outline: 2px s
 
 /* ---------- toast ---------- */
 .toast { position: fixed; left: 50%; bottom: calc(16px + env(safe-area-inset-bottom)); transform: translateX(-50%); display: flex; align-items: center; gap: 10px; background: var(--panel-2); border: 1px solid var(--accent); padding: 10px 14px; border-radius: 12px; z-index: 60; font-size: 0.9rem; max-width: calc(100vw - 24px); }
+
+/* ---------- Thème selon le côté : bleu = On top, ambre = On bottom ---------- */
+.app, .topbar, .col-detail, .react-flow, .map-node.center, .panel { transition: background-color 0.35s ease, border-color 0.35s ease; }
+.app[data-role='top'] {
+  --bg: #0a1626; --panel: #0f2038; --panel-2: #15294a; --border: #25416b; --accent: #38bdf8;
+}
+.app[data-role='bottom'] {
+  --bg: #1a110a; --panel: #261810; --panel-2: #33201a; --border: #5a3a26; --accent: #fb923c;
+}
+.app[data-role='top'] .map-node.center { background: #1b3a6b; }
+.app[data-role='bottom'] .map-node.center { background: #5a3418; }
+.app[data-role='top'] .map-node.selected { box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.6); }
+.app[data-role='bottom'] .map-node.selected { box-shadow: 0 0 0 3px rgba(251, 146, 60, 0.65); }
+.app .topbar { border-bottom: 3px solid var(--accent); }
+.app .btn.primary, .app .mode-switch button.on { color: #1a0f05; }
+/* Grand filigrane du côté dans la carte */
+@media (min-width: 961px) { .col-graph { position: relative; } }
+.col-graph::after {
+  content: attr(data-watermark); position: absolute; right: 14px; bottom: 10px; z-index: 1;
+  font-size: clamp(2rem, 7vw, 4.5rem); font-weight: 900; letter-spacing: 0.04em; text-transform: uppercase;
+  color: var(--accent); opacity: 0.09; pointer-events: none;
+}
+
+/* ---------- Filtres par type de mouvement ---------- */
+.kind-filter { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; max-width: 100%; }
+.kchip {
+  --c: #94a3b8; display: inline-flex; align-items: center; gap: 5px; cursor: pointer;
+  background: var(--panel-2); color: var(--muted); border: 1px solid var(--border); border-radius: 99px;
+  padding: 5px 11px; font-size: 0.8rem; min-height: 32px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+.kchip .kcount { font-size: 0.7rem; opacity: 0.8; }
+.kchip.on { background: var(--c); border-color: var(--c); color: #0b1220; font-weight: 700; }
+.kchip:not(.on):hover { border-color: var(--c); color: var(--text); }
+.filter-note { font-size: 0.82rem; color: var(--muted); margin: 8px 0; }
+.linkish { background: none; border: 0; padding: 0; color: var(--accent); text-decoration: underline; cursor: pointer; font: inherit; }
+.map-node.faded { opacity: 0.35; }
+.map-node.pos { width: 150px; min-height: 58px; padding: 6px 8px; }
+.map-node.pos .map-node-title { font-size: 0.8rem; }

@@ -6,11 +6,13 @@ une carte intuitive de position à position, et un outil pour construire **son p
 ## Ce que fait l'application
 
 **Explorer** (idéal débutants)
-- Carte globale : 11 positions (gardes, HQ, contrôles dominants, tortue), sans détail technique
+- Carte globale : 23 positions (gardes, passages, contrôles dominants, tortue…), 225 mouvements et près de 300 techniques, sans détail technique sur la carte
 - Curseur **On top / On bottom** : on change de point de vue sur toute la carte
 - On touche une position : elle passe au centre et toutes ses possibilités apparaissent autour
   (passages, balayages, progressions, évasions, soumissions). Exemple : *On top → Headquarters*
   affiche tous les passages de garde
+- **Boutons de filtre** : Tout / Passage / Balayage / Progression / Évasion / Soumission (cumulables) pour une carte plus claire, sur la carte d'ensemble comme autour d'une position
+- **Thème de couleur** : bleu quand vous êtes *On top*, ambre quand vous êtes *On bottom*
 - Les techniques (avec une courte explication) sont dans le panneau de détail
 
 **Mon jeu** (personnalisation)

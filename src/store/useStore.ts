@@ -12,7 +12,7 @@ import {
   sid,
   togglePick,
 } from '../graph/model';
-import type { Profile, ProfilesExport, Role, StateId } from '../graph/types';
+import type { MoveKind, Profile, ProfilesExport, Role, StateId } from '../graph/types';
 
 export type Mode = 'explore' | 'game';
 
@@ -27,10 +27,14 @@ interface State {
   mode: Mode;
   /** Position sélectionnée (non persistée) */
   selected: StateId | null;
+  /** Types de mouvements affichés ; vide = tous (non persisté) */
+  kindFilter: MoveKind[];
 
   setMode: (mode: Mode) => void;
   setRole: (role: Role) => void;
   select: (id: StateId | null) => void;
+  toggleKind: (kind: MoveKind) => void;
+  clearKinds: () => void;
 
   setActive: (id: string) => void;
   createProfile: (name: string) => void;
@@ -63,6 +67,7 @@ export const useStore = create<State>()(
       role: 'bottom',
       mode: 'explore',
       selected: null,
+      kindFilter: [],
 
       setMode: (mode) => set({ mode }),
 
@@ -82,6 +87,15 @@ export const useStore = create<State>()(
           const p = id ? parseSid(id) : null;
           return { selected: id, role: p ? p.role : s.role };
         }),
+
+      toggleKind: (kind) =>
+        set((s) => ({
+          kindFilter: s.kindFilter.includes(kind)
+            ? s.kindFilter.filter((k) => k !== kind)
+            : [...s.kindFilter, kind],
+        })),
+
+      clearKinds: () => set({ kindFilter: [] }),
 
       setActive: (id) => set((s) => (s.profiles.some((p) => p.id === id) ? { activeId: id } : s)),
 

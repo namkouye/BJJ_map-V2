@@ -28,6 +28,7 @@ import {
   gameEntries,
   getSide,
   layerGame,
+  matchesKinds,
   moveId,
   overviewEdges,
   parseSid,
@@ -36,6 +37,7 @@ import {
 } from '../graph/model';
 import type { MoveKind, Role, StateId } from '../graph/types';
 import { useActiveProfile, useStore } from '../store/useStore';
+import { KindFilter } from './KindFilter';
 import { RoleToggle } from './RoleToggle';
 
 const NODE_W = 184;
@@ -55,6 +57,7 @@ interface MapNodeData extends Record<string, unknown> {
   stars?: number;
   start?: boolean;
   dashed?: boolean;
+  faded?: boolean;
   selected?: boolean;
   /** état à sélectionner au clic */
   target?: StateId;
@@ -72,7 +75,7 @@ const MapNode = memo(function MapNode({ data }: NodeProps<MapFlowNode>) {
   const d = data;
   return (
     <div
-      className={`map-node ${d.variant} ${d.dashed ? 'dashed' : ''} ${d.selected ? 'selected' : ''} ${d.target ? 'clickable' : ''}`}
+      className={`map-node ${d.variant} ${d.dashed ? 'dashed' : ''} ${d.faded ? 'faded' : ''} ${d.selected ? 'selected' : ''} ${d.target ? 'clickable' : ''}`}
       style={{ borderColor: d.color }}
     >
       {SIDES.map(([k, p]) => (
@@ -139,40 +142,58 @@ function makeEdge(
 /* Dispositions                                                        */
 /* ------------------------------------------------------------------ */
 
-/** Vue d'ensemble : colonnes lisibles, positions placées à la main. */
+/** Vue d'ensemble : les nœuds sont plus compacts pour faire tenir toutes les positions. */
+const OV_W = 150;
+const OV_H = 58;
+
+/** Disposition large : gardes à gauche, passage au centre, positions dominantes à droite. */
 const OVERVIEW_POS: Record<string, { col: number; row: number }> = {
   'closed-guard': { col: 0, row: 0 },
   'half-guard': { col: 0, row: 1 },
-  'butterfly-guard': { col: 0, row: 2 },
-  'de-la-riva': { col: 0, row: 3 },
-  'x-guard': { col: 0, row: 4 },
-  'single-leg-x': { col: 0, row: 5 },
-  headquarters: { col: 1, row: 2.5 },
-  turtle: { col: 1, row: 4.8 },
-  'side-control': { col: 2, row: 1 },
-  'back-control': { col: 2, row: 4 },
-  mount: { col: 3, row: 2.5 },
+  'knee-shield': { col: 0, row: 2 },
+  'deep-half-guard': { col: 0, row: 3 },
+  'butterfly-guard': { col: 0, row: 4 },
+  'de-la-riva': { col: 1, row: 0 },
+  'reverse-de-la-riva': { col: 1, row: 1 },
+  'spider-guard': { col: 1, row: 2 },
+  'lasso-guard': { col: 1, row: 3 },
+  'collar-sleeve-guard': { col: 1, row: 4 },
+  'x-guard': { col: 2, row: 0.4 },
+  'single-leg-x': { col: 2, row: 1.5 },
+  saddle: { col: 2, row: 2.6 },
+  'fifty-fifty': { col: 2, row: 3.7 },
+  headquarters: { col: 3, row: 1.5 },
+  turtle: { col: 3, row: 3.4 },
+  'front-headlock': { col: 3, row: 4.4 },
+  'side-control': { col: 4, row: 0 },
+  'kesa-gatame': { col: 4, row: 1.1 },
+  'north-south': { col: 4, row: 2.2 },
+  'knee-on-belly': { col: 4, row: 3.3 },
+  mount: { col: 5, row: 0.8 },
+  'back-control': { col: 5, row: 2.8 },
 };
 
-/** Variante portrait (téléphone) : deux colonnes seulement, pour garder un texte lisible. */
+/** Variante portrait (téléphone) : deux colonnes, la carte se parcourt en la faisant glisser. */
+const COMPACT_ORDER_LEFT = [
+  'closed-guard', 'half-guard', 'knee-shield', 'deep-half-guard', 'butterfly-guard',
+  'de-la-riva', 'reverse-de-la-riva', 'spider-guard', 'lasso-guard', 'collar-sleeve-guard',
+  'x-guard', 'single-leg-x', 'saddle', 'fifty-fifty',
+];
+const COMPACT_ORDER_RIGHT = [
+  'headquarters', 'side-control', 'kesa-gatame', 'north-south', 'knee-on-belly',
+  'mount', 'back-control', 'turtle', 'front-headlock',
+];
 const OVERVIEW_POS_COMPACT: Record<string, { col: number; row: number }> = {
-  'closed-guard': { col: 0, row: 0 },
-  'half-guard': { col: 0, row: 1 },
-  'butterfly-guard': { col: 0, row: 2 },
-  'de-la-riva': { col: 0, row: 3 },
-  'x-guard': { col: 0, row: 4 },
-  'single-leg-x': { col: 0, row: 5 },
-  headquarters: { col: 1, row: 0 },
-  'side-control': { col: 1, row: 1.25 },
-  mount: { col: 1, row: 2.5 },
-  'back-control': { col: 1, row: 3.75 },
-  turtle: { col: 1, row: 5 },
+  ...Object.fromEntries(COMPACT_ORDER_LEFT.map((id, row) => [id, { col: 0, row }])),
+  ...Object.fromEntries(COMPACT_ORDER_RIGHT.map((id, row) => [id, { col: 1, row }])),
 };
 
 function overviewPosition(id: string, fallbackIndex: number, compact: boolean): Pos {
   const table = compact ? OVERVIEW_POS_COMPACT : OVERVIEW_POS;
-  const p = table[id] ?? { col: compact ? 2 : 4, row: fallbackIndex };
-  return { x: p.col * (NODE_W + (compact ? 90 : 120)), y: p.row * (NODE_H + 34) };
+  const p = table[id] ?? { col: compact ? 2 : 6, row: fallbackIndex };
+  return compact
+    ? { x: p.col * (OV_W + 70), y: p.row * (OV_H + 44) }
+    : { x: p.col * (OV_W + 90), y: p.row * (OV_H + 36) };
 }
 
 const COMPACT_QUERY = '(max-width: 700px)';
@@ -206,8 +227,9 @@ function Inner() {
   const select = useStore((s) => s.select);
   const setMode = useStore((s) => s.setMode);
   const profile = useActiveProfile();
-  const { fitView } = useReactFlow();
+  const { fitView, setViewport } = useReactFlow();
   const compact = useCompact();
+  const kindFilter = useStore((s) => s.kindFilter);
 
   const view: 'overview' | 'focus' | 'game' =
     mode === 'game' ? 'game' : selected && getSide(mapIndex, selected) ? 'focus' : 'overview';
@@ -225,6 +247,7 @@ function Inner() {
 
       const sats: Sat[] = [];
       for (const m of side.moves) {
+        if (!matchesKinds(m.kind, kindFilter)) continue;
         const mid = moveId(centerId, m);
         const stars = pickedTechniques(profile, mid, m).length;
         sats.push({
@@ -302,6 +325,7 @@ function Inner() {
     } else if (view === 'overview') {
       bjjMap.positions.forEach((p, i) => {
         const side = p[role];
+        const shown = side ? side.moves.filter((m) => matchesKinds(m.kind, kindFilter)).length : 0;
         const target = side ? sid(p.id, role) : sid(p.id, role === 'top' ? 'bottom' : 'top');
         nodes.push({
           id: p.id,
@@ -313,19 +337,20 @@ function Inner() {
             subtitle: p.nameFr,
             color: FAMILY_COLORS[p.family],
             variant: 'pos',
-            chip: side ? `${side.moves.length} options` : undefined,
+            chip: side ? `${shown} option${shown > 1 ? 's' : ''}` : undefined,
             chipColor: '#cbd5e1',
+            faded: kindFilter.length > 0 && shown === 0,
             target,
           },
         });
       });
-      for (const e of overviewEdges(bjjMap, role)) {
+      for (const e of overviewEdges(bjjMap, role, kindFilter)) {
         const a = overviewPosition(e.from, 0, compact);
         const b = overviewPosition(e.to, 0, compact);
         const color = KIND_COLORS[e.kinds[0]];
         const handles: [string, string] =
           Math.abs(a.x - b.x) < 5 ? ['s-r', 't-r'] : a.x < b.x ? ['s-r', 't-l'] : ['s-l', 't-r'];
-        edges.push(makeEdge(`o-${e.from}-${e.to}`, e.from, e.to, color, { handles, width: 1.4, opacity: 0.5 }));
+        edges.push(makeEdge(`o-${e.from}-${e.to}`, e.from, e.to, color, { handles, width: kindFilter.length ? 2 : 1.3, opacity: kindFilter.length ? 0.75 : 0.4 }));
       }
     } else {
       const entries = gameEntries(bjjMap, profile, role);
@@ -390,14 +415,21 @@ function Inner() {
       }
     }
     return { nodes, edges, empty };
-  }, [view, selected, role, profile, compact]);
+  }, [view, selected, role, profile, compact, kindFilter]);
 
   // Recadre la vue quand le mode, la sélection ou le contenu change.
-  const viewKey = `${compact ? 'c' : 'w'}:${view}:${view === 'focus' ? selected : ''}:${view === 'overview' || view === 'game' ? role : ''}:${nodes.length}`;
+  const viewKey = `${compact ? 'c' : 'w'}:${kindFilter.join('+')}:${view}:${view === 'focus' ? selected : ''}:${view === 'overview' || view === 'game' ? role : ''}:${nodes.length}`;
   useEffect(() => {
-    const t = setTimeout(() => fitView({ padding: 0.2, maxZoom: 1.05, duration: 300 }), 60);
+    const t = setTimeout(() => {
+      if (view === 'overview' && compact) {
+        const zoom = Math.min(1, (window.innerWidth - 24) / (2 * OV_W + 70));
+        setViewport({ x: 12, y: 200, zoom }, { duration: 300 });
+      } else {
+        fitView({ padding: { top: compact ? '190px' : '175px', bottom: '50px', left: '30px', right: '30px' }, maxZoom: 1.05, duration: 300 });
+      }
+    }, 60);
     return () => clearTimeout(t);
-  }, [viewKey, fitView]);
+  }, [viewKey, view, compact, fitView, setViewport]);
 
   const selectedParsed = selected ? parseSid(selected) : null;
 
@@ -420,12 +452,13 @@ function Inner() {
         proOptions={{ hideAttribution: true }}
         fitView
       >
-        <Background gap={24} color="#1e293b" />
+        <Background gap={24} color={role === 'top' ? '#1d3a63' : '#4a2f1c'} />
         <Controls showInteractive={false} />
       </ReactFlow>
 
       <div className="graph-top">
         <RoleToggle />
+        {view !== 'game' && <KindFilter />}
         {view === 'focus' && (
           <div className="pill">
             <span>

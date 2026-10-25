@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { DataPanel } from './components/DataPanel';
 import { GamePanel } from './components/GamePanel';
 import { MapView } from './components/MapView';
@@ -20,11 +20,20 @@ export default function App() {
   const mode = useStore((s) => s.mode);
   const setMode = useStore((s) => s.setMode);
   const selected = useStore((s) => s.selected);
+  const role = useStore((s) => s.role);
   const profile = useActiveProfile();
   const { canInstall, install } = useInstallPrompt();
 
+  // Le thème de couleur suit le côté choisi (bleu = dessus, ambre = dessous).
+  useEffect(() => {
+    document.documentElement.dataset.role = role;
+    document
+      .querySelector('meta[name="theme-color"]')
+      ?.setAttribute('content', role === 'top' ? '#0b1a2e' : '#1b120c');
+  }, [role]);
+
   return (
-    <div className="app">
+    <div className="app" data-role={role}>
       <header className="topbar">
         <h1>
           <span className="logo" aria-hidden>
@@ -68,7 +77,7 @@ export default function App() {
       </nav>
 
       <main className={`layout show-${tab}`}>
-        <section className="col col-graph">
+        <section className="col col-graph" data-watermark={role === 'top' ? 'On top' : 'On bottom'}>
           <MapView />
         </section>
         <aside className="col col-detail">
