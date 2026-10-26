@@ -83,6 +83,8 @@ export interface Profile {
   picks: string[];
   /** Techniques ajoutées par l'utilisateur : moveId -> noms */
   custom: Record<string, string[]>;
+  /** Positions de base épinglées dans la carte du jeu (ex. HQ, mount) */
+  pins?: StateId[];
 }
 
 export interface ProfilesExport {

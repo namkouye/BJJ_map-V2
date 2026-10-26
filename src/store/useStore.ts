@@ -11,6 +11,7 @@ import {
   removeCustom,
   sid,
   togglePick,
+  togglePinned,
 } from '../graph/model';
 import type { Lang, MoveKind, Profile, ProfilesExport, Role, StateId } from '../graph/types';
 import { detectLang } from '../i18n/ui';
@@ -48,6 +49,7 @@ interface State {
   deleteProfile: (id: string) => void;
 
   togglePick: (key: string) => void;
+  togglePin: (id: StateId) => void;
   addCustom: (moveId: string, name: string) => void;
   removeCustom: (moveId: string, name: string) => void;
   setStart: (role: Role, id: StateId | null) => void;
@@ -136,6 +138,7 @@ export const useStore = create<State>()(
           return { profiles, activeId: s.activeId === id ? profiles[0].id : s.activeId };
         }),
 
+      togglePin: (id) => set((s) => updateActive(s, (p) => togglePinned(p, id))),
       togglePick: (key) => set((s) => updateActive(s, (p) => togglePick(p, key))),
       addCustom: (mid, name) => set((s) => updateActive(s, (p) => addCustom(p, mid, name))),
       removeCustom: (mid, name) => set((s) => updateActive(s, (p) => removeCustom(p, mid, name))),

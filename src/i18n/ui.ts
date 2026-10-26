@@ -115,6 +115,23 @@ const D = {
   ],
   tapStar: ['Ajouter à mon jeu', 'Add to my game', 'Añadir a mi juego', 'Adicionar ao meu jogo'],
   untapStar: ['Retirer de mon jeu', 'Remove from my game', 'Quitar de mi juego', 'Remover do meu jogo'],
+  destCount: ['{n} destination(s) au choix', '{n} destination(s) to choose from', '{n} destino(s) a elegir', '{n} destino(s) à escolher'],
+  chooseDest: [
+    'Choisissez la position d\'arrivée (étoile = l\'ajouter à mon jeu)',
+    'Choose where you end up (star = add it to my game)',
+    'Elige la posición de llegada (estrella = añadirla a mi juego)',
+    'Escolha a posição de chegada (estrela = adicionar ao meu jogo)',
+  ],
+  pin: ['📍 Ajouter à ma carte', '📍 Add to my map', '📍 Añadir a mi mapa', '📍 Adicionar ao meu mapa'],
+  unpin: ['📍 Retirer de ma carte', '📍 Remove from my map', '📍 Quitar de mi mapa', '📍 Remover do meu mapa'],
+  pinTitle: ['Positions de base de ma carte', 'Base positions on my map', 'Posiciones base de mi mapa', 'Posições base do meu mapa'],
+  pinEmpty: [
+    'Épinglez des positions (HQ, mount…) pour bâtir des chemins qui y mènent : bouton « Ajouter à ma carte » dans le détail d\'une position.',
+    'Pin positions (HQ, mount…) to build paths leading to them: use “Add to my map” in a position’s details.',
+    'Fija posiciones (HQ, montada…) para construir caminos hacia ellas: botón «Añadir a mi mapa» en el detalle de una posición.',
+    'Fixe posições (HQ, montada…) para montar caminhos até elas: botão “Adicionar ao meu mapa” nos detalhes de uma posição.',
+  ],
+  addBase: ['+ Ajouter une position…', '+ Add a position…', '+ Añadir una posición…', '+ Adicionar uma posição…'],
   noteFrOnly: ['', 'Note in French', 'Nota en francés', 'Nota em francês'],
 
   profile: ['Profil actif', 'Active profile', 'Perfil activo', 'Perfil ativo'],

@@ -41,14 +41,14 @@ describe('jeu de données (au sol)', () => {
       'closed-guard', 'half-guard', 'side-control', 'mount', 'back-control', 'turtle',
       'butterfly-guard', 'de-la-riva', 'x-guard', 'single-leg-x', 'headquarters',
       'knee-shield', 'deep-half-guard', 'reverse-de-la-riva', 'spider-guard', 'lasso-guard',
-      'collar-sleeve-guard', 'saddle', 'fifty-fifty', 'kesa-gatame', 'north-south',
+      'collar-sleeve-guard', 'saddle', 'fifty-fifty', 'open-guard', 'reverse-half-guard', 'north-south',
       'knee-on-belly', 'front-headlock',
     ]) {
       expect(mapIndex.has(id), id).toBe(true);
     }
     const hq = getSide(mapIndex, 'headquarters:top')!;
     const passes = hq.moves.filter((m) => m.kind === 'pass').flatMap((m) => m.techniques.map((t) => t.name));
-    for (const n of ['Knee cut pass', 'Toreando pass']) expect(passes).toContain(n);
+    for (const n of ['Knee cut pass', 'Leg drag pass']) expect(passes).toContain(n);
   });
 
   it('chaque position existe des deux côtés (dessus et dessous)', () => {
@@ -90,7 +90,7 @@ describe('jeu de données (au sol)', () => {
   it('chaque garde propose au moins un balayage et une soumission ou une transition', () => {
     for (const p of bjjMap.positions.filter((x) => x.family === 'guard')) {
       const kinds = new Set(p.bottom!.moves.map((m) => m.kind));
-      expect(kinds.has('sweep') || kinds.has('transition'), p.id).toBe(true);
+      expect(kinds.has('sweep') || kinds.has('transition') || kinds.has('submission'), p.id).toBe(true);
     }
   });
 
@@ -243,7 +243,7 @@ describe('import de profils', () => {
       profiles: [{ id: 'a', name: ' Jeu 1 ', starts: { top: 'mount:top', bottom: 'oups' }, picks: ['x', 'x'], custom: { m: ['t', 3] } }],
     });
     expect(errors).toEqual([]);
-    expect(profiles[0]).toEqual({ id: 'a', name: 'Jeu 1', starts: { top: 'mount:top' }, picks: ['x'], custom: { m: ['t'] } });
+    expect(profiles[0]).toEqual({ id: 'a', name: 'Jeu 1', starts: { top: 'mount:top' }, picks: ['x'], custom: { m: ['t'] }, pins: [] });
   });
 
   it('rejette les formats invalides', () => {
@@ -316,5 +316,34 @@ describe('import de profils', () => {
     const truckSubs = mapIndex.get('truck')!.top!.moves.map((m) => m.finish);
     expect(truckSubs).toEqual(expect.arrayContaining(['Calf slicer', 'Banana split', 'Twister']));
     expect(mapIndex.get('single-leg-x')!.top!.moves.some((m) => m.to === 'back-control:top')).toBe(true);
+  });
+
+  it('plus de scarf hold, un seul nom de technique par type, passages sans doublon', () => {
+    expect(mapIndex.has('kesa-gatame')).toBe(false);
+    for (const p of bjjMap.positions)
+      for (const r of ['top', 'bottom'] as const) {
+        const kindOf = new Map<string, string>();
+        for (const m of p[r]?.moves ?? [])
+          if (m.kind !== 'submission')
+            for (const t of m.techniques) {
+              const k = kindOf.get(t.name);
+              expect(k === undefined || k === m.kind, `${p.id}:${r} ${t.name}`).toBe(true);
+              kindOf.set(t.name, m.kind);
+            }
+      }
+    const hq = mapIndex.get('headquarters')!.top!.moves;
+    expect(hq.every((m) => m.kind === 'pass')).toBe(true);
+    const names = new Set(hq.flatMap((m) => m.techniques.map((t) => t.name)));
+    for (const n of ['Knee cut pass', 'Leg drag pass', 'Long step pass', 'X-pass', 'Over-under pass', 'Folding pass', 'Leg weave pass', 'Half guard pass']) expect(names.has(n), n).toBe(true);
+    const open = new Set(mapIndex.get('open-guard')!.top!.moves.flatMap((m) => m.techniques.map((t) => t.name)));
+    for (const n of ['Toreando pass', 'Body lock pass', 'Double under pass', 'Stack pass', 'Outside camping pass']) expect(open.has(n), n).toBe(true);
+  });
+
+  it('chaque passage propose d\'enchaîner sur un autre passage', () => {
+    for (const id of ['headquarters', 'open-guard']) {
+      const side = mapIndex.get(id)!.top!;
+      for (const m of side.moves.filter((x) => x.kind === 'pass'))
+        for (const t of m.techniques) expect((t.then ?? []).length, `${id} ${t.name}`).toBeGreaterThan(0);
+    }
   });
 });

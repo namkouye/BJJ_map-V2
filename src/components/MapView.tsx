@@ -28,6 +28,8 @@ import {
   findItem,
   gameEntries,
   getSide,
+  groupOf,
+  groupPickKeys,
   itemThen,
   layerGame,
   matchesKinds,
@@ -37,9 +39,11 @@ import {
   pickedTechniques,
   resolveRef,
   sid,
+  techGroups,
   techKey,
+  type TechGroup,
 } from '../graph/model';
-import type { MoveKind, Role, StateId } from '../graph/types';
+import type { Move, MoveKind, Role, StateId } from '../graph/types';
 import { useI18n } from '../i18n/useI18n';
 import { useActiveProfile, useStore } from '../store/useStore';
 import { KindFilter } from './KindFilter';
@@ -191,25 +195,26 @@ const OVERVIEW_POS: Record<string, { col: number; row: number }> = {
   'spider-guard': { col: 1, row: 2 },
   'lasso-guard': { col: 1, row: 3 },
   'collar-sleeve-guard': { col: 1, row: 4 },
+  'k-guard': { col: 1, row: 5 },
+  dogfight: { col: 0, row: 5 },
   'x-guard': { col: 2, row: 0.4 },
   'single-leg-x': { col: 2, row: 1.5 },
   saddle: { col: 2, row: 2.6 },
   'fifty-fifty': { col: 2, row: 3.7 },
-  'k-guard': { col: 2, row: 4.9 },
-  dogfight: { col: 1, row: 5.3 },
-  'short-x': { col: 3, row: 0.2 },
-  'false-x': { col: 3, row: 2.5 },
-  truck: { col: 3, row: 5.4 },
-  'quarter-mount': { col: 4, row: 4.4 },
+  'short-x': { col: 2, row: 4.8 },
+  'false-x': { col: 2, row: 5.9 },
+  'open-guard': { col: 3, row: 0.4 },
   headquarters: { col: 3, row: 1.5 },
-  turtle: { col: 3, row: 3.4 },
-  'front-headlock': { col: 3, row: 4.4 },
-  'side-control': { col: 4, row: 0 },
-  'kesa-gatame': { col: 4, row: 1.1 },
-  'north-south': { col: 4, row: 2.2 },
-  'knee-on-belly': { col: 4, row: 3.3 },
-  mount: { col: 5, row: 0.8 },
-  'back-control': { col: 5, row: 2.8 },
+  'reverse-half-guard': { col: 3, row: 2.6 },
+  turtle: { col: 3, row: 3.7 },
+  truck: { col: 3, row: 4.8 },
+  'front-headlock': { col: 3, row: 5.9 },
+  'side-control': { col: 4, row: 0.2 },
+  'quarter-mount': { col: 4, row: 1.4 },
+  'north-south': { col: 4, row: 2.6 },
+  'knee-on-belly': { col: 4, row: 3.8 },
+  mount: { col: 5, row: 1 },
+  'back-control': { col: 5, row: 3 },
 };
 
 /** Variante portrait (téléphone) : deux colonnes, la carte se parcourt en la faisant glisser. */
@@ -219,7 +224,7 @@ const COMPACT_ORDER_LEFT = [
   'x-guard', 'single-leg-x', 'short-x', 'false-x', 'saddle', 'fifty-fifty', 'dogfight',
 ];
 const COMPACT_ORDER_RIGHT = [
-  'headquarters', 'side-control', 'kesa-gatame', 'north-south', 'knee-on-belly',
+  'open-guard', 'headquarters', 'reverse-half-guard', 'side-control', 'north-south', 'knee-on-belly',
   'mount', 'back-control', 'quarter-mount', 'turtle', 'truck', 'front-headlock',
 ];
 const OVERVIEW_POS_COMPACT: Record<string, { col: number; row: number }> = {
@@ -295,19 +300,39 @@ function Inner() {
       const pos = mapIndex.get(cp.position)!;
       const side = getSide(mapIndex, centerId)!;
       const sats: Sat[] = [];
+      const picks = profile.picks;
 
-      const techSat = (mid: string, tname: string, to: StateId | undefined, kind: MoveKind, picked: boolean): Sat => ({
-        key: techKey(mid, tname),
-        title: tname,
-        subtitle: to ? `→ ${i18n.stateName(to)}` : undefined,
-        color: KIND_COLORS[kind],
-        variant: 'sat',
-        chip: i18n.kindShort(kind),
-        stars: picked ? 1 : 0,
-        item: techKey(mid, tname),
-        kind,
-        pickKeys: [techKey(mid, tname)],
-      });
+      const groupSat = (g: TechGroup): Sat => {
+        const keys = groupPickKeys(centerId, g);
+        const multi = g.moves.length > 1;
+        return {
+          key: g.item,
+          title: g.name,
+          subtitle: multi ? t('destCount', { n: g.moves.length }) : g.moves[0].to ? `→ ${i18n.stateName(g.moves[0].to)}` : undefined,
+          color: KIND_COLORS[g.kind],
+          variant: 'sat',
+          chip: i18n.kindShort(g.kind),
+          stars: keys.filter((k) => picks.includes(k)).length,
+          item: g.item,
+          kind: g.kind,
+          pickKeys: multi ? undefined : keys,
+        };
+      };
+      const finishSat = (m: Move, extraChip?: string): Sat => {
+        const mid = moveId(centerId, m);
+        return {
+          key: finId(mid),
+          title: m.finish ?? '',
+          subtitle: lang === 'en' ? undefined : i18n.finish(m),
+          color: KIND_COLORS.submission,
+          variant: 'finish',
+          chip: (extraChip ? `${extraChip} · ` : '') + i18n.kindShort('submission'),
+          stars: pickedTechniques(profile, mid, m).length,
+          item: finId(mid),
+          kind: 'submission',
+          pickKeys: m.techniques.map((x) => techKey(mid, x.name)),
+        };
+      };
 
       let centerTitle = pos.name;
       let centerSub: string | undefined = i18n.sideTitle(centerId);
@@ -316,27 +341,8 @@ function Inner() {
       let centerKeys: string[] | undefined;
 
       if (view === 'focus') {
-        for (const m of side.moves) {
-          if (!matchesKinds(m.kind, kindFilter)) continue;
-          const mid = moveId(centerId, m);
-          const picked = pickedTechniques(profile, mid, m);
-          if (m.kind === 'submission') {
-            sats.push({
-              key: finId(mid),
-              title: m.finish ?? '',
-              subtitle: lang === 'en' ? undefined : i18n.finish(m),
-              color: KIND_COLORS.submission,
-              variant: 'finish',
-              chip: i18n.kindShort('submission'),
-              stars: picked.length,
-              item: finId(mid),
-              kind: 'submission',
-              pickKeys: m.techniques.map((x) => techKey(mid, x.name)),
-            });
-          } else {
-            for (const tech of m.techniques) sats.push(techSat(mid, tech.name, m.to, m.kind, picked.includes(tech.name)));
-          }
-        }
+        for (const g of techGroups(centerId, side)) if (matchesKinds(g.kind, kindFilter)) sats.push(groupSat(g));
+        for (const m of side.moves) if (m.kind === 'submission' && matchesKinds(m.kind, kindFilter)) sats.push(finishSat(m));
         sats.sort((a, b) => KIND_ORDER.indexOf(a.kind!) - KIND_ORDER.indexOf(b.kind!));
       } else if (item) {
         const m = item.move;
@@ -344,19 +350,28 @@ function Inner() {
         centerSub = `${i18n.posName(pos)} · ${ROLE_LABELS[cp.role]}`;
         centerColor = KIND_COLORS[m.kind];
         centerChip = i18n.kindShort(m.kind);
-        const cmid = moveId(centerId, m);
-        centerKeys = item.tech ? [techKey(cmid, item.tech.name)] : m.techniques.map((x) => techKey(cmid, x.name));
-        if (m.to) {
-          sats.push({
-            key: 'result',
-            title: posEn(m.to),
-            subtitle: i18n.sideTitle(m.to),
-            color: KIND_COLORS[m.kind],
-            variant: 'sat',
-            chip: t('result'),
-            stars: 0,
-            target: m.to,
-          });
+        if (item.tech) {
+          const g = groupOf(centerId, side, item.tech.name);
+          const dests = g ? g.moves : [m];
+          if (dests.length === 1) centerKeys = [techKey(moveId(centerId, dests[0]), item.tech.name)];
+          for (const dm of dests) {
+            if (!dm.to) continue;
+            const key = techKey(moveId(centerId, dm), item.tech.name);
+            sats.push({
+              key: `res-${dm.to}`,
+              title: posEn(dm.to),
+              subtitle: i18n.sideTitle(dm.to),
+              color: KIND_COLORS[m.kind],
+              variant: 'sat',
+              chip: t('result'),
+              stars: picks.includes(key) ? 1 : 0,
+              target: dm.to,
+              pickKeys: [key],
+            });
+          }
+        } else {
+          const cmid = moveId(centerId, m);
+          centerKeys = m.techniques.map((x) => techKey(cmid, x.name));
         }
         for (const ref of itemThen(item)) {
           const r = resolveRef(mapIndex, centerId, ref);
@@ -372,25 +387,11 @@ function Inner() {
               stars: 0,
               target: r.id,
             });
+          } else if (r.item.tech) {
+            const g = groupOf(centerId, side, r.item.tech.name);
+            if (g) sats.push({ ...groupSat(g), chip: `Plan B · ${i18n.kindShort(g.kind)}` });
           } else {
-            const im = r.item.move;
-            const imid = moveId(centerId, im);
-            if (r.item.tech) {
-              sats.push({ ...techSat(imid, r.item.tech.name, im.to, im.kind, pickedTechniques(profile, imid, im).includes(r.item.tech.name)), chip: `Plan B · ${i18n.kindShort(im.kind)}` });
-            } else {
-              sats.push({
-                key: finId(imid),
-                title: im.finish ?? '',
-                subtitle: lang === 'en' ? undefined : i18n.finish(im),
-                color: KIND_COLORS.submission,
-                variant: 'finish',
-                chip: `Plan B · ${i18n.kindShort('submission')}`,
-                stars: pickedTechniques(profile, imid, im).length,
-                item: finId(imid),
-                kind: 'submission',
-                pickKeys: im.techniques.map((x) => techKey(imid, x.name)),
-              });
-            }
+            sats.push(finishSat(r.item.move, 'Plan B'));
           }
         }
         sats.push({
@@ -489,9 +490,10 @@ function Inner() {
       }
     } else {
       const entries = gameEntries(bjjMap, profile, role);
-      empty = entries.length === 0;
+      empty = entries.length === 0 && (profile.pins ?? []).filter((x) => parseSid(x)?.role === role).length === 0;
       const start = profile.starts[role];
-      const depth = layerGame(entries, start);
+      const pins = (profile.pins ?? []).filter((x) => parseSid(x)?.role === role && getSide(mapIndex, x));
+      const depth = layerGame(entries, start, pins);
       const labels = new Map<string, { title: string; subtitle?: string; stateRole?: Role; finish?: boolean }>();
       for (const e of entries) {
         const f = parseSid(e.from)!;
@@ -513,6 +515,11 @@ function Inner() {
           labels.set(t, { title: e.move.finish ?? '', subtitle: lang === 'en' ? undefined : i18n.finish(e.move), finish: true });
         }
       }
+      for (const x of pins) {
+        if (labels.has(x)) continue;
+        const pp = parseSid(x)!;
+        labels.set(x, { title: mapIndex.get(pp.position)?.name ?? x, subtitle: i18n.sideTitle(x), stateRole: pp.role });
+      }
       // colonnes par profondeur
       const columns = new Map<number, string[]>();
       for (const [id, d] of depth) columns.set(d, [...(columns.get(d) ?? []), id]);
@@ -533,7 +540,7 @@ function Inner() {
               subtitle: l.subtitle,
               color: l.finish ? KIND_COLORS.submission : l.stateRole ? ROLE_COLORS[l.stateRole] : '#94a3b8',
               variant: l.finish ? 'finish' : 'game',
-              chip: l.finish ? i18n.kindShort('submission') : otherSide ? `↪ ${GAME_LABELS[l.stateRole!]}` : undefined,
+              chip: l.finish ? i18n.kindShort('submission') : otherSide ? `↪ ${GAME_LABELS[l.stateRole!]}` : pins.includes(id) ? '📍' : undefined,
               chipColor: l.finish ? KIND_COLORS.submission : ROLE_COLORS[l.stateRole ?? role],
               start: id === start,
               dashed: otherSide,

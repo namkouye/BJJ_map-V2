@@ -89,6 +89,36 @@ export function findItem(index: MapIndex, from: StateId, itemId: string): Item |
   return undefined;
 }
 
+/** Une technique (non-soumission) et toutes les positions où elle peut mener. */
+export interface TechGroup {
+  name: string;
+  kind: MoveKind;
+  tech: Technique;
+  moves: Move[];
+  /** identifiant de l'élément (technique ouverte au clic) */
+  item: string;
+}
+
+export function techGroups(from: StateId, side: PositionSide): TechGroup[] {
+  const map = new Map<string, TechGroup>();
+  for (const m of side.moves) {
+    if (m.kind === 'submission') continue;
+    for (const t of m.techniques) {
+      const g = map.get(t.name);
+      if (g) g.moves.push(m);
+      else map.set(t.name, { name: t.name, kind: m.kind, tech: t, moves: [m], item: techKey(moveId(from, m), t.name) });
+    }
+  }
+  return [...map.values()];
+}
+
+/** Techniques d'un nom donné pour un côté (tous les mouvements qui la contiennent). */
+export function groupOf(from: StateId, side: PositionSide, name: string): TechGroup | undefined {
+  return techGroups(from, side).find((g) => g.name === name);
+}
+
+export const groupPickKeys = (from: StateId, g: TechGroup): string[] => g.moves.map((m) => techKey(moveId(from, m), g.name));
+
 export type Next =
   | { type: 'state'; id: StateId }
   | { type: 'item'; item: Item };
@@ -211,7 +241,7 @@ export function overviewEdges(map: BJJMap, role: Role, kinds: readonly MoveKind[
 /* ------------------------------------------------------------------ */
 
 export function newProfile(id: string, name: string): Profile {
-  return { id, name, starts: {}, picks: [], custom: {} };
+  return { id, name, starts: {}, picks: [], custom: {}, pins: [] };
 }
 
 export function togglePick(profile: Profile, key: string): Profile {
@@ -219,6 +249,11 @@ export function togglePick(profile: Profile, key: string): Profile {
     ? profile.picks.filter((k) => k !== key)
     : [...profile.picks, key];
   return { ...profile, picks };
+}
+
+export function togglePinned(profile: Profile, id: StateId): Profile {
+  const pins = profile.pins ?? [];
+  return { ...profile, pins: pins.includes(id) ? pins.filter((x) => x !== id) : [...pins, id] };
 }
 
 export function addCustom(profile: Profile, mid: string, name: string): Profile {
@@ -284,7 +319,7 @@ export const entryTarget = (e: GameEntry): string => e.move.to ?? finId(e.id);
  * Profondeur de chaque nœud (état ou finition) dans le jeu, en partant de la position
  * de départ ; les nœuds sans entrée servent de racines supplémentaires.
  */
-export function layerGame(entries: GameEntry[], start?: StateId): Map<string, number> {
+export function layerGame(entries: GameEntry[], start?: StateId, extras: StateId[] = []): Map<string, number> {
   const adj = new Map<string, string[]>();
   const hasIncoming = new Set<string>();
   const nodes: string[] = [];
@@ -301,6 +336,8 @@ export function layerGame(entries: GameEntry[], start?: StateId): Map<string, nu
     adj.get(e.from)!.push(t);
     hasIncoming.add(t);
   }
+
+  for (const x of extras) addNode(x);
 
   const depth = new Map<string, number>();
   const bfs = (root: string) => {
@@ -358,6 +395,7 @@ export function parseProfiles(raw: unknown): { profiles: Profile[]; errors: stri
       starts,
       picks: [...new Set(p.picks)],
       custom,
+      pins: Array.isArray(p.pins) ? [...new Set(p.pins.filter((x): x is string => typeof x === 'string' && !!parseSid(x)))] : [],
     });
   });
   return { profiles, errors };

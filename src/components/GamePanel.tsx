@@ -69,6 +69,7 @@ export function GamePanel() {
   const role = useStore((s) => s.role);
   const setMode = useStore((s) => s.setMode);
   const setStart = useStore((s) => s.setStart);
+  const togglePin = useStore((s) => s.togglePin);
   const select = useStore((s) => s.select);
   const selected = useStore((s) => s.selected);
   const profile = useActiveProfile();
@@ -80,6 +81,8 @@ export function GamePanel() {
   const startOptions = bjjMap.positions
     .filter((p) => p[role])
     .map((p) => ({ id: sid(p.id, role), label: `${p.name} — ${i18n.sideTitle(sid(p.id, role))}` }));
+
+  const pinsHere = (profile.pins ?? []).filter((x) => parseSid(x)?.role === role);
 
   const build = (from: string) => {
     setMode('explore');
@@ -114,6 +117,36 @@ export function GamePanel() {
         <button className="btn primary block" disabled={!start} onClick={() => start && build(start)}>
           {entries.length ? t('continueBuild') : t('startBuild')}
         </button>
+      </section>
+
+      <section>
+        <h3>{t('pinTitle')}</h3>
+        {pinsHere.length === 0 && <p className="empty">{t('pinEmpty')}</p>}
+        <ul className="picked-list">
+          {pinsHere.map((x) => (
+            <li key={x} className={selected === x ? 'active' : ''}>
+              <button className="picked-from" onClick={() => build(x)}>
+                📍 {mapIndex.get(parseSid(x)!.position)?.name}
+              </button>
+              <small>{i18n.sideTitle(x)}</small>
+              <button className="btn ghost small" aria-label={t('unpin')} onClick={() => togglePin(x)}>
+                ✕
+              </button>
+            </li>
+          ))}
+        </ul>
+        <select
+          value=""
+          aria-label={t('addBase')}
+          onChange={(e) => e.target.value && togglePin(e.target.value)}
+        >
+          <option value="">{t('addBase')}</option>
+          {startOptions.filter((o) => !pinsHere.includes(o.id)).map((o) => (
+            <option key={o.id} value={o.id}>
+              {o.label}
+            </option>
+          ))}
+        </select>
       </section>
 
       <section>

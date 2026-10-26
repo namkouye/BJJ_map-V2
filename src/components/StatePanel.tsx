@@ -12,6 +12,8 @@ import {
   finId,
   findItem,
   getSide,
+  groupOf,
+  groupPickKeys,
   itemThen,
   matchesKinds,
   moveId,
@@ -20,7 +22,9 @@ import {
   pickedTechniques,
   resolveRef,
   sid,
+  techGroups,
   techKey,
+  type TechGroup,
 } from '../graph/model';
 import type { Move, StateId } from '../graph/types';
 import { useI18n } from '../i18n/useI18n';
@@ -143,8 +147,53 @@ function MoveCard({ from, move, only }: { from: StateId; move: Move; only?: stri
             );
           })}
         </ul>
-        <CustomAdder mid={mid} />
+        {!only && <CustomAdder mid={mid} />}
       </details>
+    </li>
+  );
+}
+
+
+/** Une technique (une seule ligne, même si elle mène à plusieurs positions). */
+function TechRow({ from, g }: { from: StateId; g: TechGroup }) {
+  const profile = useActiveProfile();
+  const select = useStore((s) => s.select);
+  const togglePick = useStore((s) => s.togglePick);
+  const i18n = useI18n();
+  const { t } = i18n;
+  const keys = groupPickKeys(from, g);
+  const multi = g.moves.length > 1;
+  const on = keys.some((k) => profile.picks.includes(k));
+  const note = i18n.note(g.tech);
+  return (
+    <li className="move-card" style={{ borderLeftColor: KIND_COLORS[g.kind] }}>
+      <div className="tech-row">
+        {!multi ? (
+          <button
+            className={`star ${on ? 'on' : ''}`}
+            aria-pressed={on}
+            aria-label={t(on ? 'removeFromGame' : 'addToGame', { name: g.name })}
+            onClick={() => togglePick(keys[0])}
+          >
+            {on ? '★' : '☆'}
+          </button>
+        ) : (
+          <span className="star-spacer" aria-hidden />
+        )}
+        <div className="tech-main">
+          <button className="move-dest" onClick={() => select(from, g.item)}>
+            <strong>{g.name}</strong>
+            <small>
+              {multi
+                ? t('destCount', { n: g.moves.length })
+                : g.moves[0].to
+                  ? `→ ${i18n.stateName(g.moves[0].to)}`
+                  : ''}
+            </small>
+          </button>
+          {note && <small className="tech-note">{note}</small>}
+        </div>
+      </div>
     </li>
   );
 }
@@ -187,22 +236,20 @@ function ItemPanel({ from, itemId }: { from: StateId; itemId: string }) {
         </div>
       </header>
 
-      <ul className="moves">
-        <MoveCard from={from} move={m} only={item.tech?.name} />
-      </ul>
-
-      {m.to && (
+      {item.tech ? (
         <section>
           <h3 style={{ color }}>{t('result')}</h3>
+          {(groupOf(from, getSide(mapIndex, from)!, item.tech.name)?.moves.length ?? 1) > 1 && <p className="filter-note">{t('chooseDest')}</p>}
           <ul className="moves">
-            <li className="move-card" style={{ borderLeftColor: color }}>
-              <button className="move-dest" onClick={() => select(m.to!)}>
-                <strong>{mapIndex.get(parseSid(m.to)!.position)?.name}</strong>
-                <small>{i18n.sideTitle(m.to)}</small>
-              </button>
-            </li>
+            {(groupOf(from, getSide(mapIndex, from)!, item.tech.name)?.moves ?? [m]).map((dm) => (
+              <MoveCard key={moveId(from, dm)} from={from} move={dm} only={item.tech!.name} />
+            ))}
           </ul>
         </section>
+      ) : (
+        <ul className="moves">
+          <MoveCard from={from} move={m} />
+        </ul>
       )}
 
       {nexts.length > 0 && (
@@ -245,6 +292,7 @@ export function StatePanel() {
   const selItem = useStore((s) => s.selItem);
   const select = useStore((s) => s.select);
   const setStart = useStore((s) => s.setStart);
+  const togglePin = useStore((s) => s.togglePin);
   const kindFilter = useStore((s) => s.kindFilter);
   const clearKinds = useStore((s) => s.clearKinds);
   const profile = useActiveProfile();
@@ -276,9 +324,15 @@ export function StatePanel() {
   const isStart = profile.starts[parsed.role] === selected;
   const mirror = sid(pos.id, otherRole(parsed.role));
   const game = GAME_LABELS[parsed.role].toLowerCase();
+  const techs = techGroups(selected, side);
   const groups = KIND_ORDER.filter((kind) => matchesKinds(kind, kindFilter))
-    .map((kind) => ({ kind, moves: side.moves.filter((m) => m.kind === kind) }))
-    .filter((g) => g.moves.length);
+    .map((kind) => ({
+      kind,
+      techs: techs.filter((g) => g.kind === kind),
+      moves: side.moves.filter((m) => m.kind === kind && m.kind === 'submission'),
+    }))
+    .filter((g) => g.techs.length || g.moves.length);
+  const pinned = (profile.pins ?? []).includes(selected);
 
   return (
     <div className="state-panel">
@@ -304,6 +358,9 @@ export function StatePanel() {
           >
             {isStart ? t('isStart', { game }) : t('setStart', { game })}
           </button>
+          <button className={`btn small ${pinned ? 'primary' : ''}`} aria-pressed={pinned} onClick={() => togglePin(selected)}>
+            {pinned ? t('unpin') : t('pin')}
+          </button>
         </div>
       </header>
 
@@ -320,6 +377,9 @@ export function StatePanel() {
         <section key={g.kind}>
           <h3 style={{ color: KIND_COLORS[g.kind] }}>{i18n.kindLabel(g.kind)}</h3>
           <ul className="moves">
+            {g.techs.map((x) => (
+              <TechRow key={x.item} from={selected} g={x} />
+            ))}
             {g.moves.map((m) => (
               <MoveCard key={moveId(selected, m)} from={selected} move={m} />
             ))}
