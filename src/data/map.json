@@ -814,10 +814,12 @@
        {
         "name": "Standing guard break (tailbone)",
         "note": "Debout : une main sur le coccyx, reculer pour ouvrir les chevilles",
+        "likely": true,
         "then": [
          "Kneeling hip break",
          "Sao Paulo pass",
-         "Double under pass"
+         "Double under pass",
+         "Stack pass"
         ]
        },
        {
@@ -826,7 +828,8 @@
         "then": [
          "Standing guard break (tailbone)",
          "Sao Paulo pass",
-         "Double under pass"
+         "Double under pass",
+         "Stack pass"
         ]
        }
       ]
@@ -838,10 +841,12 @@
        {
         "name": "Standing guard break (tailbone)",
         "note": "Debout : une main sur le coccyx, reculer pour ouvrir les chevilles",
+        "likely": true,
         "then": [
          "Kneeling hip break",
          "Sao Paulo pass",
-         "Double under pass"
+         "Double under pass",
+         "Stack pass"
         ]
        },
        {
@@ -850,7 +855,8 @@
         "then": [
          "Standing guard break (tailbone)",
          "Sao Paulo pass",
-         "Double under pass"
+         "Double under pass",
+         "Stack pass"
         ]
        }
       ]
@@ -865,7 +871,8 @@
         "then": [
          "Standing guard break (tailbone)",
          "Kneeling hip break",
-         "Double under pass"
+         "Double under pass",
+         "Stack pass"
         ]
        }
       ]
@@ -880,7 +887,8 @@
         "then": [
          "Standing guard break (tailbone)",
          "Kneeling hip break",
-         "Sao Paulo pass"
+         "Sao Paulo pass",
+         "Stack pass"
         ]
        },
        {
@@ -889,7 +897,8 @@
         "then": [
          "Standing guard break (tailbone)",
          "Kneeling hip break",
-         "Sao Paulo pass"
+         "Sao Paulo pass",
+         "Double under pass"
         ]
        }
       ]
@@ -1254,10 +1263,12 @@
        {
         "name": "Knee cut pass",
         "note": "Le genou coupe sur la cuisse, cross-face + underhook",
+        "likely": true,
         "then": [
          "Cross-face / pressure pass",
          "Over-under pass",
-         "Leg weave pass"
+         "Leg weave pass",
+         "Back-step pass"
         ]
        },
        {
@@ -1266,7 +1277,8 @@
         "then": [
          "Knee cut pass",
          "Over-under pass",
-         "Leg weave pass"
+         "Leg weave pass",
+         "Back-step pass"
         ]
        },
        {
@@ -1275,7 +1287,8 @@
         "then": [
          "Knee cut pass",
          "Cross-face / pressure pass",
-         "Leg weave pass"
+         "Leg weave pass",
+         "Back-step pass"
         ]
        },
        {
@@ -1284,7 +1297,8 @@
         "then": [
          "Knee cut pass",
          "Cross-face / pressure pass",
-         "Over-under pass"
+         "Over-under pass",
+         "Back-step pass"
         ]
        }
       ]
@@ -1296,10 +1310,12 @@
        {
         "name": "Knee cut pass",
         "note": "Le genou coupe sur la cuisse, cross-face + underhook",
+        "likely": true,
         "then": [
          "Cross-face / pressure pass",
          "Over-under pass",
-         "Leg weave pass"
+         "Leg weave pass",
+         "Back-step pass"
         ]
        }
       ]
@@ -1311,10 +1327,12 @@
        {
         "name": "Knee cut pass",
         "note": "Le genou coupe sur la cuisse, cross-face + underhook",
+        "likely": true,
         "then": [
          "Cross-face / pressure pass",
          "Over-under pass",
-         "Leg weave pass"
+         "Leg weave pass",
+         "Back-step pass"
         ]
        }
       ]
@@ -1329,7 +1347,8 @@
         "then": [
          "Knee cut pass",
          "Cross-face / pressure pass",
-         "Over-under pass"
+         "Over-under pass",
+         "Leg weave pass"
         ]
        }
       ]
@@ -1344,7 +1363,8 @@
         "then": [
          "Knee cut pass",
          "Cross-face / pressure pass",
-         "Over-under pass"
+         "Over-under pass",
+         "Leg weave pass"
         ]
        }
       ]
@@ -1707,7 +1727,10 @@
         "then": [
          "Smash the shield and pass",
          "Crossface + underhook pass",
-         "Remove the shield (to half guard)"
+         "Knee cut pass",
+         "Over-under pass",
+         "Remove the shield (to half guard)",
+         "Half guard pass"
         ]
        },
        {
@@ -1716,7 +1739,10 @@
         "then": [
          "Flatten and knee cut",
          "Crossface + underhook pass",
-         "Remove the shield (to half guard)"
+         "Knee cut pass",
+         "Over-under pass",
+         "Remove the shield (to half guard)",
+         "Half guard pass"
         ]
        },
        {
@@ -1725,7 +1751,35 @@
         "then": [
          "Flatten and knee cut",
          "Smash the shield and pass",
-         "Remove the shield (to half guard)"
+         "Knee cut pass",
+         "Over-under pass",
+         "Remove the shield (to half guard)",
+         "Half guard pass"
+        ]
+       },
+       {
+        "name": "Knee cut pass",
+        "note": "Le genou coupe sur la cuisse, cross-face + underhook",
+        "likely": true,
+        "then": [
+         "Flatten and knee cut",
+         "Smash the shield and pass",
+         "Crossface + underhook pass",
+         "Over-under pass",
+         "Remove the shield (to half guard)",
+         "Half guard pass"
+        ]
+       },
+       {
+        "name": "Over-under pass",
+        "note": "Un bras dessus, un bras dessous les jambes, épaule dans la mâchoire",
+        "then": [
+         "Flatten and knee cut",
+         "Smash the shield and pass",
+         "Crossface + underhook pass",
+         "Knee cut pass",
+         "Remove the shield (to half guard)",
+         "Half guard pass"
         ]
        }
       ]
@@ -1740,7 +1794,96 @@
         "then": [
          "Flatten and knee cut",
          "Smash the shield and pass",
-         "Crossface + underhook pass"
+         "Crossface + underhook pass",
+         "Knee cut pass",
+         "Over-under pass",
+         "Half guard pass"
+        ]
+       },
+       {
+        "name": "Half guard pass",
+        "note": "Entrer en demi-garde dessus en contrôlant une jambe",
+        "then": [
+         "Flatten and knee cut",
+         "Smash the shield and pass",
+         "Crossface + underhook pass",
+         "Knee cut pass",
+         "Over-under pass",
+         "Remove the shield (to half guard)"
+        ]
+       }
+      ]
+     },
+     {
+      "kind": "pass",
+      "to": "quarter-mount:top",
+      "techniques": [
+       {
+        "name": "Knee cut pass",
+        "note": "Le genou coupe sur la cuisse, cross-face + underhook",
+        "likely": true,
+        "then": [
+         "Flatten and knee cut",
+         "Smash the shield and pass",
+         "Crossface + underhook pass",
+         "Over-under pass",
+         "Remove the shield (to half guard)",
+         "Half guard pass"
+        ]
+       }
+      ]
+     },
+     {
+      "kind": "pass",
+      "to": "knee-on-belly:top",
+      "techniques": [
+       {
+        "name": "Knee cut pass",
+        "note": "Le genou coupe sur la cuisse, cross-face + underhook",
+        "likely": true,
+        "then": [
+         "Flatten and knee cut",
+         "Smash the shield and pass",
+         "Crossface + underhook pass",
+         "Over-under pass",
+         "Remove the shield (to half guard)",
+         "Half guard pass"
+        ]
+       }
+      ]
+     },
+     {
+      "kind": "pass",
+      "to": "north-south:top",
+      "techniques": [
+       {
+        "name": "Over-under pass",
+        "note": "Un bras dessus, un bras dessous les jambes, épaule dans la mâchoire",
+        "then": [
+         "Flatten and knee cut",
+         "Smash the shield and pass",
+         "Crossface + underhook pass",
+         "Knee cut pass",
+         "Remove the shield (to half guard)",
+         "Half guard pass"
+        ]
+       }
+      ]
+     },
+     {
+      "kind": "pass",
+      "to": "mount:top",
+      "techniques": [
+       {
+        "name": "Over-under pass",
+        "note": "Un bras dessus, un bras dessous les jambes, épaule dans la mâchoire",
+        "then": [
+         "Flatten and knee cut",
+         "Smash the shield and pass",
+         "Crossface + underhook pass",
+         "Knee cut pass",
+         "Remove the shield (to half guard)",
+         "Half guard pass"
         ]
        }
       ]
@@ -1843,25 +1986,31 @@
         "name": "Back-step free",
         "note": "Pivoter pour libérer la jambe et finir en side control",
         "then": [
-         "Sprawl and free the leg"
+         "Sprawl and free the leg",
+         "Hips back, free the leg"
         ]
        },
        {
         "name": "Sprawl and free the leg",
         "note": "Étendre les hanches en arrière et dégager la jambe",
         "then": [
-         "Back-step free"
+         "Back-step free",
+         "Hips back, free the leg"
         ]
        }
       ]
      },
      {
-      "kind": "escape",
+      "kind": "pass",
       "to": "half-guard:top",
       "techniques": [
        {
         "name": "Hips back, free the leg",
-        "note": "Reculer les hanches pour revenir en demi-garde dessus"
+        "note": "Reculer les hanches pour revenir en demi-garde dessus",
+        "then": [
+         "Back-step free",
+         "Sprawl and free the leg"
+        ]
        }
       ]
      }
@@ -1929,7 +2078,10 @@
         "then": [
          "Knee cut pass",
          "Double under pass",
-         "Leg drag pass"
+         "Leg drag pass",
+         "Body lock pass",
+         "Knee wedge to half guard",
+         "Pummel to headquarters"
         ]
        },
        {
@@ -1938,16 +2090,23 @@
         "then": [
          "Toreando pass",
          "Double under pass",
-         "Leg drag pass"
+         "Leg drag pass",
+         "Body lock pass",
+         "Knee wedge to half guard",
+         "Pummel to headquarters"
         ]
        },
        {
         "name": "Double under pass",
         "note": "Hanches basses, bras sous les cuisses",
+        "likely": true,
         "then": [
          "Toreando pass",
          "Knee cut pass",
-         "Leg drag pass"
+         "Leg drag pass",
+         "Body lock pass",
+         "Knee wedge to half guard",
+         "Pummel to headquarters"
         ]
        },
        {
@@ -1956,16 +2115,23 @@
         "then": [
          "Toreando pass",
          "Knee cut pass",
-         "Double under pass"
+         "Double under pass",
+         "Body lock pass",
+         "Knee wedge to half guard",
+         "Pummel to headquarters"
         ]
        },
        {
         "name": "Body lock pass",
         "note": "Verrouiller la taille et marcher autour",
+        "likely": true,
         "then": [
          "Toreando pass",
          "Knee cut pass",
-         "Double under pass"
+         "Double under pass",
+         "Leg drag pass",
+         "Knee wedge to half guard",
+         "Pummel to headquarters"
         ]
        }
       ]
@@ -1980,7 +2146,10 @@
         "then": [
          "Toreando pass",
          "Knee cut pass",
-         "Double under pass"
+         "Double under pass",
+         "Leg drag pass",
+         "Body lock pass",
+         "Pummel to headquarters"
         ]
        }
       ]
@@ -1995,7 +2164,139 @@
         "then": [
          "Toreando pass",
          "Knee cut pass",
-         "Double under pass"
+         "Double under pass",
+         "Leg drag pass",
+         "Body lock pass",
+         "Knee wedge to half guard"
+        ]
+       }
+      ]
+     },
+     {
+      "kind": "pass",
+      "to": "knee-on-belly:top",
+      "techniques": [
+       {
+        "name": "Toreando pass",
+        "note": "Dévier les jambes sur le côté et contourner",
+        "then": [
+         "Knee cut pass",
+         "Double under pass",
+         "Leg drag pass",
+         "Body lock pass",
+         "Knee wedge to half guard",
+         "Pummel to headquarters"
+        ]
+       },
+       {
+        "name": "Knee cut pass",
+        "note": "Le genou coupe sur la cuisse, cross-face + underhook",
+        "then": [
+         "Toreando pass",
+         "Double under pass",
+         "Leg drag pass",
+         "Body lock pass",
+         "Knee wedge to half guard",
+         "Pummel to headquarters"
+        ]
+       }
+      ]
+     },
+     {
+      "kind": "pass",
+      "to": "north-south:top",
+      "techniques": [
+       {
+        "name": "Toreando pass",
+        "note": "Dévier les jambes sur le côté et contourner",
+        "then": [
+         "Knee cut pass",
+         "Double under pass",
+         "Leg drag pass",
+         "Body lock pass",
+         "Knee wedge to half guard",
+         "Pummel to headquarters"
+        ]
+       },
+       {
+        "name": "Double under pass",
+        "note": "Bras sous les cuisses, empiler",
+        "likely": true,
+        "then": [
+         "Toreando pass",
+         "Knee cut pass",
+         "Leg drag pass",
+         "Body lock pass",
+         "Knee wedge to half guard",
+         "Pummel to headquarters"
+        ]
+       }
+      ]
+     },
+     {
+      "kind": "pass",
+      "to": "quarter-mount:top",
+      "techniques": [
+       {
+        "name": "Knee cut pass",
+        "note": "Le genou coupe sur la cuisse, cross-face + underhook",
+        "then": [
+         "Toreando pass",
+         "Double under pass",
+         "Leg drag pass",
+         "Body lock pass",
+         "Knee wedge to half guard",
+         "Pummel to headquarters"
+        ]
+       }
+      ]
+     },
+     {
+      "kind": "pass",
+      "to": "back-control:top",
+      "techniques": [
+       {
+        "name": "Leg drag pass",
+        "note": "Traîner les jambes d'un côté et poser les hanches",
+        "then": [
+         "Toreando pass",
+         "Knee cut pass",
+         "Double under pass",
+         "Body lock pass",
+         "Knee wedge to half guard",
+         "Pummel to headquarters"
+        ]
+       },
+       {
+        "name": "Body lock pass",
+        "note": "Verrouiller les hanches et avancer pas à pas",
+        "likely": true,
+        "then": [
+         "Toreando pass",
+         "Knee cut pass",
+         "Double under pass",
+         "Leg drag pass",
+         "Knee wedge to half guard",
+         "Pummel to headquarters"
+        ]
+       }
+      ]
+     },
+     {
+      "kind": "pass",
+      "to": "mount:top",
+      "techniques": [
+       {
+        "name": "Body lock pass",
+        "note": "Verrouiller les hanches et avancer pas à pas",
+        "likely": true,
+        "then": [
+         "Toreando pass",
+         "Knee cut pass",
+         "Double under pass",
+         "Leg drag pass",
+         "Knee wedge to half guard",
+         "Pummel to headquarters"
         ]
        }
       ]
@@ -2117,21 +2418,27 @@
     "summary": "Le tibia de l'adversaire est coincé à l'intérieur de votre cuisse. Gardez les hanches basses et sortez avant les entrées de jambes.",
     "moves": [
      {
-      "kind": "escape",
+      "kind": "pass",
       "to": "headquarters:top",
       "techniques": [
        {
         "name": "Knee-line pass out of K-guard",
         "note": "Aligner le genou sur la ligne des hanches et reculer en HQ",
         "then": [
-         "Step over the shin"
+         "Step over the shin",
+         "Pass over the K-guard",
+         "Knee cut pass",
+         "Long step pass"
         ]
        },
        {
         "name": "Step over the shin",
         "note": "Passer la jambe par-dessus le tibia piégé",
         "then": [
-         "Knee-line pass out of K-guard"
+         "Knee-line pass out of K-guard",
+         "Pass over the K-guard",
+         "Knee cut pass",
+         "Long step pass"
         ]
        }
       ]
@@ -2142,7 +2449,94 @@
       "techniques": [
        {
         "name": "Pass over the K-guard",
-        "note": "Pression sur les hanches puis contournement"
+        "note": "Pression sur les hanches puis contournement",
+        "then": [
+         "Knee-line pass out of K-guard",
+         "Step over the shin",
+         "Knee cut pass",
+         "Long step pass"
+        ]
+       },
+       {
+        "name": "Knee cut pass",
+        "note": "Le genou coupe sur la cuisse, cross-face + underhook",
+        "likely": true,
+        "then": [
+         "Knee-line pass out of K-guard",
+         "Step over the shin",
+         "Pass over the K-guard",
+         "Long step pass"
+        ]
+       },
+       {
+        "name": "Long step pass",
+        "note": "Grand pas autour de la jambe",
+        "then": [
+         "Knee-line pass out of K-guard",
+         "Step over the shin",
+         "Pass over the K-guard",
+         "Knee cut pass"
+        ]
+       }
+      ]
+     },
+     {
+      "kind": "pass",
+      "to": "quarter-mount:top",
+      "techniques": [
+       {
+        "name": "Knee cut pass",
+        "note": "Le genou coupe sur la cuisse, cross-face + underhook",
+        "likely": true,
+        "then": [
+         "Knee-line pass out of K-guard",
+         "Step over the shin",
+         "Pass over the K-guard",
+         "Long step pass"
+        ]
+       }
+      ]
+     },
+     {
+      "kind": "pass",
+      "to": "knee-on-belly:top",
+      "techniques": [
+       {
+        "name": "Knee cut pass",
+        "note": "Le genou coupe sur la cuisse, cross-face + underhook",
+        "likely": true,
+        "then": [
+         "Knee-line pass out of K-guard",
+         "Step over the shin",
+         "Pass over the K-guard",
+         "Long step pass"
+        ]
+       },
+       {
+        "name": "Long step pass",
+        "note": "Grand pas autour de la jambe",
+        "then": [
+         "Knee-line pass out of K-guard",
+         "Step over the shin",
+         "Pass over the K-guard",
+         "Knee cut pass"
+        ]
+       }
+      ]
+     },
+     {
+      "kind": "pass",
+      "to": "mount:top",
+      "techniques": [
+       {
+        "name": "Long step pass",
+        "note": "Grand pas autour de la jambe",
+        "then": [
+         "Knee-line pass out of K-guard",
+         "Step over the shin",
+         "Pass over the K-guard",
+         "Knee cut pass"
+        ]
        }
       ]
      }
@@ -2306,7 +2700,9 @@
         "then": [
          "Step-back hook strip",
          "Toreando pass",
-         "Knee cut pass"
+         "Knee cut pass",
+         "Leg drag pass",
+         "Long step pass"
         ]
        },
        {
@@ -2315,7 +2711,9 @@
         "then": [
          "DLR hook removal",
          "Toreando pass",
-         "Knee cut pass"
+         "Knee cut pass",
+         "Leg drag pass",
+         "Long step pass"
         ]
        }
       ]
@@ -2330,16 +2728,21 @@
         "then": [
          "DLR hook removal",
          "Step-back hook strip",
-         "Knee cut pass"
+         "Knee cut pass",
+         "Leg drag pass",
+         "Long step pass"
         ]
        },
        {
         "name": "Knee cut pass",
         "note": "Crochet dégagé, genou glisse vers l'intérieur",
+        "likely": true,
         "then": [
          "DLR hook removal",
          "Step-back hook strip",
-         "Toreando pass"
+         "Toreando pass",
+         "Leg drag pass",
+         "Long step pass"
         ]
        },
        {
@@ -2348,7 +2751,129 @@
         "then": [
          "DLR hook removal",
          "Step-back hook strip",
-         "Toreando pass"
+         "Toreando pass",
+         "Knee cut pass",
+         "Long step pass"
+        ]
+       },
+       {
+        "name": "Long step pass",
+        "note": "Grand pas autour de la jambe",
+        "then": [
+         "DLR hook removal",
+         "Step-back hook strip",
+         "Toreando pass",
+         "Knee cut pass",
+         "Leg drag pass"
+        ]
+       }
+      ]
+     },
+     {
+      "kind": "pass",
+      "to": "quarter-mount:top",
+      "techniques": [
+       {
+        "name": "Knee cut pass",
+        "note": "Le genou coupe sur la cuisse, cross-face + underhook",
+        "likely": true,
+        "then": [
+         "DLR hook removal",
+         "Step-back hook strip",
+         "Toreando pass",
+         "Leg drag pass",
+         "Long step pass"
+        ]
+       }
+      ]
+     },
+     {
+      "kind": "pass",
+      "to": "knee-on-belly:top",
+      "techniques": [
+       {
+        "name": "Knee cut pass",
+        "note": "Le genou coupe sur la cuisse, cross-face + underhook",
+        "likely": true,
+        "then": [
+         "DLR hook removal",
+         "Step-back hook strip",
+         "Toreando pass",
+         "Leg drag pass",
+         "Long step pass"
+        ]
+       },
+       {
+        "name": "Toreando pass",
+        "note": "Dévier les jambes sur le côté et contourner",
+        "then": [
+         "DLR hook removal",
+         "Step-back hook strip",
+         "Knee cut pass",
+         "Leg drag pass",
+         "Long step pass"
+        ]
+       },
+       {
+        "name": "Long step pass",
+        "note": "Grand pas autour de la jambe",
+        "then": [
+         "DLR hook removal",
+         "Step-back hook strip",
+         "Toreando pass",
+         "Knee cut pass",
+         "Leg drag pass"
+        ]
+       }
+      ]
+     },
+     {
+      "kind": "pass",
+      "to": "north-south:top",
+      "techniques": [
+       {
+        "name": "Toreando pass",
+        "note": "Dévier les jambes sur le côté et contourner",
+        "then": [
+         "DLR hook removal",
+         "Step-back hook strip",
+         "Knee cut pass",
+         "Leg drag pass",
+         "Long step pass"
+        ]
+       }
+      ]
+     },
+     {
+      "kind": "pass",
+      "to": "back-control:top",
+      "techniques": [
+       {
+        "name": "Leg drag pass",
+        "note": "Traîner les jambes d'un côté et poser les hanches",
+        "then": [
+         "DLR hook removal",
+         "Step-back hook strip",
+         "Toreando pass",
+         "Knee cut pass",
+         "Long step pass"
+        ]
+       }
+      ]
+     },
+     {
+      "kind": "pass",
+      "to": "mount:top",
+      "techniques": [
+       {
+        "name": "Long step pass",
+        "note": "Grand pas autour de la jambe",
+        "then": [
+         "DLR hook removal",
+         "Step-back hook strip",
+         "Toreando pass",
+         "Knee cut pass",
+         "Leg drag pass"
         ]
        }
       ]
@@ -2458,7 +2983,8 @@
         "note": "Retirer le crochet intérieur et reculer en HQ",
         "then": [
          "Toreando pass",
-         "Knee cut pass"
+         "Knee cut pass",
+         "Long step pass"
         ]
        }
       ]
@@ -2472,7 +2998,8 @@
         "note": "Dévier la jambe crochetée",
         "then": [
          "Reverse DLR hook removal",
-         "Knee cut pass"
+         "Knee cut pass",
+         "Long step pass"
         ]
        },
        {
@@ -2480,7 +3007,98 @@
         "note": "Genou qui coupe vers l'intérieur",
         "then": [
          "Reverse DLR hook removal",
-         "Toreando pass"
+         "Toreando pass",
+         "Long step pass"
+        ]
+       },
+       {
+        "name": "Long step pass",
+        "note": "Grand pas autour de la jambe",
+        "likely": true,
+        "then": [
+         "Reverse DLR hook removal",
+         "Toreando pass",
+         "Knee cut pass"
+        ]
+       }
+      ]
+     },
+     {
+      "kind": "pass",
+      "to": "knee-on-belly:top",
+      "techniques": [
+       {
+        "name": "Long step pass",
+        "note": "Grand pas autour de la jambe",
+        "likely": true,
+        "then": [
+         "Reverse DLR hook removal",
+         "Toreando pass",
+         "Knee cut pass"
+        ]
+       },
+       {
+        "name": "Knee cut pass",
+        "note": "Le genou coupe sur la cuisse, cross-face + underhook",
+        "then": [
+         "Reverse DLR hook removal",
+         "Toreando pass",
+         "Long step pass"
+        ]
+       },
+       {
+        "name": "Toreando pass",
+        "note": "Dévier les jambes sur le côté et contourner",
+        "then": [
+         "Reverse DLR hook removal",
+         "Knee cut pass",
+         "Long step pass"
+        ]
+       }
+      ]
+     },
+     {
+      "kind": "pass",
+      "to": "mount:top",
+      "techniques": [
+       {
+        "name": "Long step pass",
+        "note": "Grand pas autour de la jambe",
+        "likely": true,
+        "then": [
+         "Reverse DLR hook removal",
+         "Toreando pass",
+         "Knee cut pass"
+        ]
+       }
+      ]
+     },
+     {
+      "kind": "pass",
+      "to": "quarter-mount:top",
+      "techniques": [
+       {
+        "name": "Knee cut pass",
+        "note": "Le genou coupe sur la cuisse, cross-face + underhook",
+        "then": [
+         "Reverse DLR hook removal",
+         "Toreando pass",
+         "Long step pass"
+        ]
+       }
+      ]
+     },
+     {
+      "kind": "pass",
+      "to": "north-south:top",
+      "techniques": [
+       {
+        "name": "Toreando pass",
+        "note": "Dévier les jambes sur le côté et contourner",
+        "then": [
+         "Reverse DLR hook removal",
+         "Knee cut pass",
+         "Long step pass"
         ]
        }
       ]
@@ -2559,7 +3177,10 @@
         "then": [
          "Sleeve grip strip",
          "Toreando after grip strip",
-         "Knee cut after grip strip"
+         "Knee cut after grip strip",
+         "Toreando pass",
+         "Leg drag pass",
+         "Long step pass"
         ]
        },
        {
@@ -2568,7 +3189,10 @@
         "then": [
          "Break spider grips (stack & step)",
          "Toreando after grip strip",
-         "Knee cut after grip strip"
+         "Knee cut after grip strip",
+         "Toreando pass",
+         "Leg drag pass",
+         "Long step pass"
         ]
        }
       ]
@@ -2583,7 +3207,10 @@
         "then": [
          "Break spider grips (stack & step)",
          "Sleeve grip strip",
-         "Knee cut after grip strip"
+         "Knee cut after grip strip",
+         "Toreando pass",
+         "Leg drag pass",
+         "Long step pass"
         ]
        },
        {
@@ -2592,7 +3219,133 @@
         "then": [
          "Break spider grips (stack & step)",
          "Sleeve grip strip",
-         "Toreando after grip strip"
+         "Toreando after grip strip",
+         "Toreando pass",
+         "Leg drag pass",
+         "Long step pass"
+        ]
+       },
+       {
+        "name": "Toreando pass",
+        "note": "Dévier les jambes sur le côté et contourner",
+        "likely": true,
+        "then": [
+         "Break spider grips (stack & step)",
+         "Sleeve grip strip",
+         "Toreando after grip strip",
+         "Knee cut after grip strip",
+         "Leg drag pass",
+         "Long step pass"
+        ]
+       },
+       {
+        "name": "Leg drag pass",
+        "note": "Traîner les jambes d'un côté et poser les hanches",
+        "then": [
+         "Break spider grips (stack & step)",
+         "Sleeve grip strip",
+         "Toreando after grip strip",
+         "Knee cut after grip strip",
+         "Toreando pass",
+         "Long step pass"
+        ]
+       },
+       {
+        "name": "Long step pass",
+        "note": "Grand pas autour de la jambe",
+        "then": [
+         "Break spider grips (stack & step)",
+         "Sleeve grip strip",
+         "Toreando after grip strip",
+         "Knee cut after grip strip",
+         "Toreando pass",
+         "Leg drag pass"
+        ]
+       }
+      ]
+     },
+     {
+      "kind": "pass",
+      "to": "knee-on-belly:top",
+      "techniques": [
+       {
+        "name": "Toreando pass",
+        "note": "Dévier les jambes sur le côté et contourner",
+        "likely": true,
+        "then": [
+         "Break spider grips (stack & step)",
+         "Sleeve grip strip",
+         "Toreando after grip strip",
+         "Knee cut after grip strip",
+         "Leg drag pass",
+         "Long step pass"
+        ]
+       },
+       {
+        "name": "Long step pass",
+        "note": "Grand pas autour de la jambe",
+        "then": [
+         "Break spider grips (stack & step)",
+         "Sleeve grip strip",
+         "Toreando after grip strip",
+         "Knee cut after grip strip",
+         "Toreando pass",
+         "Leg drag pass"
+        ]
+       }
+      ]
+     },
+     {
+      "kind": "pass",
+      "to": "north-south:top",
+      "techniques": [
+       {
+        "name": "Toreando pass",
+        "note": "Dévier les jambes sur le côté et contourner",
+        "likely": true,
+        "then": [
+         "Break spider grips (stack & step)",
+         "Sleeve grip strip",
+         "Toreando after grip strip",
+         "Knee cut after grip strip",
+         "Leg drag pass",
+         "Long step pass"
+        ]
+       }
+      ]
+     },
+     {
+      "kind": "pass",
+      "to": "back-control:top",
+      "techniques": [
+       {
+        "name": "Leg drag pass",
+        "note": "Traîner les jambes d'un côté et poser les hanches",
+        "then": [
+         "Break spider grips (stack & step)",
+         "Sleeve grip strip",
+         "Toreando after grip strip",
+         "Knee cut after grip strip",
+         "Toreando pass",
+         "Long step pass"
+        ]
+       }
+      ]
+     },
+     {
+      "kind": "pass",
+      "to": "mount:top",
+      "techniques": [
+       {
+        "name": "Long step pass",
+        "note": "Grand pas autour de la jambe",
+        "then": [
+         "Break spider grips (stack & step)",
+         "Sleeve grip strip",
+         "Toreando after grip strip",
+         "Knee cut after grip strip",
+         "Toreando pass",
+         "Leg drag pass"
         ]
        }
       ]
@@ -2762,14 +3515,143 @@
         "name": "Lasso strip",
         "note": "Tirer le bras en tournant pour sortir de l'enroulement",
         "then": [
-         "Posture and step back"
+         "Posture and step back",
+         "Toreando pass",
+         "Long step pass",
+         "Knee cut pass"
         ]
        },
        {
         "name": "Posture and step back",
         "note": "Reculer en se redressant pour casser le lasso",
         "then": [
-         "Lasso strip"
+         "Lasso strip",
+         "Toreando pass",
+         "Long step pass",
+         "Knee cut pass"
+        ]
+       }
+      ]
+     },
+     {
+      "kind": "pass",
+      "to": "side-control:top",
+      "techniques": [
+       {
+        "name": "Toreando pass",
+        "note": "Dévier les jambes sur le côté et contourner",
+        "likely": true,
+        "then": [
+         "Lasso strip",
+         "Posture and step back",
+         "Long step pass",
+         "Knee cut pass"
+        ]
+       },
+       {
+        "name": "Long step pass",
+        "note": "Grand pas autour de la jambe",
+        "then": [
+         "Lasso strip",
+         "Posture and step back",
+         "Toreando pass",
+         "Knee cut pass"
+        ]
+       },
+       {
+        "name": "Knee cut pass",
+        "note": "Le genou coupe sur la cuisse, cross-face + underhook",
+        "then": [
+         "Lasso strip",
+         "Posture and step back",
+         "Toreando pass",
+         "Long step pass"
+        ]
+       }
+      ]
+     },
+     {
+      "kind": "pass",
+      "to": "knee-on-belly:top",
+      "techniques": [
+       {
+        "name": "Toreando pass",
+        "note": "Dévier les jambes sur le côté et contourner",
+        "likely": true,
+        "then": [
+         "Lasso strip",
+         "Posture and step back",
+         "Long step pass",
+         "Knee cut pass"
+        ]
+       },
+       {
+        "name": "Long step pass",
+        "note": "Grand pas autour de la jambe",
+        "then": [
+         "Lasso strip",
+         "Posture and step back",
+         "Toreando pass",
+         "Knee cut pass"
+        ]
+       },
+       {
+        "name": "Knee cut pass",
+        "note": "Le genou coupe sur la cuisse, cross-face + underhook",
+        "then": [
+         "Lasso strip",
+         "Posture and step back",
+         "Toreando pass",
+         "Long step pass"
+        ]
+       }
+      ]
+     },
+     {
+      "kind": "pass",
+      "to": "north-south:top",
+      "techniques": [
+       {
+        "name": "Toreando pass",
+        "note": "Dévier les jambes sur le côté et contourner",
+        "likely": true,
+        "then": [
+         "Lasso strip",
+         "Posture and step back",
+         "Long step pass",
+         "Knee cut pass"
+        ]
+       }
+      ]
+     },
+     {
+      "kind": "pass",
+      "to": "mount:top",
+      "techniques": [
+       {
+        "name": "Long step pass",
+        "note": "Grand pas autour de la jambe",
+        "then": [
+         "Lasso strip",
+         "Posture and step back",
+         "Toreando pass",
+         "Knee cut pass"
+        ]
+       }
+      ]
+     },
+     {
+      "kind": "pass",
+      "to": "quarter-mount:top",
+      "techniques": [
+       {
+        "name": "Knee cut pass",
+        "note": "Le genou coupe sur la cuisse, cross-face + underhook",
+        "then": [
+         "Lasso strip",
+         "Posture and step back",
+         "Toreando pass",
+         "Long step pass"
         ]
        }
       ]
@@ -2915,7 +3797,10 @@
         "note": "Retirer les prises et reculer en HQ",
         "then": [
          "Toreando vs collar-sleeve",
-         "Knee cut vs collar-sleeve"
+         "Knee cut vs collar-sleeve",
+         "Toreando pass",
+         "Knee cut pass",
+         "Long step pass"
         ]
        }
       ]
@@ -2929,7 +3814,10 @@
         "note": "Dévier les jambes après avoir cassé les prises",
         "then": [
          "Break the collar-sleeve grips",
-         "Knee cut vs collar-sleeve"
+         "Knee cut vs collar-sleeve",
+         "Toreando pass",
+         "Knee cut pass",
+         "Long step pass"
         ]
        },
        {
@@ -2937,7 +3825,136 @@
         "note": "Genou qui coupe après avoir cassé les prises",
         "then": [
          "Break the collar-sleeve grips",
-         "Toreando vs collar-sleeve"
+         "Toreando vs collar-sleeve",
+         "Toreando pass",
+         "Knee cut pass",
+         "Long step pass"
+        ]
+       },
+       {
+        "name": "Toreando pass",
+        "note": "Dévier les jambes sur le côté et contourner",
+        "likely": true,
+        "then": [
+         "Break the collar-sleeve grips",
+         "Toreando vs collar-sleeve",
+         "Knee cut vs collar-sleeve",
+         "Knee cut pass",
+         "Long step pass"
+        ]
+       },
+       {
+        "name": "Knee cut pass",
+        "note": "Le genou coupe sur la cuisse, cross-face + underhook",
+        "then": [
+         "Break the collar-sleeve grips",
+         "Toreando vs collar-sleeve",
+         "Knee cut vs collar-sleeve",
+         "Toreando pass",
+         "Long step pass"
+        ]
+       },
+       {
+        "name": "Long step pass",
+        "note": "Grand pas autour de la jambe",
+        "then": [
+         "Break the collar-sleeve grips",
+         "Toreando vs collar-sleeve",
+         "Knee cut vs collar-sleeve",
+         "Toreando pass",
+         "Knee cut pass"
+        ]
+       }
+      ]
+     },
+     {
+      "kind": "pass",
+      "to": "knee-on-belly:top",
+      "techniques": [
+       {
+        "name": "Toreando pass",
+        "note": "Dévier les jambes sur le côté et contourner",
+        "likely": true,
+        "then": [
+         "Break the collar-sleeve grips",
+         "Toreando vs collar-sleeve",
+         "Knee cut vs collar-sleeve",
+         "Knee cut pass",
+         "Long step pass"
+        ]
+       },
+       {
+        "name": "Knee cut pass",
+        "note": "Le genou coupe sur la cuisse, cross-face + underhook",
+        "then": [
+         "Break the collar-sleeve grips",
+         "Toreando vs collar-sleeve",
+         "Knee cut vs collar-sleeve",
+         "Toreando pass",
+         "Long step pass"
+        ]
+       },
+       {
+        "name": "Long step pass",
+        "note": "Grand pas autour de la jambe",
+        "then": [
+         "Break the collar-sleeve grips",
+         "Toreando vs collar-sleeve",
+         "Knee cut vs collar-sleeve",
+         "Toreando pass",
+         "Knee cut pass"
+        ]
+       }
+      ]
+     },
+     {
+      "kind": "pass",
+      "to": "north-south:top",
+      "techniques": [
+       {
+        "name": "Toreando pass",
+        "note": "Dévier les jambes sur le côté et contourner",
+        "likely": true,
+        "then": [
+         "Break the collar-sleeve grips",
+         "Toreando vs collar-sleeve",
+         "Knee cut vs collar-sleeve",
+         "Knee cut pass",
+         "Long step pass"
+        ]
+       }
+      ]
+     },
+     {
+      "kind": "pass",
+      "to": "quarter-mount:top",
+      "techniques": [
+       {
+        "name": "Knee cut pass",
+        "note": "Le genou coupe sur la cuisse, cross-face + underhook",
+        "then": [
+         "Break the collar-sleeve grips",
+         "Toreando vs collar-sleeve",
+         "Knee cut vs collar-sleeve",
+         "Toreando pass",
+         "Long step pass"
+        ]
+       }
+      ]
+     },
+     {
+      "kind": "pass",
+      "to": "mount:top",
+      "techniques": [
+       {
+        "name": "Long step pass",
+        "note": "Grand pas autour de la jambe",
+        "then": [
+         "Break the collar-sleeve grips",
+         "Toreando vs collar-sleeve",
+         "Knee cut vs collar-sleeve",
+         "Toreando pass",
+         "Knee cut pass"
         ]
        }
       ]
@@ -3211,7 +4228,7 @@
     "summary": "Une de vos jambes est piégée entre celles de l'adversaire. Protégez le talon et sortez la jambe.",
     "moves": [
      {
-      "kind": "escape",
+      "kind": "pass",
       "to": "headquarters:top",
       "techniques": [
        {
@@ -3322,7 +4339,7 @@
     "summary": "Votre pied est posé sur la hanche de l'adversaire, la cheville exposée. Fléchissez la jambe et sortez avant la clé.",
     "moves": [
      {
-      "kind": "escape",
+      "kind": "pass",
       "to": "headquarters:top",
       "techniques": [
        {
@@ -3387,7 +4404,7 @@
     "summary": "L'adversaire croise vos jambes sans encore verrouiller. Sortez le genou avant l'entrée en selle.",
     "moves": [
      {
-      "kind": "escape",
+      "kind": "pass",
       "to": "headquarters:top",
       "techniques": [
        {
@@ -3437,21 +4454,23 @@
     "summary": "L'adversaire contrôle votre jambe avec les siennes en selle. Sortez le genou avant qu'il ne la verrouille.",
     "moves": [
      {
-      "kind": "escape",
+      "kind": "pass",
       "to": "headquarters:top",
       "techniques": [
        {
         "name": "Clear the knee line and extract",
         "note": "Dégager la ligne du genou et retirer la jambe",
         "then": [
-         "Boot out (hip turn)"
+         "Boot out (hip turn)",
+         "Knee cut pass"
         ]
        },
        {
         "name": "Boot out (hip turn)",
         "note": "Tourner les hanches pour sortir le pied",
         "then": [
-         "Clear the knee line and extract"
+         "Clear the knee line and extract",
+         "Knee cut pass"
         ]
        }
       ]
@@ -3462,7 +4481,11 @@
       "techniques": [
        {
         "name": "Knee cut pass",
-        "note": "Dégager le genou de la selle et couper vers l'intérieur"
+        "note": "Dégager le genou de la selle et couper vers l'intérieur",
+        "then": [
+         "Clear the knee line and extract",
+         "Boot out (hip turn)"
+        ]
        }
       ]
      },
@@ -3561,7 +4584,7 @@
     "summary": "Vos jambes sont croisées avec celles de l'adversaire, chacun peut attaquer. Soyez rapide à sortir ou à attaquer.",
     "moves": [
      {
-      "kind": "escape",
+      "kind": "pass",
       "to": "headquarters:top",
       "techniques": [
        {
@@ -3694,10 +4717,15 @@
        {
         "name": "Knee cut pass",
         "note": "Le genou coupe sur la cuisse, cross-face + underhook",
+        "likely": true,
         "then": [
          "Leg drag pass",
          "Long step pass",
-         "X-pass"
+         "X-pass",
+         "Over-under pass",
+         "Folding pass",
+         "Leg weave pass",
+         "Half guard pass"
         ]
        },
        {
@@ -3706,16 +4734,25 @@
         "then": [
          "Knee cut pass",
          "Long step pass",
-         "X-pass"
+         "X-pass",
+         "Over-under pass",
+         "Folding pass",
+         "Leg weave pass",
+         "Half guard pass"
         ]
        },
        {
         "name": "Long step pass",
         "note": "Grand pas autour de la jambe",
+        "likely": true,
         "then": [
          "Knee cut pass",
          "Leg drag pass",
-         "X-pass"
+         "X-pass",
+         "Over-under pass",
+         "Folding pass",
+         "Leg weave pass",
+         "Half guard pass"
         ]
        },
        {
@@ -3724,7 +4761,11 @@
         "then": [
          "Knee cut pass",
          "Leg drag pass",
-         "Long step pass"
+         "Long step pass",
+         "Over-under pass",
+         "Folding pass",
+         "Leg weave pass",
+         "Half guard pass"
         ]
        },
        {
@@ -3733,7 +4774,11 @@
         "then": [
          "Knee cut pass",
          "Leg drag pass",
-         "Long step pass"
+         "Long step pass",
+         "X-pass",
+         "Folding pass",
+         "Leg weave pass",
+         "Half guard pass"
         ]
        },
        {
@@ -3742,7 +4787,11 @@
         "then": [
          "Knee cut pass",
          "Leg drag pass",
-         "Long step pass"
+         "Long step pass",
+         "X-pass",
+         "Over-under pass",
+         "Leg weave pass",
+         "Half guard pass"
         ]
        },
        {
@@ -3751,7 +4800,11 @@
         "then": [
          "Knee cut pass",
          "Leg drag pass",
-         "Long step pass"
+         "Long step pass",
+         "X-pass",
+         "Over-under pass",
+         "Folding pass",
+         "Half guard pass"
         ]
        }
       ]
@@ -3763,10 +4816,15 @@
        {
         "name": "Knee cut pass",
         "note": "Le genou coupe sur la cuisse, cross-face + underhook",
+        "likely": true,
         "then": [
          "Leg drag pass",
          "Long step pass",
-         "X-pass"
+         "X-pass",
+         "Over-under pass",
+         "Folding pass",
+         "Leg weave pass",
+         "Half guard pass"
         ]
        }
       ]
@@ -3778,19 +4836,29 @@
        {
         "name": "Knee cut pass",
         "note": "Le genou coupe sur la cuisse, cross-face + underhook",
+        "likely": true,
         "then": [
          "Leg drag pass",
          "Long step pass",
-         "X-pass"
+         "X-pass",
+         "Over-under pass",
+         "Folding pass",
+         "Leg weave pass",
+         "Half guard pass"
         ]
        },
        {
         "name": "Long step pass",
         "note": "Grand pas autour de la jambe",
+        "likely": true,
         "then": [
          "Knee cut pass",
          "Leg drag pass",
-         "X-pass"
+         "X-pass",
+         "Over-under pass",
+         "Folding pass",
+         "Leg weave pass",
+         "Half guard pass"
         ]
        }
       ]
@@ -3805,7 +4873,11 @@
         "then": [
          "Knee cut pass",
          "Long step pass",
-         "X-pass"
+         "X-pass",
+         "Over-under pass",
+         "Folding pass",
+         "Leg weave pass",
+         "Half guard pass"
         ]
        }
       ]
@@ -3815,21 +4887,17 @@
       "to": "mount:top",
       "techniques": [
        {
-        "name": "Leg drag pass",
-        "note": "Traîner les jambes d'un côté et poser les hanches",
-        "then": [
-         "Knee cut pass",
-         "Long step pass",
-         "X-pass"
-        ]
-       },
-       {
         "name": "Long step pass",
         "note": "Grand pas autour de la jambe",
+        "likely": true,
         "then": [
          "Knee cut pass",
          "Leg drag pass",
-         "X-pass"
+         "X-pass",
+         "Over-under pass",
+         "Folding pass",
+         "Leg weave pass",
+         "Half guard pass"
         ]
        },
        {
@@ -3838,7 +4906,11 @@
         "then": [
          "Knee cut pass",
          "Leg drag pass",
-         "Long step pass"
+         "Long step pass",
+         "Over-under pass",
+         "Folding pass",
+         "Leg weave pass",
+         "Half guard pass"
         ]
        },
        {
@@ -3847,7 +4919,11 @@
         "then": [
          "Knee cut pass",
          "Leg drag pass",
-         "Long step pass"
+         "Long step pass",
+         "X-pass",
+         "Folding pass",
+         "Leg weave pass",
+         "Half guard pass"
         ]
        },
        {
@@ -3856,7 +4932,11 @@
         "then": [
          "Knee cut pass",
          "Leg drag pass",
-         "Long step pass"
+         "Long step pass",
+         "X-pass",
+         "Over-under pass",
+         "Folding pass",
+         "Half guard pass"
         ]
        }
       ]
@@ -3871,7 +4951,11 @@
         "then": [
          "Knee cut pass",
          "Leg drag pass",
-         "Long step pass"
+         "Long step pass",
+         "X-pass",
+         "Folding pass",
+         "Leg weave pass",
+         "Half guard pass"
         ]
        },
        {
@@ -3880,7 +4964,11 @@
         "then": [
          "Knee cut pass",
          "Leg drag pass",
-         "Long step pass"
+         "Long step pass",
+         "X-pass",
+         "Over-under pass",
+         "Leg weave pass",
+         "Half guard pass"
         ]
        }
       ]
@@ -3895,7 +4983,11 @@
         "then": [
          "Knee cut pass",
          "Leg drag pass",
-         "Long step pass"
+         "Long step pass",
+         "X-pass",
+         "Over-under pass",
+         "Folding pass",
+         "Leg weave pass"
         ]
        }
       ]
@@ -5253,7 +6345,8 @@
       ]
      }
     ]
-   }
+   },
+   "overview": false
   },
   {
    "id": "front-headlock",
@@ -5409,19 +6502,25 @@
        {
         "name": "Toreando pass",
         "note": "Dévier les jambes sur le côté et contourner",
+        "likely": true,
         "then": [
          "Body lock pass",
          "Double under pass",
-         "Stack pass"
+         "Stack pass",
+         "Outside camping pass",
+         "Leg drag pass"
         ]
        },
        {
         "name": "Body lock pass",
         "note": "Verrouiller les hanches et avancer pas à pas",
+        "likely": true,
         "then": [
          "Toreando pass",
          "Double under pass",
-         "Stack pass"
+         "Stack pass",
+         "Outside camping pass",
+         "Leg drag pass"
         ]
        },
        {
@@ -5430,7 +6529,9 @@
         "then": [
          "Toreando pass",
          "Body lock pass",
-         "Stack pass"
+         "Stack pass",
+         "Outside camping pass",
+         "Leg drag pass"
         ]
        },
        {
@@ -5439,7 +6540,9 @@
         "then": [
          "Toreando pass",
          "Body lock pass",
-         "Double under pass"
+         "Double under pass",
+         "Outside camping pass",
+         "Leg drag pass"
         ]
        },
        {
@@ -5448,7 +6551,9 @@
         "then": [
          "Toreando pass",
          "Body lock pass",
-         "Double under pass"
+         "Double under pass",
+         "Stack pass",
+         "Leg drag pass"
         ]
        },
        {
@@ -5457,7 +6562,9 @@
         "then": [
          "Toreando pass",
          "Body lock pass",
-         "Double under pass"
+         "Double under pass",
+         "Stack pass",
+         "Outside camping pass"
         ]
        }
       ]
@@ -5469,10 +6576,13 @@
        {
         "name": "Toreando pass",
         "note": "Dévier les jambes sur le côté et contourner",
+        "likely": true,
         "then": [
          "Body lock pass",
          "Double under pass",
-         "Stack pass"
+         "Stack pass",
+         "Outside camping pass",
+         "Leg drag pass"
         ]
        }
       ]
@@ -5484,10 +6594,13 @@
        {
         "name": "Toreando pass",
         "note": "Dévier les jambes sur le côté et contourner",
+        "likely": true,
         "then": [
          "Body lock pass",
          "Double under pass",
-         "Stack pass"
+         "Stack pass",
+         "Outside camping pass",
+         "Leg drag pass"
         ]
        },
        {
@@ -5496,7 +6609,9 @@
         "then": [
          "Toreando pass",
          "Body lock pass",
-         "Stack pass"
+         "Stack pass",
+         "Outside camping pass",
+         "Leg drag pass"
         ]
        },
        {
@@ -5505,7 +6620,9 @@
         "then": [
          "Toreando pass",
          "Body lock pass",
-         "Double under pass"
+         "Double under pass",
+         "Outside camping pass",
+         "Leg drag pass"
         ]
        }
       ]
@@ -5517,10 +6634,13 @@
        {
         "name": "Body lock pass",
         "note": "Verrouiller les hanches et avancer pas à pas",
+        "likely": true,
         "then": [
          "Toreando pass",
          "Double under pass",
-         "Stack pass"
+         "Stack pass",
+         "Outside camping pass",
+         "Leg drag pass"
         ]
        },
        {
@@ -5529,7 +6649,9 @@
         "then": [
          "Toreando pass",
          "Body lock pass",
-         "Double under pass"
+         "Double under pass",
+         "Stack pass",
+         "Leg drag pass"
         ]
        },
        {
@@ -5538,7 +6660,9 @@
         "then": [
          "Toreando pass",
          "Body lock pass",
-         "Double under pass"
+         "Double under pass",
+         "Stack pass",
+         "Outside camping pass"
         ]
        }
       ]
@@ -5550,19 +6674,13 @@
        {
         "name": "Body lock pass",
         "note": "Verrouiller les hanches et avancer pas à pas",
+        "likely": true,
         "then": [
          "Toreando pass",
          "Double under pass",
-         "Stack pass"
-        ]
-       },
-       {
-        "name": "Leg drag pass",
-        "note": "Traîner les jambes d'un côté et poser les hanches",
-        "then": [
-         "Toreando pass",
-         "Body lock pass",
-         "Double under pass"
+         "Stack pass",
+         "Outside camping pass",
+         "Leg drag pass"
         ]
        }
       ]

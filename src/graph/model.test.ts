@@ -346,4 +346,22 @@ describe('import de profils', () => {
         for (const t of m.techniques) expect((t.then ?? []).length, `${id} ${t.name}`).toBeGreaterThan(0);
     }
   });
+
+  it('approche offensive : leg drag ne mène jamais à la montée, passages sans plafond de combos, truck hors vue d\'ensemble', () => {
+    for (const p of bjjMap.positions)
+      for (const r of ['top', 'bottom'] as const)
+        for (const m of p[r]?.moves ?? [])
+          if (m.techniques.some((t) => t.name === 'Leg drag pass')) expect(m.to, `${p.id}:${r}`).not.toBe('mount:top');
+    const hq = mapIndex.get('headquarters')!.top!.moves.filter((m) => m.kind === 'pass');
+    const passNames = new Set(hq.flatMap((m) => m.techniques.map((t) => t.name)));
+    for (const m of hq) for (const t of m.techniques) expect(new Set(t.then).size, t.name).toBe(passNames.size - 1);
+    expect(mapIndex.get('truck')!.overview).toBe(false);
+  });
+
+  it('face aux gardes (dessus) : plus de sorties de garde, et des options probables signalées', () => {
+    for (const p of bjjMap.positions.filter((x) => x.family === 'guard'))
+      expect(p.top!.moves.some((m) => m.kind === 'escape'), p.id).toBe(false);
+    const dlr = mapIndex.get('de-la-riva')!.top!.moves.flatMap((m) => m.techniques);
+    expect(dlr.find((t) => t.name === 'Knee cut pass')?.likely).toBe(true);
+  });
 });

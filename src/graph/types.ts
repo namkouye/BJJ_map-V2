@@ -25,6 +25,8 @@ export interface Technique {
    * un état (`headquarters:top`) ou le nom d'une technique / d'une soumission du même côté.
    */
   then?: string[];
+  /** Option la plus probable face à cette garde (approche offensive) */
+  likely?: boolean;
 }
 
 /**
@@ -55,6 +57,8 @@ export interface Position {
   name: string;
   nameFr: string;
   family: Family;
+  /** false = absente de la vue d'ensemble (ex. truck : attaque depuis la tortue) */
+  overview?: boolean;
   top?: PositionSide;
   bottom?: PositionSide;
 }

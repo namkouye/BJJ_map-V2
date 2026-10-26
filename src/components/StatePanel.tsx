@@ -184,6 +184,7 @@ function TechRow({ from, g }: { from: StateId; g: TechGroup }) {
           <button className="move-dest" onClick={() => select(from, g.item)}>
             <strong>{g.name}</strong>
             <small>
+              {g.tech.likely ? `● ${t('likelyTag')} · ` : ''}
               {multi
                 ? t('destCount', { n: g.moves.length })
                 : g.moves[0].to
@@ -254,7 +255,7 @@ function ItemPanel({ from, itemId }: { from: StateId; itemId: string }) {
 
       {nexts.length > 0 && (
         <section>
-          <h3 style={{ color: '#94a3b8' }}>{t('ifItFails')}</h3>
+          <h3 style={{ color: '#94a3b8' }}>{m.kind === 'pass' ? t('combo') : t('ifItFails')}</h3>
           <ul className="moves">
             {nexts.map((n, i) => {
               if (n.type === 'state') {
@@ -328,7 +329,7 @@ export function StatePanel() {
   const groups = KIND_ORDER.filter((kind) => matchesKinds(kind, kindFilter))
     .map((kind) => ({
       kind,
-      techs: techs.filter((g) => g.kind === kind),
+      techs: techs.filter((g) => g.kind === kind).sort((a, b) => Number(!!b.tech.likely) - Number(!!a.tech.likely)),
       moves: side.moves.filter((m) => m.kind === kind && m.kind === 'submission'),
     }))
     .filter((g) => g.techs.length || g.moves.length);

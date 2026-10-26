@@ -135,7 +135,10 @@ const MapNode = memo(function MapNode({ data }: NodeProps<MapFlowNode>) {
     </div>
   );
 });
-const nodeTypes = { map: MapNode };
+function BandNode({ data }: NodeProps<Node<{ text: string; sub?: boolean }, 'band'>>) {
+  return <div className={`band-label ${data.sub ? 'sub' : ''}`}>{data.text}</div>;
+}
+const nodeTypes = { map: MapNode, band: BandNode };
 
 /* ------------------------------------------------------------------ */
 /* Arêtes                                                              */
@@ -183,61 +186,81 @@ function makeEdge(
 const OV_W = 150;
 const OV_H = 58;
 
-/** Disposition large : gardes à gauche, passage au centre, positions dominantes à droite. */
+/** Disposition large : bandes verticales (gardes classiques, gardes de jambes, passage, positions majeures). */
 const OVERVIEW_POS: Record<string, { col: number; row: number }> = {
-  'closed-guard': { col: 0, row: 0 },
-  'half-guard': { col: 0, row: 1 },
-  'knee-shield': { col: 0, row: 2 },
-  'deep-half-guard': { col: 0, row: 3 },
-  'butterfly-guard': { col: 0, row: 4 },
-  'de-la-riva': { col: 1, row: 0 },
-  'reverse-de-la-riva': { col: 1, row: 1 },
-  'spider-guard': { col: 1, row: 2 },
-  'lasso-guard': { col: 1, row: 3 },
-  'collar-sleeve-guard': { col: 1, row: 4 },
-  'k-guard': { col: 1, row: 5 },
-  dogfight: { col: 0, row: 5 },
-  'x-guard': { col: 2, row: 0.4 },
-  'single-leg-x': { col: 2, row: 1.5 },
-  saddle: { col: 2, row: 2.6 },
-  'fifty-fifty': { col: 2, row: 3.7 },
-  'short-x': { col: 2, row: 4.8 },
-  'false-x': { col: 2, row: 5.9 },
-  'open-guard': { col: 3, row: 0.4 },
-  headquarters: { col: 3, row: 1.5 },
-  'reverse-half-guard': { col: 3, row: 2.6 },
-  turtle: { col: 3, row: 3.7 },
-  truck: { col: 3, row: 4.8 },
-  'front-headlock': { col: 3, row: 5.9 },
-  'side-control': { col: 4, row: 0.2 },
-  'quarter-mount': { col: 4, row: 1.4 },
-  'north-south': { col: 4, row: 2.6 },
-  'knee-on-belly': { col: 4, row: 3.8 },
-  mount: { col: 5, row: 1 },
-  'back-control': { col: 5, row: 3 },
+  // gardes classiques — à gauche : on les passe via l'open guard ; à droite : via HQ
+  'closed-guard': { col: 0, row: 1 },
+  'butterfly-guard': { col: 1, row: 1 },
+  'spider-guard': { col: 2, row: 1 },
+  'lasso-guard': { col: 0, row: 2 },
+  'collar-sleeve-guard': { col: 1, row: 2 },
+  'half-guard': { col: 3.4, row: 1 },
+  'knee-shield': { col: 4.4, row: 1 },
+  'deep-half-guard': { col: 5.4, row: 1 },
+  dogfight: { col: 6.4, row: 1 },
+  'de-la-riva': { col: 3.4, row: 2 },
+  'reverse-de-la-riva': { col: 4.4, row: 2 },
+  // gardes de jambes
+  'k-guard': { col: 0, row: 4.4 },
+  'x-guard': { col: 1.1, row: 4.4 },
+  'single-leg-x': { col: 2.2, row: 4.4 },
+  'short-x': { col: 3.3, row: 4.4 },
+  'false-x': { col: 4.4, row: 4.4 },
+  saddle: { col: 5.5, row: 4.4 },
+  'fifty-fifty': { col: 6.6, row: 4.4 },
+  // passage
+  'open-guard': { col: 1, row: 6.8 },
+  headquarters: { col: 4.4, row: 6.8 },
+  'reverse-half-guard': { col: 6.4, row: 6.8 },
+  // positions majeures
+  'side-control': { col: 0, row: 9.2 },
+  'quarter-mount': { col: 1.1, row: 9.2 },
+  'knee-on-belly': { col: 2.2, row: 9.2 },
+  'north-south': { col: 3.3, row: 9.2 },
+  mount: { col: 4.4, row: 9.2 },
+  'back-control': { col: 5.5, row: 9.2 },
+  turtle: { col: 0, row: 10.4 },
+  'front-headlock': { col: 1.1, row: 10.4 },
 };
 
-/** Variante portrait (téléphone) : deux colonnes, la carte se parcourt en la faisant glisser. */
-const COMPACT_ORDER_LEFT = [
-  'closed-guard', 'half-guard', 'knee-shield', 'deep-half-guard', 'butterfly-guard',
-  'de-la-riva', 'reverse-de-la-riva', 'k-guard', 'spider-guard', 'lasso-guard', 'collar-sleeve-guard',
-  'x-guard', 'single-leg-x', 'short-x', 'false-x', 'saddle', 'fifty-fifty', 'dogfight',
+type BandKey = 'band_classic' | 'band_leg' | 'band_pass' | 'band_major' | 'side_open' | 'side_hq';
+const OVERVIEW_BANDS: Array<{ key: BandKey; col: number; row: number; sub?: boolean }> = [
+  { key: 'band_classic', col: 0, row: 0.1 },
+  { key: 'side_open', col: 0, row: 0.55, sub: true },
+  { key: 'side_hq', col: 3.4, row: 0.55, sub: true },
+  { key: 'band_leg', col: 0, row: 3.5 },
+  { key: 'band_pass', col: 0, row: 5.9 },
+  { key: 'band_major', col: 0, row: 8.3 },
 ];
-const COMPACT_ORDER_RIGHT = [
-  'open-guard', 'headquarters', 'reverse-half-guard', 'side-control', 'north-south', 'knee-on-belly',
-  'mount', 'back-control', 'quarter-mount', 'turtle', 'truck', 'front-headlock',
+
+/** Variante portrait (téléphone) : deux colonnes par bande, la carte se parcourt en la faisant glisser. */
+const COMPACT_BANDS: Array<{ key: BandKey; ids: string[] }> = [
+  { key: 'band_classic', ids: ['closed-guard', 'half-guard', 'butterfly-guard', 'knee-shield', 'spider-guard', 'deep-half-guard', 'lasso-guard', 'dogfight', 'collar-sleeve-guard', 'de-la-riva', 'reverse-de-la-riva'] },
+  { key: 'band_leg', ids: ['k-guard', 'x-guard', 'single-leg-x', 'short-x', 'false-x', 'saddle', 'fifty-fifty'] },
+  { key: 'band_pass', ids: ['open-guard', 'headquarters', 'reverse-half-guard'] },
+  { key: 'band_major', ids: ['side-control', 'quarter-mount', 'knee-on-belly', 'north-south', 'mount', 'back-control', 'turtle', 'front-headlock'] },
 ];
-const OVERVIEW_POS_COMPACT: Record<string, { col: number; row: number }> = {
-  ...Object.fromEntries(COMPACT_ORDER_LEFT.map((id, row) => [id, { col: 0, row }])),
-  ...Object.fromEntries(COMPACT_ORDER_RIGHT.map((id, row) => [id, { col: 1, row }])),
-};
+const COMPACT_ROW = OV_H + 40;
+const OVERVIEW_POS_COMPACT: Record<string, { col: number; row: number }> = {};
+const OVERVIEW_BANDS_COMPACT: Array<{ key: BandKey; row: number }> = [];
+{
+  let row = 0;
+  for (const band of COMPACT_BANDS) {
+    OVERVIEW_BANDS_COMPACT.push({ key: band.key, row });
+    row += 0.7;
+    band.ids.forEach((id, i) => {
+      OVERVIEW_POS_COMPACT[id] = { col: i % 2, row: row + Math.floor(i / 2) };
+    });
+    row += Math.ceil(band.ids.length / 2) + 0.4;
+  }
+}
 
 function overviewPosition(id: string, fallbackIndex: number, compact: boolean): Pos {
   const table = compact ? OVERVIEW_POS_COMPACT : OVERVIEW_POS;
-  const p = table[id] ?? { col: compact ? 2 : 6, row: fallbackIndex };
+  const p = table[id] ?? { col: compact ? 2 : 7.5, row: fallbackIndex };
   return compact
-    ? { x: p.col * (OV_W + 70), y: p.row * (OV_H + 44) }
-    : { x: p.col * (OV_W + 90), y: p.row * (OV_H + 36) };
+    ? { x: p.col * (OV_W + 70), y: p.row * COMPACT_ROW }
+    : { x: p.col * (OV_W + 40), y: p.row * (OV_H + 36) };
 }
 
 const COMPACT_QUERY = '(max-width: 700px)';
@@ -308,7 +331,7 @@ function Inner() {
         return {
           key: g.item,
           title: g.name,
-          subtitle: multi ? t('destCount', { n: g.moves.length }) : g.moves[0].to ? `→ ${i18n.stateName(g.moves[0].to)}` : undefined,
+          subtitle: (g.tech.likely ? `● ${t('likelyTag')} · ` : '') + (multi ? t('destCount', { n: g.moves.length }) : g.moves[0].to ? `→ ${i18n.stateName(g.moves[0].to)}` : ''),
           color: KIND_COLORS[g.kind],
           variant: 'sat',
           chip: i18n.kindShort(g.kind),
@@ -343,7 +366,7 @@ function Inner() {
       if (view === 'focus') {
         for (const g of techGroups(centerId, side)) if (matchesKinds(g.kind, kindFilter)) sats.push(groupSat(g));
         for (const m of side.moves) if (m.kind === 'submission' && matchesKinds(m.kind, kindFilter)) sats.push(finishSat(m));
-        sats.sort((a, b) => KIND_ORDER.indexOf(a.kind!) - KIND_ORDER.indexOf(b.kind!));
+        sats.sort((a, b) => KIND_ORDER.indexOf(a.kind!) - KIND_ORDER.indexOf(b.kind!) || Number(b.subtitle?.startsWith('●') ?? false) - Number(a.subtitle?.startsWith('●') ?? false));
       } else if (item) {
         const m = item.move;
         centerTitle = item.tech ? item.tech.name : (m.finish ?? '');
@@ -389,7 +412,7 @@ function Inner() {
             });
           } else if (r.item.tech) {
             const g = groupOf(centerId, side, r.item.tech.name);
-            if (g) sats.push({ ...groupSat(g), chip: `Plan B · ${i18n.kindShort(g.kind)}` });
+            if (g) sats.push({ ...groupSat(g), chip: g.kind === 'pass' ? 'Combo' : `Plan B · ${i18n.kindShort(g.kind)}` });
           } else {
             sats.push(finishSat(r.item.move, 'Plan B'));
           }
@@ -459,9 +482,28 @@ function Inner() {
         );
       });
     } else if (view === 'overview') {
-      bjjMap.positions.forEach((p, i) => {
+      const visible = bjjMap.positions.filter((p) => p.overview !== false);
+      const ids = new Set(visible.map((p) => p.id));
+      const bands = compact
+        ? OVERVIEW_BANDS_COMPACT.map((b) => ({ key: b.key, sub: false, x: 0, y: b.row * COMPACT_ROW - 6 }))
+        : OVERVIEW_BANDS.map((b) => ({ key: b.key, sub: !!b.sub, x: b.col * (OV_W + 40), y: b.row * (OV_H + 36) }));
+      for (const b of bands) {
+        nodes.push({
+          id: `band-${b.key}`,
+          type: 'band' as never,
+          position: { x: b.x, y: b.y },
+          draggable: false,
+          selectable: false,
+          focusable: false,
+          data: { text: t(b.key), sub: b.sub } as never,
+        });
+      }
+      visible.forEach((p, i) => {
         const side = p[role];
-        const shown = side ? side.moves.filter((m) => matchesKinds(m.kind, kindFilter)).length : 0;
+        const shown = side
+          ? techGroups(sid(p.id, role), side).filter((g) => matchesKinds(g.kind, kindFilter)).length +
+            side.moves.filter((m) => m.kind === 'submission' && matchesKinds(m.kind, kindFilter)).length
+          : 0;
         const target = side ? sid(p.id, role) : sid(p.id, role === 'top' ? 'bottom' : 'top');
         nodes.push({
           id: p.id,
@@ -481,12 +523,17 @@ function Inner() {
         });
       });
       for (const e of overviewEdges(bjjMap, role, kindFilter)) {
+        if (!ids.has(e.from) || !ids.has(e.to)) continue;
         const a = overviewPosition(e.from, 0, compact);
         const b = overviewPosition(e.to, 0, compact);
         const color = KIND_COLORS[e.kinds[0]];
+        const dy = b.y - a.y;
+        const dx = b.x - a.x;
         const handles: [string, string] =
-          Math.abs(a.x - b.x) < 5 ? ['s-r', 't-r'] : a.x < b.x ? ['s-r', 't-l'] : ['s-l', 't-r'];
-        edges.push(makeEdge(`o-${e.from}-${e.to}`, e.from, e.to, color, { handles, width: kindFilter.length ? 2 : 1.3, opacity: kindFilter.length ? 0.75 : 0.4 }));
+          Math.abs(dy) < OV_H / 2
+            ? dx >= 0 ? ['s-r', 't-l'] : ['s-l', 't-r']
+            : dy > 0 ? ['s-b', 't-t'] : ['s-t', 't-b'];
+        edges.push(makeEdge(`o-${e.from}-${e.to}`, e.from, e.to, color, { handles, width: kindFilter.length ? 2 : 1.3, opacity: kindFilter.length ? 0.75 : 0.35 }));
       }
     } else {
       const entries = gameEntries(bjjMap, profile, role);
@@ -565,7 +612,7 @@ function Inner() {
     const t = setTimeout(() => {
       if (view === 'overview' && compact) {
         const zoom = Math.min(1, (window.innerWidth - 24) / (2 * OV_W + 70));
-        setViewport({ x: 12, y: 200, zoom }, { duration: 300 });
+        setViewport({ x: 12, y: 265, zoom }, { duration: 300 });
       } else {
         fitView({ padding: { top: compact ? '190px' : '175px', bottom: '50px', left: '30px', right: '30px' }, maxZoom: 1.05, duration: 300 });
       }

@@ -255,3 +255,17 @@ input:focus, select:focus, textarea:focus, button:focus-visible { outline: 2px s
 .tech-main { display: flex; flex-direction: column; gap: 3px; min-width: 0; flex: 1; }
 .tech-note { color: var(--muted); font-size: 0.78rem; }
 .star-spacer { width: 32px; flex: none; }
+
+/* ---------- Bandes de la vue d'ensemble ---------- */
+.react-flow__node-band { pointer-events: none; }
+.band-label { white-space: nowrap; font-size: 0.95rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); opacity: 0.85; border-bottom: 2px solid var(--border); padding: 0 40px 3px 0; min-width: 260px; }
+.band-label.sub { font-size: 0.72rem; font-weight: 700; color: var(--muted); border-bottom: 0; text-transform: none; letter-spacing: 0.02em; min-width: 0; }
+
+/* ---------- Barre du haut compacte sur téléphone ---------- */
+.mode-switch button, .lang-btn, .top-actions .btn { white-space: nowrap; }
+@media (max-width: 520px) {
+  .profile-chip { display: none; }
+  .topbar { gap: 6px; padding: 8px 10px; }
+  .lang-btn { padding: 6px 8px; }
+  .top-actions .btn { padding: 6px 10px; min-height: 34px; }
+}
