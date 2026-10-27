@@ -13,6 +13,7 @@ import {
   findItem,
   getSide,
   groupOf,
+  directTarget,
   groupPickKeys,
   itemThen,
   matchesKinds,
@@ -165,6 +166,7 @@ function TechRow({ from, g }: { from: StateId; g: TechGroup }) {
   const multi = g.moves.length > 1;
   const on = keys.some((k) => profile.picks.includes(k));
   const note = i18n.note(g.tech);
+  const direct = directTarget(mapIndex, g);
   return (
     <li className="move-card" style={{ borderLeftColor: KIND_COLORS[g.kind] }}>
       <div className="tech-row">
@@ -181,7 +183,7 @@ function TechRow({ from, g }: { from: StateId; g: TechGroup }) {
           <span className="star-spacer" aria-hidden />
         )}
         <div className="tech-main">
-          <button className="move-dest" onClick={() => select(from, g.item)}>
+          <button className="move-dest" onClick={() => (direct ? select(direct) : select(from, g.item))}>
             <strong>{g.name}</strong>
             <small>
               {g.tech.likely ? `● ${t('likelyTag')} · ` : ''}

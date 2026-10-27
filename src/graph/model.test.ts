@@ -299,16 +299,21 @@ describe('import de profils', () => {
     expect(hgTop).toMatch(/Leg weave pass/);
     expect(mapIndex.get('half-guard')!.top!.moves.some((m) => m.kind === 'transition' && m.to === 'knee-on-belly:top')).toBe(false);
     const hgBottom = names('half-guard', 'bottom').join('|');
-    expect(hgBottom).toMatch(/Enclave roll to turtle/);
-    expect(hgBottom).toMatch(/Ninja roll/);
+    expect(hgBottom).not.toMatch(/Enclave roll|Ninja roll|Plan B sweep/);
     expect(hgBottom).toMatch(/John Wayne/);
     expect(hgBottom).not.toMatch(/Dogfight sweep|Back take via underhook|Sweep to mount/);
     expect(names('dogfight', 'bottom').join('|')).toMatch(/Dive under sweep/);
+    expect(names('dogfight', 'top').join('|')).toMatch(/Shotgun armbar|Uchi mata/);
     expect(mapIndex.get('half-guard')!.bottom!.moves.some((m) => m.to === 'dogfight:bottom')).toBe(true);
     const scBottom = mapIndex.get('side-control')!.bottom!;
     expect(scBottom.moves.some((m) => m.finish === 'Guillotine')).toBe(false);
     expect(names('side-control', 'bottom').join('|')).toMatch(/Stiff-arm hip escape/);
     expect(names('side-control', 'bottom').join('|')).not.toMatch(/Underhook reversal/);
+    expect(names('butterfly-guard', 'bottom').join('|')).toMatch(/Shoulder crunch/);
+    expect(names('butterfly-guard', 'bottom').join('|')).not.toMatch(/Hip heist/);
+    expect(names('butterfly-guard', 'top').join('|')).not.toMatch(/Double under/);
+    expect(mapIndex.get('reverse-half-guard')!.family).toBe('guard');
+    expect(mapIndex.get('reverse-half-guard')!.bottom!.moves.some((m) => m.to === 'turtle:bottom')).toBe(false);
     expect(names('k-guard', 'bottom').join('|')).toMatch(/Choi bar/);
     expect(names('de-la-riva', 'bottom').join('|')).toMatch(/De La X/);
     expect(names('de-la-riva', 'bottom').join('|')).toMatch(/Baby bolo/);
@@ -332,7 +337,7 @@ describe('import de profils', () => {
             }
       }
     const hq = mapIndex.get('headquarters')!.top!.moves;
-    expect(hq.every((m) => m.kind === 'pass')).toBe(true);
+    expect(hq.every((m) => m.kind === 'pass' || m.to === 'open-guard:top')).toBe(true);
     const names = new Set(hq.flatMap((m) => m.techniques.map((t) => t.name)));
     for (const n of ['Knee cut pass', 'Leg drag pass', 'Long step pass', 'X-pass', 'Over-under pass', 'Folding pass', 'Leg weave pass', 'Half guard pass']) expect(names.has(n), n).toBe(true);
     const open = new Set(mapIndex.get('open-guard')!.top!.moves.flatMap((m) => m.techniques.map((t) => t.name)));

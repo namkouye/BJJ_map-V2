@@ -117,6 +117,18 @@ export function groupOf(from: StateId, side: PositionSide, name: string): TechGr
   return techGroups(from, side).find((g) => g.name === name);
 }
 
+const norm = (x: string) => x.toLowerCase().replace(/\(.*?\)/g, '').replace(/[^a-z0-9]+/g, ' ').trim();
+
+/** Si la technique porte le nom de sa seule destination (« Mount », « Side control »…), on va directement à la position. */
+export function directTarget(index: MapIndex, g: TechGroup): StateId | undefined {
+  if (g.moves.length !== 1 || !g.moves[0].to) return undefined;
+  const to = g.moves[0].to;
+  const pos = index.get(parseSid(to)?.position ?? '');
+  if (!pos || !getSide(index, to)) return undefined;
+  const n = norm(g.name);
+  return n === norm(pos.name) || n === norm(pos.nameFr) ? to : undefined;
+}
+
 export const groupPickKeys = (from: StateId, g: TechGroup): string[] => g.moves.map((m) => techKey(moveId(from, m), g.name));
 
 export type Next =

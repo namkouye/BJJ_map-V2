@@ -35,6 +35,7 @@ import {
   matchesKinds,
   moveId,
   overviewEdges,
+  directTarget,
   parseSid,
   pickedTechniques,
   resolveRef,
@@ -76,6 +77,8 @@ interface MapNodeData extends Record<string, unknown> {
   item?: string;
   /** techniques que l'étoile du nœud ajoute / retire de mon jeu */
   pickKeys?: string[];
+  /** liste de noms affichée dans le nœud (passages sous Open guard / HQ) */
+  list?: string[];
 }
 type MapFlowNode = Node<MapNodeData, 'map'>;
 
@@ -124,6 +127,13 @@ const MapNode = memo(function MapNode({ data }: NodeProps<MapFlowNode>) {
       )}
       <div className="map-node-title">{d.title}</div>
       {d.subtitle && <div className="map-node-sub">{d.subtitle}</div>}
+      {d.list && d.list.length > 0 && (
+        <ul className="map-node-list">
+          {d.list.map((n) => (
+            <li key={n}>{n}</li>
+          ))}
+        </ul>
+      )}
       <div className="map-node-meta">
         {d.chip && (
           <span className="map-chip" style={{ background: d.chipColor ?? d.color }}>
@@ -200,6 +210,7 @@ const OVERVIEW_POS: Record<string, { col: number; row: number }> = {
   dogfight: { col: 6.4, row: 1 },
   'de-la-riva': { col: 3.4, row: 2 },
   'reverse-de-la-riva': { col: 4.4, row: 2 },
+  'reverse-half-guard': { col: 5.4, row: 2 },
   // gardes de jambes
   'k-guard': { col: 0, row: 4.4 },
   'x-guard': { col: 1.1, row: 4.4 },
@@ -211,16 +222,15 @@ const OVERVIEW_POS: Record<string, { col: number; row: number }> = {
   // passage
   'open-guard': { col: 1, row: 6.8 },
   headquarters: { col: 4.4, row: 6.8 },
-  'reverse-half-guard': { col: 6.4, row: 6.8 },
   // positions majeures
-  'side-control': { col: 0, row: 9.2 },
-  'quarter-mount': { col: 1.1, row: 9.2 },
-  'knee-on-belly': { col: 2.2, row: 9.2 },
-  'north-south': { col: 3.3, row: 9.2 },
-  mount: { col: 4.4, row: 9.2 },
-  'back-control': { col: 5.5, row: 9.2 },
-  turtle: { col: 0, row: 10.4 },
-  'front-headlock': { col: 1.1, row: 10.4 },
+  'side-control': { col: 0, row: 9.9 },
+  'quarter-mount': { col: 1.1, row: 9.9 },
+  'knee-on-belly': { col: 2.2, row: 9.9 },
+  'north-south': { col: 3.3, row: 9.9 },
+  mount: { col: 4.4, row: 9.9 },
+  'back-control': { col: 5.5, row: 9.9 },
+  turtle: { col: 0, row: 11.1 },
+  'front-headlock': { col: 1.1, row: 11.1 },
 };
 
 type BandKey = 'band_classic' | 'band_leg' | 'band_pass' | 'band_major' | 'side_open' | 'side_hq';
@@ -230,14 +240,14 @@ const OVERVIEW_BANDS: Array<{ key: BandKey; col: number; row: number; sub?: bool
   { key: 'side_hq', col: 3.4, row: 0.55, sub: true },
   { key: 'band_leg', col: 0, row: 3.5 },
   { key: 'band_pass', col: 0, row: 5.9 },
-  { key: 'band_major', col: 0, row: 8.3 },
+  { key: 'band_major', col: 0, row: 9.0 },
 ];
 
 /** Variante portrait (téléphone) : deux colonnes par bande, la carte se parcourt en la faisant glisser. */
 const COMPACT_BANDS: Array<{ key: BandKey; ids: string[] }> = [
-  { key: 'band_classic', ids: ['closed-guard', 'half-guard', 'butterfly-guard', 'knee-shield', 'spider-guard', 'deep-half-guard', 'lasso-guard', 'dogfight', 'collar-sleeve-guard', 'de-la-riva', 'reverse-de-la-riva'] },
+  { key: 'band_classic', ids: ['closed-guard', 'half-guard', 'butterfly-guard', 'knee-shield', 'spider-guard', 'deep-half-guard', 'lasso-guard', 'dogfight', 'collar-sleeve-guard', 'de-la-riva', 'reverse-de-la-riva', 'reverse-half-guard'] },
   { key: 'band_leg', ids: ['k-guard', 'x-guard', 'single-leg-x', 'short-x', 'false-x', 'saddle', 'fifty-fifty'] },
-  { key: 'band_pass', ids: ['open-guard', 'headquarters', 'reverse-half-guard'] },
+  { key: 'band_pass', ids: ['open-guard', 'headquarters'] },
   { key: 'band_major', ids: ['side-control', 'quarter-mount', 'knee-on-belly', 'north-south', 'mount', 'back-control', 'turtle', 'front-headlock'] },
 ];
 const COMPACT_ROW = OV_H + 40;
@@ -251,7 +261,7 @@ const OVERVIEW_BANDS_COMPACT: Array<{ key: BandKey; row: number }> = [];
     band.ids.forEach((id, i) => {
       OVERVIEW_POS_COMPACT[id] = { col: i % 2, row: row + Math.floor(i / 2) };
     });
-    row += Math.ceil(band.ids.length / 2) + 0.4;
+    row += Math.ceil(band.ids.length / 2) + 0.4 + (band.key === 'band_pass' ? 1.7 : 0);
   }
 }
 
@@ -328,6 +338,7 @@ function Inner() {
       const groupSat = (g: TechGroup): Sat => {
         const keys = groupPickKeys(centerId, g);
         const multi = g.moves.length > 1;
+        const direct = directTarget(mapIndex, g);
         return {
           key: g.item,
           title: g.name,
@@ -336,7 +347,8 @@ function Inner() {
           variant: 'sat',
           chip: i18n.kindShort(g.kind),
           stars: keys.filter((k) => picks.includes(k)).length,
-          item: g.item,
+          item: direct ? undefined : g.item,
+          target: direct,
           kind: g.kind,
           pickKeys: multi ? undefined : keys,
         };
@@ -522,6 +534,25 @@ function Inner() {
           },
         });
       });
+      for (const gid of ['open-guard', 'headquarters']) {
+        const gp = mapIndex.get(gid);
+        const names = [...new Set((gp?.top?.moves ?? []).filter((m) => m.kind === 'pass').flatMap((m) => m.techniques.map((x) => x.name)))];
+        if (!gp || names.length === 0 || !matchesKinds('pass', kindFilter)) continue;
+        const base = overviewPosition(gid, 0, compact);
+        nodes.push({
+          id: `passes-${gid}`,
+          type: 'map',
+          position: compact ? { x: base.x, y: base.y + COMPACT_ROW * 0.95 } : { x: base.x, y: base.y + OV_H + 14 },
+          draggable: false,
+          data: {
+            title: t('guardPasses'),
+            color: KIND_COLORS.pass,
+            variant: 'pos',
+            list: names.map((n) => n.replace(/ pass$/, '')),
+            target: sid(gid, 'top'),
+          },
+        });
+      }
       for (const e of overviewEdges(bjjMap, role, kindFilter)) {
         if (!ids.has(e.from) || !ids.has(e.to)) continue;
         const a = overviewPosition(e.from, 0, compact);
