@@ -18,7 +18,7 @@ une carte intuitive de position à position, et un outil pour construire **son p
 - **Étoiles** : chaque technique a une étoile ☆ jaune directement sur la carte (et dans le panneau) pour l'ajouter à « Mon jeu » ; sur une soumission, l'étoile prend toutes ses variantes
 - **Passages de garde** : chaque passage n'apparaît qu'une fois ; en cliquant dessus on choisit la position d'arrivée (side control, quarter mount…) et on enchaîne sur un autre passage (combos)
 - **Navigation directe** : une technique qui porte le nom de sa destination (Mount, Side control, Knee on belly, Back control, Front headlock…) mène directement à la position, qui n'existe qu'une seule fois
-- **Vue globale** : les passages de garde sont listés sous Open guard et HQ (reliés dans les deux sens) ; la reverse half guard est dans les gardes
+- **Vue globale** : chaque passage de garde a sa case dans le segment « Passage de garde » (à gauche : via Open guard, à droite : via HQ) ; Open guard et HQ sont reliés dans les deux sens ; la reverse half guard est dans les gardes
 - **Ma carte** : bouton « Ajouter à ma carte » pour épingler des positions de base (HQ, mount…) dans « Mon jeu »
 - **Approche offensive** : face à une garde (dessus) on ne détaille que les passages, avec l'option la plus probable marquée « ● Probable » ; chaque passage propose tous les autres passages en combo, et les positions obtenues sont des *progressions*
 - **Langues** : bouton 🌐 en haut à droite (FR / EN / ES / PT)

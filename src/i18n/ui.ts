@@ -64,6 +64,7 @@ const D = {
   likelyTag: ['Probable', 'Likely', 'Probable', 'Provável'],
   band_classic: ['Gardes classiques', 'Classic guards', 'Guardias clásicas', 'Guardas clássicas'],
   band_leg: ['Gardes de jambes', 'Leg-entanglement guards', 'Guardias de piernas', 'Guardas de pernas'],
+  passTag: ['Passage de garde', 'Guard pass', 'Pase de guardia', 'Passagem de guarda'],
   guardPasses: ['Passages de garde', 'Guard passes', 'Pases de guardia', 'Passagens de guarda'],
   band_pass: ['Passage de garde', 'Guard passing', 'Pase de guardia', 'Passagem de guarda'],
   band_major: ['Positions majeures', 'Major positions', 'Posiciones principales', 'Posições principais'],

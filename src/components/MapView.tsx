@@ -79,6 +79,8 @@ interface MapNodeData extends Record<string, unknown> {
   pickKeys?: string[];
   /** liste de noms affichée dans le nœud (passages sous Open guard / HQ) */
   list?: string[];
+  /** position d'où s'ouvre l'item (passage de garde de la vue globale) */
+  itemFrom?: StateId;
 }
 type MapFlowNode = Node<MapNodeData, 'map'>;
 
@@ -223,14 +225,14 @@ const OVERVIEW_POS: Record<string, { col: number; row: number }> = {
   'open-guard': { col: 1, row: 6.8 },
   headquarters: { col: 4.4, row: 6.8 },
   // positions majeures
-  'side-control': { col: 0, row: 9.9 },
-  'quarter-mount': { col: 1.1, row: 9.9 },
-  'knee-on-belly': { col: 2.2, row: 9.9 },
-  'north-south': { col: 3.3, row: 9.9 },
-  mount: { col: 4.4, row: 9.9 },
-  'back-control': { col: 5.5, row: 9.9 },
-  turtle: { col: 0, row: 11.1 },
-  'front-headlock': { col: 1.1, row: 11.1 },
+  'side-control': { col: 0, row: 10.9 },
+  'quarter-mount': { col: 1.1, row: 10.9 },
+  'knee-on-belly': { col: 2.2, row: 10.9 },
+  'north-south': { col: 3.3, row: 10.9 },
+  mount: { col: 4.4, row: 10.9 },
+  'back-control': { col: 5.5, row: 10.9 },
+  turtle: { col: 0, row: 12.1 },
+  'front-headlock': { col: 1.1, row: 12.1 },
 };
 
 type BandKey = 'band_classic' | 'band_leg' | 'band_pass' | 'band_major' | 'side_open' | 'side_hq';
@@ -240,14 +242,35 @@ const OVERVIEW_BANDS: Array<{ key: BandKey; col: number; row: number; sub?: bool
   { key: 'side_hq', col: 3.4, row: 0.55, sub: true },
   { key: 'band_leg', col: 0, row: 3.5 },
   { key: 'band_pass', col: 0, row: 5.9 },
-  { key: 'band_major', col: 0, row: 9.0 },
+  { key: 'side_open', col: 0, row: 7.6, sub: true },
+  { key: 'side_hq', col: 4.4, row: 7.6, sub: true },
+  { key: 'band_major', col: 0, row: 10.0 },
 ];
+
+/** Un nœud par passage de garde : à gauche s'il part de l'Open guard, à droite s'il part de HQ, au milieu s'il part des deux. */
+interface PassSpot { name: string; via: 'open' | 'both' | 'hq'; wide: { col: number; row: number } }
+const PASS_SPOTS: PassSpot[] = (() => {
+  const names = (id: string) =>
+    new Set((mapIndex.get(id)?.top?.moves ?? []).filter((m) => m.kind === 'pass').flatMap((m) => m.techniques.map((x) => x.name)));
+  const o = names('open-guard');
+  const h = names('headquarters');
+  const all = [...new Set([...o, ...h])];
+  const open = all.filter((n) => o.has(n) && !h.has(n));
+  const both = all.filter((n) => o.has(n) && h.has(n));
+  const hq = all.filter((n) => h.has(n) && !o.has(n));
+  return [
+    ...open.map((name, i): PassSpot => ({ name, via: 'open', wide: { col: i % 3, row: 8.1 + Math.floor(i / 3) * 0.9 } })),
+    ...both.map((name, i): PassSpot => ({ name, via: 'both', wide: { col: 3.3, row: 8.1 + i * 0.9 } })),
+    ...hq.map((name, i): PassSpot => ({ name, via: 'hq', wide: { col: 4.4 + (i % 4), row: 8.1 + Math.floor(i / 4) * 0.9 } })),
+  ];
+})();
+const passNodeId = (name: string) => `pass:${name}`;
 
 /** Variante portrait (téléphone) : deux colonnes par bande, la carte se parcourt en la faisant glisser. */
 const COMPACT_BANDS: Array<{ key: BandKey; ids: string[] }> = [
   { key: 'band_classic', ids: ['closed-guard', 'half-guard', 'butterfly-guard', 'knee-shield', 'spider-guard', 'deep-half-guard', 'lasso-guard', 'dogfight', 'collar-sleeve-guard', 'de-la-riva', 'reverse-de-la-riva', 'reverse-half-guard'] },
   { key: 'band_leg', ids: ['k-guard', 'x-guard', 'single-leg-x', 'short-x', 'false-x', 'saddle', 'fifty-fifty'] },
-  { key: 'band_pass', ids: ['open-guard', 'headquarters'] },
+  { key: 'band_pass', ids: ['open-guard', 'headquarters', ...PASS_SPOTS.map((x) => passNodeId(x.name))] },
   { key: 'band_major', ids: ['side-control', 'quarter-mount', 'knee-on-belly', 'north-south', 'mount', 'back-control', 'turtle', 'front-headlock'] },
 ];
 const COMPACT_ROW = OV_H + 40;
@@ -255,13 +278,14 @@ const OVERVIEW_POS_COMPACT: Record<string, { col: number; row: number }> = {};
 const OVERVIEW_BANDS_COMPACT: Array<{ key: BandKey; row: number }> = [];
 {
   let row = 0;
+  for (const sp of PASS_SPOTS) OVERVIEW_POS[passNodeId(sp.name)] = sp.wide;
   for (const band of COMPACT_BANDS) {
     OVERVIEW_BANDS_COMPACT.push({ key: band.key, row });
     row += 0.7;
     band.ids.forEach((id, i) => {
       OVERVIEW_POS_COMPACT[id] = { col: i % 2, row: row + Math.floor(i / 2) };
     });
-    row += Math.ceil(band.ids.length / 2) + 0.4 + (band.key === 'band_pass' ? 1.7 : 0);
+    row += Math.ceil(band.ids.length / 2) + 0.4 + 0;
   }
 }
 
@@ -501,7 +525,7 @@ function Inner() {
         : OVERVIEW_BANDS.map((b) => ({ key: b.key, sub: !!b.sub, x: b.col * (OV_W + 40), y: b.row * (OV_H + 36) }));
       for (const b of bands) {
         nodes.push({
-          id: `band-${b.key}`,
+          id: `band-${b.key}-${b.y}`,
           type: 'band' as never,
           position: { x: b.x, y: b.y },
           draggable: false,
@@ -534,24 +558,26 @@ function Inner() {
           },
         });
       });
-      for (const gid of ['open-guard', 'headquarters']) {
-        const gp = mapIndex.get(gid);
-        const names = [...new Set((gp?.top?.moves ?? []).filter((m) => m.kind === 'pass').flatMap((m) => m.techniques.map((x) => x.name)))];
-        if (!gp || names.length === 0 || !matchesKinds('pass', kindFilter)) continue;
-        const base = overviewPosition(gid, 0, compact);
-        nodes.push({
-          id: `passes-${gid}`,
-          type: 'map',
-          position: compact ? { x: base.x, y: base.y + COMPACT_ROW * 0.95 } : { x: base.x, y: base.y + OV_H + 14 },
-          draggable: false,
-          data: {
-            title: t('guardPasses'),
-            color: KIND_COLORS.pass,
-            variant: 'pos',
-            list: names.map((n) => n.replace(/ pass$/, '')),
-            target: sid(gid, 'top'),
-          },
-        });
+      if (matchesKinds('pass', kindFilter)) {
+        for (const sp of PASS_SPOTS) {
+          const from = sid(sp.via === 'hq' ? 'headquarters' : 'open-guard', 'top');
+          const g = groupOf(from, getSide(mapIndex, from)!, sp.name);
+          nodes.push({
+            id: passNodeId(sp.name),
+            type: 'map',
+            position: overviewPosition(passNodeId(sp.name), 0, compact),
+            draggable: false,
+            data: {
+              title: sp.name.replace(/ pass$/, ''),
+              subtitle: t('passTag'),
+              color: KIND_COLORS.pass,
+              variant: 'pos',
+              target: from,
+              item: g?.item,
+              itemFrom: from,
+            },
+          });
+        }
       }
       for (const e of overviewEdges(bjjMap, role, kindFilter)) {
         if (!ids.has(e.from) || !ids.has(e.to)) continue;
@@ -663,7 +689,8 @@ function Inner() {
         nodesConnectable={false}
         onNodeClick={(_, n) => {
           const d = n.data as MapNodeData;
-          if (d.item && selected) select(selected, d.item);
+          if (d.item && d.itemFrom) select(d.itemFrom, d.item);
+          else if (d.item && selected) select(selected, d.item);
           else if (d.target) select(d.target);
         }}
         onPaneClick={() => (view === 'focus' ? select(null) : view === 'item' && selected ? select(selected) : undefined)}
