@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { CustomPanel, MyLinks } from './Builder';
 import { mapIndex } from '../data/defaultMap';
 import {
   FAMILY_COLORS,
@@ -15,6 +16,7 @@ import {
   groupOf,
   directTarget,
   groupPickKeys,
+  isCustomId,
   itemThen,
   matchesKinds,
   moveId,
@@ -306,6 +308,10 @@ export function StatePanel() {
   const pos = parsed ? mapIndex.get(parsed.position) : undefined;
   const side = selected ? getSide(mapIndex, selected) : undefined;
 
+  if (selected && isCustomId(selected) && profile.nodes?.some((n) => n.id === selected)) {
+    return <CustomPanel id={selected} />;
+  }
+
   if (!selected || !parsed || !pos || !side) {
     return (
       <div className="state-panel intro">
@@ -390,6 +396,7 @@ export function StatePanel() {
         </section>
       ))}
       {!groups.length && <p className="empty">{kindFilter.length ? t('noOptionsKind') : t('noOptions')}</p>}
+      <MyLinks from={selected} />
       <p className="hint-text">{t('starHint', { name: profile.name })}</p>
     </div>
   );

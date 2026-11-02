@@ -78,6 +78,22 @@ export interface BJJMap {
 }
 
 /** Un "jeu" personnel : techniques favorites + positions de départ. */
+/** Case ajoutée à la main : une position, une garde, un balayage, un passage ou une évasion. */
+export type CustomKind = 'position' | 'guard' | 'sweep' | 'pass' | 'escape';
+export interface CustomNode {
+  id: string;
+  name: string;
+  kind: CustomKind;
+}
+/** Connexion ajoutée à la main entre deux cases (un StateId de la carte ou l'id d'une case perso). */
+export interface CustomLink {
+  id: string;
+  from: string;
+  to: string;
+  kind: MoveKind;
+  name?: string;
+}
+
 export interface Profile {
   id: string;
   name: string;
@@ -89,6 +105,12 @@ export interface Profile {
   custom: Record<string, string[]>;
   /** Positions de base épinglées dans la carte du jeu (ex. HQ, mount) */
   pins?: StateId[];
+  /** Cases ajoutées à la main */
+  nodes?: CustomNode[];
+  /** Connexions ajoutées à la main */
+  links?: CustomLink[];
+  /** Positions déplacées à la main : `ov:<id>` (vue d'ensemble) ou `g:<rôle>:<id>` (mon jeu) */
+  layout?: Record<string, { x: number; y: number }>;
 }
 
 export interface ProfilesExport {

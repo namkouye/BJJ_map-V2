@@ -3,6 +3,12 @@ import { persist } from 'zustand/middleware';
 import { mapIndex } from '../data/defaultMap';
 import {
   addCustom,
+  addLinkTo,
+  addNodeTo,
+  clearLayout,
+  removeLinkFrom,
+  removeNodeFrom,
+  setNodePos,
   getSide,
   newProfile,
   otherRole,
@@ -13,10 +19,13 @@ import {
   togglePick,
   togglePinned,
 } from '../graph/model';
-import type { Lang, MoveKind, Profile, ProfilesExport, Role, StateId } from '../graph/types';
+import type { CustomKind, Lang, MoveKind, Profile, ProfilesExport, Role, StateId } from '../graph/types';
 import { detectLang } from '../i18n/ui';
 
 export type Mode = 'explore' | 'game';
+
+/** Fenêtre de construction ouverte (non persistée) */
+export type Dialog = null | { type: 'node' } | { type: 'link'; from: string };
 
 const uid = () => `p-${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`;
 
@@ -34,6 +43,15 @@ interface State {
   selected: StateId | null;
   /** Types de mouvements affichés ; vide = tous (non persisté) */
   kindFilter: MoveKind[];
+  dialog: Dialog;
+
+  openDialog: (d: Dialog) => void;
+  addNode: (name: string, kind: CustomKind) => string;
+  removeNode: (id: string) => void;
+  addLink: (from: string, to: string, kind: MoveKind, name?: string) => void;
+  removeLink: (id: string) => void;
+  setNodePos: (key: string, pos: { x: number; y: number }) => void;
+  resetLayout: (prefix: string) => void;
 
   setMode: (mode: Mode) => void;
   setLang: (lang: Lang) => void;
@@ -77,6 +95,21 @@ export const useStore = create<State>()(
       selItem: null,
       selected: null,
       kindFilter: [],
+      dialog: null,
+
+      openDialog: (dialog) => set({ dialog }),
+      addNode: (name, kind) => {
+        const id = `c-${Date.now().toString(36)}${Math.random().toString(36).slice(2, 5)}`;
+        set((s) => updateActive(s, (p) => addNodeTo(p, { id, name, kind })));
+        return id;
+      },
+      removeNode: (id) =>
+        set((s) => ({ ...updateActive(s, (p) => removeNodeFrom(p, id)), selected: s.selected === id ? null : s.selected })),
+      addLink: (from, to, kind, name) =>
+        set((s) => updateActive(s, (p) => addLinkTo(p, { id: `l-${Date.now().toString(36)}${Math.random().toString(36).slice(2, 5)}`, from, to, kind, name }))),
+      removeLink: (id) => set((s) => updateActive(s, (p) => removeLinkFrom(p, id))),
+      setNodePos: (key, pos) => set((s) => updateActive(s, (p) => setNodePos(p, key, pos))),
+      resetLayout: (prefix) => set((s) => updateActive(s, (p) => clearLayout(p, prefix))),
 
       setMode: (mode) => set({ mode }),
       setLang: (lang) => set({ lang }),

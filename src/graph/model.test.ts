@@ -1,6 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import { bjjMap, mapIndex } from '../data/defaultMap';
 import {
+  addLinkTo,
+  addNodeTo,
+  clearLayout,
+  removeNodeFrom,
+  setNodePos,
   addCustom,
   entryTarget,
   findItem,
@@ -243,7 +248,7 @@ describe('import de profils', () => {
       profiles: [{ id: 'a', name: ' Jeu 1 ', starts: { top: 'mount:top', bottom: 'oups' }, picks: ['x', 'x'], custom: { m: ['t', 3] } }],
     });
     expect(errors).toEqual([]);
-    expect(profiles[0]).toEqual({ id: 'a', name: 'Jeu 1', starts: { top: 'mount:top' }, picks: ['x'], custom: { m: ['t'] }, pins: [] });
+    expect(profiles[0]).toEqual({ id: 'a', name: 'Jeu 1', starts: { top: 'mount:top' }, picks: ['x'], custom: { m: ['t'] }, pins: [], nodes: [], links: [], layout: {} });
   });
 
   it('rejette les formats invalides', () => {
@@ -368,5 +373,47 @@ describe('import de profils', () => {
       expect(p.top!.moves.some((m) => m.kind === 'escape'), p.id).toBe(false);
     const dlr = mapIndex.get('de-la-riva')!.top!.moves.flatMap((m) => m.techniques);
     expect(dlr.find((t) => t.name === 'Knee cut pass')?.likely).toBe(true);
+  });
+});
+
+describe('cases et connexions ajoutées à la main', () => {
+  it('ajoute, relie, déplace et supprime une case', () => {
+    let p = newProfile('p', 'Test');
+    p = addNodeTo(p, { id: 'c-1', name: '  Lapel guard ', kind: 'guard' });
+    p = addNodeTo(p, { id: 'c-2', name: '', kind: 'sweep' });
+    expect(p.nodes).toEqual([{ id: 'c-1', name: 'Lapel guard', kind: 'guard' }]);
+    p = addLinkTo(p, { id: 'l-1', from: 'closed-guard:bottom', to: 'c-1', kind: 'transition' });
+    p = addLinkTo(p, { id: 'l-2', from: 'closed-guard:bottom', to: 'c-1', kind: 'transition' });
+    p = addLinkTo(p, { id: 'l-3', from: 'c-1', to: 'c-1', kind: 'sweep' });
+    expect(p.links).toHaveLength(1);
+    p = setNodePos(p, 'ov:c-1', { x: 10.4, y: 20.6 });
+    p = setNodePos(p, 'g:bottom:c-1', { x: 1, y: 2 });
+    p = setNodePos(p, 'ov:mount', { x: 5, y: 5 });
+    expect(p.layout!['ov:c-1']).toEqual({ x: 10, y: 21 });
+    expect(Object.keys(clearLayout(p, 'ov:').layout!)).toEqual(['g:bottom:c-1']);
+    p = removeNodeFrom(p, 'c-1');
+    expect(p.nodes).toEqual([]);
+    expect(p.links).toEqual([]);
+    expect(Object.keys(p.layout!)).toEqual(['ov:mount']);
+  });
+
+  it('importe et nettoie les cases, liens et positions', () => {
+    const { profiles } = parseProfiles({
+      profiles: [
+        {
+          name: 'X',
+          picks: [],
+          nodes: [{ id: 'c-a', name: 'Ma garde', kind: 'guard' }, { id: 'zz', name: 'bad', kind: 'guard' }],
+          links: [
+            { id: 'l1', from: 'mount:top', to: 'c-a', kind: 'transition' },
+            { id: 'l2', from: 'mount:top', to: 'c-inconnu', kind: 'transition' },
+          ],
+          layout: { 'ov:c-a': { x: 1, y: 2 }, 'ov:b': { x: 'a', y: 1 } },
+        },
+      ],
+    });
+    expect(profiles[0].nodes).toHaveLength(1);
+    expect(profiles[0].links!.map((l) => l.id)).toEqual(['l1']);
+    expect(profiles[0].layout).toEqual({ 'ov:c-a': { x: 1, y: 2 } });
   });
 });

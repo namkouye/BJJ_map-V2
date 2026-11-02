@@ -36,6 +36,7 @@ import {
   moveId,
   overviewEdges,
   directTarget,
+  isCustomId,
   parseSid,
   pickedTechniques,
   resolveRef,
@@ -44,9 +45,10 @@ import {
   techKey,
   type TechGroup,
 } from '../graph/model';
-import type { Move, MoveKind, Role, StateId } from '../graph/types';
+import type { CustomKind, Move, MoveKind, Role, StateId } from '../graph/types';
 import { useI18n } from '../i18n/useI18n';
 import { useActiveProfile, useStore } from '../store/useStore';
+import { boxInfo, customColor } from './Builder';
 import { KindFilter } from './KindFilter';
 import { RoleToggle } from './RoleToggle';
 
@@ -63,7 +65,7 @@ interface MapNodeData extends Record<string, unknown> {
   title: string;
   subtitle?: string;
   color: string;
-  variant: 'center' | 'sat' | 'finish' | 'pos' | 'game';
+  variant: 'center' | 'sat' | 'finish' | 'pos' | 'game' | 'add';
   chip?: string;
   chipColor?: string;
   stars?: number;
@@ -81,6 +83,8 @@ interface MapNodeData extends Record<string, unknown> {
   list?: string[];
   /** position d'où s'ouvre l'item (passage de garde de la vue globale) */
   itemFrom?: StateId;
+  /** case en pointillé « ＋ » : ouvre la recherche de connexion depuis cette case */
+  addFrom?: string;
 }
 type MapFlowNode = Node<MapNodeData, 'map'>;
 
@@ -235,7 +239,7 @@ const OVERVIEW_POS: Record<string, { col: number; row: number }> = {
   'front-headlock': { col: 1.1, row: 12.1 },
 };
 
-type BandKey = 'band_classic' | 'band_leg' | 'band_pass' | 'band_major' | 'side_open' | 'side_hq';
+type BandKey = 'band_custom' | 'band_classic' | 'band_leg' | 'band_pass' | 'band_major' | 'side_open' | 'side_hq';
 const OVERVIEW_BANDS: Array<{ key: BandKey; col: number; row: number; sub?: boolean }> = [
   { key: 'band_classic', col: 0, row: 0.1 },
   { key: 'side_open', col: 0, row: 0.55, sub: true },
@@ -276,6 +280,7 @@ const COMPACT_BANDS: Array<{ key: BandKey; ids: string[] }> = [
 const COMPACT_ROW = OV_H + 40;
 const OVERVIEW_POS_COMPACT: Record<string, { col: number; row: number }> = {};
 const OVERVIEW_BANDS_COMPACT: Array<{ key: BandKey; row: number }> = [];
+let COMPACT_END = 0;
 {
   let row = 0;
   for (const sp of PASS_SPOTS) OVERVIEW_POS[passNodeId(sp.name)] = sp.wide;
@@ -287,6 +292,7 @@ const OVERVIEW_BANDS_COMPACT: Array<{ key: BandKey; row: number }> = [];
     });
     row += Math.ceil(band.ids.length / 2) + 0.4 + 0;
   }
+  COMPACT_END = row;
 }
 
 function overviewPosition(id: string, fallbackIndex: number, compact: boolean): Pos {
@@ -323,9 +329,54 @@ interface Sat {
   dashed?: boolean;
   kind?: MoveKind;
   pickKeys?: string[];
+  addFrom?: string;
 }
 
 /* ------------------------------------------------------------------ */
+
+/** Place le nœud central puis les satellites en couronne autour. */
+function pushRing(nodes: MapFlowNode[], edges: Edge[], sats: Sat[], center: MapNodeData, compact: boolean) {
+  nodes.push({
+    id: 'center',
+    type: 'map',
+    position: { x: -NODE_W / 2 - 16, y: -NODE_H / 2 - 8 },
+    draggable: false,
+    data: center,
+  });
+  const n = sats.length;
+  const r = Math.max(250, (n * (NODE_W + 28)) / (2 * Math.PI));
+  const rx = compact ? r * 0.64 : r * 1.25;
+  const ry = compact ? r * 1.25 : r * 0.82;
+  const origin: Pos = { x: 0, y: 0 };
+  sats.forEach((s, i) => {
+    const angle = -Math.PI / 2 + (i * 2 * Math.PI) / n;
+    const p: Pos = { x: Math.cos(angle) * rx, y: Math.sin(angle) * ry };
+    nodes.push({
+      id: s.key,
+      type: 'map',
+      position: { x: p.x - NODE_W / 2, y: p.y - NODE_H / 2 },
+      draggable: false,
+      data: {
+        title: s.title,
+        subtitle: s.subtitle,
+        color: s.color,
+        variant: s.variant,
+        chip: s.chip,
+        chipColor: s.color,
+        stars: s.stars,
+        target: s.target,
+        item: s.item,
+        dashed: s.dashed,
+        pickKeys: s.pickKeys,
+        addFrom: s.addFrom,
+      },
+    });
+    const e = makeEdge(`e-${s.key}`, 'center', s.key, s.color, { handles: faceHandles(origin, p), width: s.stars ? 3.2 : 2 });
+    edges.push(s.addFrom || s.dashed ? dashedEdge(e) : e);
+  });
+}
+
+const dashedEdge = (e: Edge): Edge => ({ ...e, style: { ...e.style, strokeDasharray: '6 5' } });
 
 function Inner() {
   const mode = useStore((s) => s.mode);
@@ -343,15 +394,76 @@ function Inner() {
   const kindFilter = useStore((s) => s.kindFilter);
 
   const item = selected && selItem ? findItem(mapIndex, selected, selItem) : undefined;
-  const view: 'overview' | 'focus' | 'item' | 'game' =
-    mode === 'game' ? 'game' : selected && getSide(mapIndex, selected) ? (item ? 'item' : 'focus') : 'overview';
+  const customSel = !!selected && isCustomId(selected) && !!profile.nodes?.some((n) => n.id === selected);
+  const view: 'overview' | 'focus' | 'item' | 'game' | 'custom' =
+    mode === 'game' ? 'game' : customSel ? 'custom' : selected && getSide(mapIndex, selected) ? (item ? 'item' : 'focus') : 'overview';
+  const openDialog = useStore((s) => s.openDialog);
+  const setNodePos = useStore((s) => s.setNodePos);
+  const resetLayout = useStore((s) => s.resetLayout);
 
   const { nodes, edges, empty } = useMemo(() => {
     const nodes: MapFlowNode[] = [];
     const edges: Edge[] = [];
     let empty = false;
 
-    if (view === 'focus' || view === 'item') {
+    const linkSats = (id: string, withIncoming: boolean): Sat[] => {
+      const out: Sat[] = [];
+      for (const l of profile.links ?? []) {
+        if (!matchesKinds(l.kind, kindFilter)) continue;
+        const other = l.from === id ? l.to : withIncoming && l.to === id ? l.from : null;
+        const b = other ? boxInfo(profile, other, i18n) : undefined;
+        if (!other || !b) continue;
+        const incoming = l.to === id;
+        out.push({
+          key: `cl-${l.id}`,
+          title: incoming ? b.title : l.name || b.title,
+          subtitle: incoming ? `← ${l.name ?? ''}`.trim() : l.name ? `→ ${b.title}` : b.sub,
+          color: KIND_COLORS[l.kind],
+          variant: 'sat',
+          chip: incoming ? t('incoming') : `${i18n.kindShort(l.kind)} ✎`,
+          stars: 0,
+          target: other as StateId,
+          dashed: incoming,
+          kind: l.kind,
+        });
+      }
+      return out;
+    };
+    const addSat = (from: string): Sat => ({
+      key: `add-${from}`,
+      title: t('addOption'),
+      subtitle: t('addLinkBtn'),
+      color: '#94a3b8',
+      variant: 'sat',
+      chip: '＋',
+      stars: 0,
+      dashed: true,
+      addFrom: from,
+    });
+    const ovPos = (id: string): Pos => {
+      const o = profile.layout?.[`ov:${id}`];
+      if (o) return o;
+      if (isCustomId(id)) {
+        const i = Math.max(0, (profile.nodes ?? []).findIndex((n) => n.id === id));
+        return compact
+          ? { x: (i % 2) * (OV_W + 70), y: (COMPACT_END + 1 + Math.floor(i / 2)) * COMPACT_ROW }
+          : { x: (8.8 + (i % 2) * 1.1) * (OV_W + 40), y: (0.9 + Math.floor(i / 2) * 0.9) * (OV_H + 36) };
+      }
+      return overviewPosition(id, 0, compact);
+    };
+
+    if (view === 'custom') {
+      const cn = profile.nodes!.find((n) => n.id === selected)!;
+      const sats = [...linkSats(cn.id, true), addSat(cn.id)];
+      pushRing(nodes, edges, sats, {
+        title: cn.name,
+        subtitle: t(`ck_${cn.kind}` as never),
+        color: customColor(cn.kind),
+        variant: 'center',
+        chip: t('customBox'),
+        chipColor: customColor(cn.kind),
+      }, compact);
+    } else if (view === 'focus' || view === 'item') {
       const centerId = selected!;
       const cp = parseSid(centerId)!;
       const pos = mapIndex.get(cp.position)!;
@@ -403,6 +515,7 @@ function Inner() {
         for (const g of techGroups(centerId, side)) if (matchesKinds(g.kind, kindFilter)) sats.push(groupSat(g));
         for (const m of side.moves) if (m.kind === 'submission' && matchesKinds(m.kind, kindFilter)) sats.push(finishSat(m));
         sats.sort((a, b) => KIND_ORDER.indexOf(a.kind!) - KIND_ORDER.indexOf(b.kind!) || Number(b.subtitle?.startsWith('●') ?? false) - Number(a.subtitle?.startsWith('●') ?? false));
+        sats.push(...linkSats(centerId, false), addSat(centerId));
       } else if (item) {
         const m = item.move;
         centerTitle = item.tech ? item.tech.name : (m.finish ?? '');
@@ -466,63 +579,28 @@ function Inner() {
         });
       }
 
-      nodes.push({
-        id: 'center',
-        type: 'map',
-        position: { x: -NODE_W / 2 - 16, y: -NODE_H / 2 - 8 },
-        draggable: false,
-        data: {
-          title: centerTitle,
-          subtitle: centerSub,
-          color: centerColor,
-          variant: 'center',
-          chip: centerChip,
-          chipColor: centerColor,
-          pickKeys: centerKeys,
-        },
-      });
-
-      const n = sats.length;
-      const r = Math.max(250, (n * (NODE_W + 28)) / (2 * Math.PI));
-      const rx = compact ? r * 0.64 : r * 1.25;
-      const ry = compact ? r * 1.25 : r * 0.82;
-      const center: Pos = { x: 0, y: 0 };
-
-      sats.forEach((s, i) => {
-        const angle = -Math.PI / 2 + (i * 2 * Math.PI) / n;
-        const p: Pos = { x: Math.cos(angle) * rx, y: Math.sin(angle) * ry };
-        nodes.push({
-          id: s.key,
-          type: 'map',
-          position: { x: p.x - NODE_W / 2, y: p.y - NODE_H / 2 },
-          draggable: false,
-          data: {
-            title: s.title,
-            subtitle: s.subtitle,
-            color: s.color,
-            variant: s.variant,
-            chip: s.chip,
-            chipColor: s.color,
-            stars: s.stars,
-            target: s.target,
-            item: s.item,
-            dashed: s.dashed,
-            pickKeys: s.pickKeys,
-          },
-        });
-        edges.push(
-          makeEdge(`e-${s.key}`, 'center', s.key, s.color, {
-            handles: faceHandles(center, p),
-            width: s.stars ? 3.2 : 2,
-          }),
-        );
-      });
+      pushRing(nodes, edges, sats, {
+        title: centerTitle,
+        subtitle: centerSub,
+        color: centerColor,
+        variant: 'center',
+        chip: centerChip,
+        chipColor: centerColor,
+        pickKeys: centerKeys,
+      }, compact);
     } else if (view === 'overview') {
       const visible = bjjMap.positions.filter((p) => p.overview !== false);
       const ids = new Set(visible.map((p) => p.id));
+      const custom = profile.nodes ?? [];
       const bands = compact
         ? OVERVIEW_BANDS_COMPACT.map((b) => ({ key: b.key, sub: false, x: 0, y: b.row * COMPACT_ROW - 6 }))
         : OVERVIEW_BANDS.map((b) => ({ key: b.key, sub: !!b.sub, x: b.col * (OV_W + 40), y: b.row * (OV_H + 36) }));
+      if (custom.length)
+        bands.push(
+          compact
+            ? { key: 'band_custom', sub: false, x: 0, y: COMPACT_END * COMPACT_ROW - 6 }
+            : { key: 'band_custom', sub: false, x: 8.8 * (OV_W + 40), y: 0.1 * (OV_H + 36) },
+        );
       for (const b of bands) {
         nodes.push({
           id: `band-${b.key}-${b.y}`,
@@ -534,7 +612,7 @@ function Inner() {
           data: { text: t(b.key), sub: b.sub } as never,
         });
       }
-      visible.forEach((p, i) => {
+      visible.forEach((p) => {
         const side = p[role];
         const shown = side
           ? techGroups(sid(p.id, role), side).filter((g) => matchesKinds(g.kind, kindFilter)).length +
@@ -544,8 +622,8 @@ function Inner() {
         nodes.push({
           id: p.id,
           type: 'map',
-          position: overviewPosition(p.id, i, compact),
-          draggable: false,
+          position: ovPos(p.id),
+          draggable: true,
           data: {
             title: p.name,
             subtitle: lang === 'en' ? undefined : i18n.posName(p),
@@ -565,8 +643,8 @@ function Inner() {
           nodes.push({
             id: passNodeId(sp.name),
             type: 'map',
-            position: overviewPosition(passNodeId(sp.name), 0, compact),
-            draggable: false,
+            position: ovPos(passNodeId(sp.name)),
+            draggable: true,
             data: {
               title: sp.name.replace(/ pass$/, ''),
               subtitle: t('passTag'),
@@ -579,10 +657,40 @@ function Inner() {
           });
         }
       }
+      for (const cn of custom) {
+        nodes.push({
+          id: cn.id,
+          type: 'map',
+          position: ovPos(cn.id),
+          draggable: true,
+          data: {
+            title: cn.name,
+            subtitle: t(`ck_${cn.kind}` as never),
+            color: customColor(cn.kind),
+            variant: 'pos',
+            chip: t('customBox'),
+            chipColor: customColor(cn.kind),
+            target: cn.id as StateId,
+          },
+        });
+      }
+      for (const l of profile.links ?? []) {
+        if (!matchesKinds(l.kind, kindFilter)) continue;
+        const ends = [l.from, l.to].map((x) => {
+          if (isCustomId(x)) return custom.some((c) => c.id === x) ? x : null;
+          const pp = parseSid(x);
+          const otherCustom = isCustomId(l.from) || isCustomId(l.to);
+          return pp && (pp.role === role || otherCustom) && ids.has(pp.position) ? pp.position : null;
+        });
+        if (!ends[0] || !ends[1] || ends[0] === ends[1]) continue;
+        const a = ovPos(ends[0]);
+        const b = ovPos(ends[1]);
+        edges.push(dashedEdge(makeEdge(`ol-${l.id}`, ends[0], ends[1], KIND_COLORS[l.kind], { handles: faceHandles(a, b), width: 2, label: l.name })));
+      }
       for (const e of overviewEdges(bjjMap, role, kindFilter)) {
         if (!ids.has(e.from) || !ids.has(e.to)) continue;
-        const a = overviewPosition(e.from, 0, compact);
-        const b = overviewPosition(e.to, 0, compact);
+        const a = ovPos(e.from);
+        const b = ovPos(e.to);
         const color = KIND_COLORS[e.kinds[0]];
         const dy = b.y - a.y;
         const dx = b.x - a.x;
@@ -598,7 +706,7 @@ function Inner() {
       const start = profile.starts[role];
       const pins = (profile.pins ?? []).filter((x) => parseSid(x)?.role === role && getSide(mapIndex, x));
       const depth = layerGame(entries, start, pins);
-      const labels = new Map<string, { title: string; subtitle?: string; stateRole?: Role; finish?: boolean }>();
+      const labels = new Map<string, { title: string; subtitle?: string; stateRole?: Role; finish?: boolean; custom?: CustomKind }>();
       for (const e of entries) {
         const f = parseSid(e.from)!;
         labels.set(e.from, {
@@ -624,6 +732,21 @@ function Inner() {
         const pp = parseSid(x)!;
         labels.set(x, { title: mapIndex.get(pp.position)?.name ?? x, subtitle: i18n.sideTitle(x), stateRole: pp.role });
       }
+      // cases et connexions ajoutées à la main : elles prolongent les cases déjà dans le jeu
+      const links = profile.links ?? [];
+      for (let pass = 0, changed = true; changed && pass < 12; pass++) {
+        changed = false;
+        for (const l of links) {
+          if (!depth.has(l.from) || depth.has(l.to)) continue;
+          const b = boxInfo(profile, l.to, i18n);
+          if (!b) continue;
+          const pp = parseSid(l.to);
+          labels.set(l.to, { title: b.title, subtitle: b.sub, stateRole: pp?.role, custom: b.custom });
+          depth.set(l.to, depth.get(l.from)! + 1);
+          changed = true;
+        }
+      }
+      const gpos = new Map<string, Pos>();
       // colonnes par profondeur
       const columns = new Map<number, string[]>();
       for (const [id, d] of depth) columns.set(d, [...(columns.get(d) ?? []), id]);
@@ -633,19 +756,22 @@ function Inner() {
         ids.forEach((id, i) => {
           const l = labels.get(id)!;
           const stars = entries.filter((e) => e.from === id).reduce((a, e) => a + e.names.length, 0);
-          const otherSide = !l.finish && l.stateRole !== role && !sources.has(id);
+          const otherSide = !l.finish && !l.custom && l.stateRole !== role && !sources.has(id);
+          const basePos = { x: d * (NODE_W + 130), y: -total / 2 + i * (NODE_H + 28) };
+          const pos = profile.layout?.[`g:${role}:${id}`] ?? basePos;
+          gpos.set(id, pos);
           nodes.push({
             id,
             type: 'map',
-            position: { x: d * (NODE_W + 130), y: -total / 2 + i * (NODE_H + 28) },
-            draggable: false,
+            position: pos,
+            draggable: true,
             data: {
               title: l.title,
               subtitle: l.subtitle,
-              color: l.finish ? KIND_COLORS.submission : l.stateRole ? ROLE_COLORS[l.stateRole] : '#94a3b8',
+              color: l.finish ? KIND_COLORS.submission : l.custom ? customColor(l.custom) : l.stateRole ? ROLE_COLORS[l.stateRole] : '#94a3b8',
               variant: l.finish ? 'finish' : 'game',
-              chip: l.finish ? i18n.kindShort('submission') : otherSide ? `↪ ${GAME_LABELS[l.stateRole!]}` : pins.includes(id) ? '📍' : undefined,
-              chipColor: l.finish ? KIND_COLORS.submission : ROLE_COLORS[l.stateRole ?? role],
+              chip: l.finish ? i18n.kindShort('submission') : l.custom ? t(`ck_${l.custom}` as never) : otherSide ? `↪ ${GAME_LABELS[l.stateRole!]}` : pins.includes(id) ? '📍' : undefined,
+              chipColor: l.finish ? KIND_COLORS.submission : l.custom ? customColor(l.custom) : ROLE_COLORS[l.stateRole ?? role],
               start: id === start,
               dashed: otherSide,
               selected: id === selected,
@@ -659,12 +785,30 @@ function Inner() {
         const label = e.names.length > 2 ? `${e.names.slice(0, 2).join(' · ')} +${e.names.length - 2}` : e.names.join(' · ');
         edges.push(makeEdge(`g-${e.id}`, e.from, entryTarget(e), KIND_COLORS[e.move.kind], { label, width: 2.4 }));
       }
+      for (const l of links) {
+        if (!depth.has(l.from) || !depth.has(l.to)) continue;
+        edges.push(dashedEdge(makeEdge(`gl-${l.id}`, l.from, l.to, KIND_COLORS[l.kind], { label: l.name, width: 2.4 })));
+      }
+      // case en pointillé « ＋ » à côté de la case sélectionnée : chercher / créer la suite
+      const addOn = selected && gpos.has(selected) ? selected : start && gpos.has(start) ? start : undefined;
+      const sp = addOn ? gpos.get(addOn) : undefined;
+      if (addOn && sp && !addOn.startsWith('fin:')) {
+        const selected = addOn;
+        nodes.push({
+          id: `add-${selected}`,
+          type: 'map',
+          position: { x: sp.x + NODE_W + 12, y: sp.y + (NODE_H - 38) / 2 },
+          draggable: false,
+          data: { title: t('addOption'), color: '#94a3b8', variant: 'add', dashed: true, addFrom: selected },
+        });
+        edges.push(dashedEdge(makeEdge(`gadd-${selected}`, selected, `add-${selected}`, '#94a3b8', { handles: ['s-r', 't-l'], width: 1.6 })));
+      }
     }
     return { nodes, edges, empty };
   }, [view, selected, selItem, role, profile, compact, kindFilter, lang]);
 
   // Recadre la vue quand le mode, la sélection ou le contenu change.
-  const viewKey = `${compact ? 'c' : 'w'}:${kindFilter.join('+')}:${view}:${view === 'focus' || view === 'item' ? `${selected}|${selItem}` : ''}:${view === 'overview' || view === 'game' ? role : ''}:${nodes.length}`;
+  const viewKey = `${compact ? 'c' : 'w'}:${kindFilter.join('+')}:${view}:${view === 'focus' || view === 'item' || view === 'custom' ? `${selected}|${selItem}` : ''}:${view === 'overview' || view === 'game' ? role : ''}:${nodes.length}`;
   useEffect(() => {
     const t = setTimeout(() => {
       if (view === 'overview' && compact) {
@@ -685,15 +829,22 @@ function Inner() {
         nodes={nodes}
         edges={edges}
         nodeTypes={nodeTypes}
-        nodesDraggable={false}
+        nodesDraggable={view === 'overview' || view === 'game'}
         nodesConnectable={false}
+        nodeDragThreshold={4}
+        onNodeDragStop={(_, n) => {
+          if (n.id.startsWith('band-') || n.id.startsWith('add-')) return;
+          if (view === 'overview') setNodePos(`ov:${n.id}`, n.position);
+          else if (view === 'game') setNodePos(`g:${role}:${n.id}`, n.position);
+        }}
         onNodeClick={(_, n) => {
           const d = n.data as MapNodeData;
-          if (d.item && d.itemFrom) select(d.itemFrom, d.item);
+          if (d.addFrom) openDialog({ type: 'link', from: d.addFrom });
+          else if (d.item && d.itemFrom) select(d.itemFrom, d.item);
           else if (d.item && selected) select(selected, d.item);
           else if (d.target) select(d.target);
         }}
-        onPaneClick={() => (view === 'focus' ? select(null) : view === 'item' && selected ? select(selected) : undefined)}
+        onPaneClick={() => (view === 'focus' || view === 'custom' ? select(null) : view === 'item' && selected ? select(selected) : undefined)}
         minZoom={0.15}
         maxZoom={2}
         colorMode="dark"
@@ -706,12 +857,20 @@ function Inner() {
 
       <div className="graph-top">
         <RoleToggle />
-        {(view === 'overview' || view === 'focus') && <KindFilter />}
+        {(view === 'overview' || view === 'focus' || view === 'custom') && <KindFilter />}
         {view === 'focus' && (
           <div className="pill">
             <span>
               {mapIndex.get(selectedParsed!.position)?.name} · {ROLE_LABELS[selectedParsed!.role]}
             </span>
+            <button className="btn small" onClick={() => select(null)}>
+              {t('overviewBtn')}
+            </button>
+          </div>
+        )}
+        {view === 'custom' && selected && (
+          <div className="pill">
+            <span>{boxInfo(profile, selected, i18n)?.title}</span>
             <button className="btn small" onClick={() => select(null)}>
               {t('overviewBtn')}
             </button>
@@ -728,7 +887,7 @@ function Inner() {
           </div>
         )}
         {view === 'overview' && (
-          <div className="pill hint">{t('overviewHint')}</div>
+          <div className="pill hint">{t('overviewHint')} · {t('dragHint')}</div>
         )}
         {view === 'game' && (
           <div className="pill">
@@ -738,6 +897,19 @@ function Inner() {
           </div>
         )}
       </div>
+
+      {(view === 'overview' || view === 'game') && (
+        <div className="fab-group">
+          {Object.keys(profile.layout ?? {}).some((k) => k.startsWith(view === 'overview' ? 'ov:' : `g:${role}:`)) && (
+            <button className="btn small" onClick={() => resetLayout(view === 'overview' ? 'ov:' : `g:${role}:`)}>
+              ⟲ {t('resetLayout')}
+            </button>
+          )}
+          <button className="fab" aria-label={t('addBox')} title={t('addBox')} onClick={() => openDialog({ type: 'node' })}>
+            ＋
+          </button>
+        </div>
+      )}
 
       {view === 'game' && empty && (
         <div className="empty-overlay">

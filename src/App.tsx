@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Dialogs, NextBox } from './components/Builder';
 import { DataPanel } from './components/DataPanel';
 import { GamePanel } from './components/GamePanel';
 import { MapView } from './components/MapView';
@@ -88,6 +89,11 @@ export default function App() {
         <aside className="col col-detail">
           <div className="panel">
             {mode === 'game' && <GamePanel />}
+            {mode === 'game' && (
+              <div className="game-panel next-wrap">
+                <NextBox />
+              </div>
+            )}
             {(mode === 'explore' || selected) && <StatePanel />}
           </div>
         </aside>
@@ -96,6 +102,7 @@ export default function App() {
       {showData && (
         <DataPanel onClose={() => setShowData(false)} canInstall={canInstall} onInstall={install} />
       )}
+      <Dialogs />
       <ReloadPrompt />
     </div>
   );

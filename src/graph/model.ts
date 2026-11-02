@@ -8,6 +8,9 @@ import type {
   Role,
   StateId,
   Technique,
+  CustomKind,
+  CustomLink,
+  CustomNode,
 } from './types';
 
 /* ------------------------------------------------------------------ */
@@ -256,6 +259,51 @@ export function newProfile(id: string, name: string): Profile {
   return { id, name, starts: {}, picks: [], custom: {}, pins: [] };
 }
 
+/* --- Cases et connexions ajoutées à la main --- */
+
+export const isCustomId = (id: string): boolean => id.startsWith('c-');
+export const CUSTOM_KINDS: CustomKind[] = ['position', 'guard', 'sweep', 'pass', 'escape'];
+export const LINK_KINDS: MoveKind[] = ['transition', 'sweep', 'pass', 'escape'];
+
+export function addNodeTo(profile: Profile, node: CustomNode): Profile {
+  const name = node.name.trim();
+  if (!name) return profile;
+  return { ...profile, nodes: [...(profile.nodes ?? []), { ...node, name }] };
+}
+
+export function removeNodeFrom(profile: Profile, id: string): Profile {
+  const layout = { ...(profile.layout ?? {}) };
+  for (const k of Object.keys(layout)) if (k.endsWith(`:${id}`) || k === `ov:${id}`) delete layout[k];
+  return {
+    ...profile,
+    nodes: (profile.nodes ?? []).filter((n) => n.id !== id),
+    links: (profile.links ?? []).filter((l) => l.from !== id && l.to !== id),
+    layout,
+  };
+}
+
+export function addLinkTo(profile: Profile, link: CustomLink): Profile {
+  if (link.from === link.to) return profile;
+  const name = link.name?.trim() || undefined;
+  const links = profile.links ?? [];
+  if (links.some((l) => l.from === link.from && l.to === link.to && l.kind === link.kind && l.name === name)) return profile;
+  return { ...profile, links: [...links, { ...link, name }] };
+}
+
+export function removeLinkFrom(profile: Profile, id: string): Profile {
+  return { ...profile, links: (profile.links ?? []).filter((l) => l.id !== id) };
+}
+
+export function setNodePos(profile: Profile, key: string, pos: { x: number; y: number }): Profile {
+  return { ...profile, layout: { ...(profile.layout ?? {}), [key]: { x: Math.round(pos.x), y: Math.round(pos.y) } } };
+}
+
+export function clearLayout(profile: Profile, prefix: string): Profile {
+  const layout = { ...(profile.layout ?? {}) };
+  for (const k of Object.keys(layout)) if (k.startsWith(prefix)) delete layout[k];
+  return { ...profile, layout };
+}
+
 export function togglePick(profile: Profile, key: string): Profile {
   const picks = profile.picks.includes(key)
     ? profile.picks.filter((k) => k !== key)
@@ -376,6 +424,30 @@ export function layerGame(entries: GameEntry[], start?: StateId, extras: StateId
 /* Import de profils                                                   */
 /* ------------------------------------------------------------------ */
 
+const KINDS_OK: MoveKind[] = ['pass', 'sweep', 'transition', 'escape', 'submission'];
+function sanitizeNodes(raw: unknown): CustomNode[] {
+  if (!Array.isArray(raw)) return [];
+  return raw.filter(
+    (n): n is CustomNode =>
+      !!n && typeof n.id === 'string' && isCustomId(n.id) && typeof n.name === 'string' && !!n.name.trim() && CUSTOM_KINDS.includes(n.kind),
+  );
+}
+function sanitizeLinks(raw: unknown, nodes: CustomNode[]): CustomLink[] {
+  if (!Array.isArray(raw)) return [];
+  const ok = (id: unknown): boolean =>
+    typeof id === 'string' && (isCustomId(id) ? nodes.some((n) => n.id === id) : !!parseSid(id));
+  return raw.filter(
+    (l): l is CustomLink => !!l && typeof l.id === 'string' && ok(l.from) && ok(l.to) && KINDS_OK.includes(l.kind) && (l.name === undefined || typeof l.name === 'string'),
+  );
+}
+function sanitizeLayout(raw: unknown): Record<string, { x: number; y: number }> {
+  const out: Record<string, { x: number; y: number }> = {};
+  if (raw && typeof raw === 'object')
+    for (const [k, v] of Object.entries(raw as Record<string, { x?: unknown; y?: unknown }>))
+      if (v && Number.isFinite(v.x) && Number.isFinite(v.y)) out[k] = { x: v.x as number, y: v.y as number };
+  return out;
+}
+
 export function parseProfiles(raw: unknown): { profiles: Profile[]; errors: string[] } {
   const file = raw as { profiles?: unknown };
   if (!file || !Array.isArray(file.profiles)) {
@@ -408,6 +480,9 @@ export function parseProfiles(raw: unknown): { profiles: Profile[]; errors: stri
       picks: [...new Set(p.picks)],
       custom,
       pins: Array.isArray(p.pins) ? [...new Set(p.pins.filter((x): x is string => typeof x === 'string' && !!parseSid(x)))] : [],
+      nodes: sanitizeNodes(p.nodes),
+      links: sanitizeLinks(p.links, sanitizeNodes(p.nodes)),
+      layout: sanitizeLayout(p.layout),
     });
   });
   return { profiles, errors };

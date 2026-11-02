@@ -110,3 +110,11 @@ placer une nouvelle position sur la vue d'ensemble, complétez `OVERVIEW_POS` da
 ## Licence
 
 MIT
+
+## Construire sa propre carte
+
+- **Bouton ＋** (vue d'ensemble et « Mon jeu ») : ajoute une case à la main — position, garde, sweep, passage de garde ou évasion. Elle apparaît dans la bande « Mes ajouts » de la vue d'ensemble.
+- **Connexions** : en cliquant sur une case, une case en pointillé « ＋ Ajouter » ouvre une recherche (suggestions, position/garde existante, case perso, ou création à la volée) pour la relier ; type de lien et nom de technique au choix.
+- **Mon jeu** : depuis la position de départ, le bloc « Construire la suite » propose les prochaines techniques (probables d'abord), avec recherche, et une « connexion libre » vers n'importe quelle case.
+- **Déplacer les cases** : glissez-les sur la vue d'ensemble et sur « Mon jeu » ; la disposition est mémorisée par profil, avec un bouton « Réorganiser » pour la remettre à zéro.
+- Tout est enregistré dans le profil (export / import inclus).

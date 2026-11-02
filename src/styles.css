@@ -272,3 +272,33 @@ input:focus, select:focus, textarea:focus, button:focus-visible { outline: 2px s
 
 .map-node-list { margin: 4px 0 0; padding: 0 0 0 14px; font-size: 0.68rem; line-height: 1.3; text-align: left; }
 .map-node.pos:has(.map-node-list) { min-height: 0; }
+
+/* --- Construction : cases ajoutées, connexions, déplacement --- */
+.fab-group { position: absolute; right: 14px; bottom: 74px; z-index: 6; display: flex; align-items: center; gap: 8px; }
+.fab { width: 52px; height: 52px; border-radius: 50%; border: none; background: var(--accent); color: #0b1220; font-size: 1.7rem; font-weight: 700; line-height: 1; cursor: pointer; box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45); }
+.fab:hover { filter: brightness(1.1); }
+.map-node.add { width: 110px; min-height: 38px; padding: 6px 8px; text-align: center; border-style: dashed; background: transparent; color: var(--muted); }
+.map-node.add .map-node-title { font-size: 0.8rem; }
+.map-node.dashed { border-style: dashed; }
+.builder-form { display: flex; flex-direction: column; gap: 12px; }
+.builder-form label { display: flex; flex-direction: column; gap: 4px; font-size: 0.85rem; color: var(--muted); }
+.builder-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.builder-actions { display: flex; justify-content: flex-end; gap: 8px; }
+.builder-h { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); margin-top: 4px; }
+.kind-pick { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip-btn { border: 2px solid var(--border); background: var(--panel-2); border-radius: 999px; padding: 6px 14px; cursor: pointer; }
+.chip-btn.on { background: var(--accent); color: #0b1220; font-weight: 600; }
+.cand-list { display: flex; flex-direction: column; gap: 6px; max-height: 280px; overflow: auto; }
+.cand { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 10px; width: 100%; text-align: left; background: var(--panel-2); border: 1px solid var(--border); border-left: 4px solid var(--border); border-radius: 8px; padding: 8px 10px; cursor: pointer; }
+.cand:hover { border-color: var(--accent); }
+.cand small { color: var(--muted); font-size: 0.76rem; }
+.cand.picked { opacity: 0.75; }
+.cand-add { margin-left: auto; font-size: 0.78rem; color: var(--accent); }
+.create-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.create-row select { width: auto; }
+.next-wrap { padding-top: 4px; }
+.next-box { display: flex; flex-direction: column; gap: 8px; }
+.next-from { font-size: 0.85rem; color: var(--muted); }
+.my-links { margin-top: 12px; display: flex; flex-direction: column; gap: 8px; }
+.my-links h3 { font-size: 0.8rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
+.react-flow__node.draggable { cursor: grab; }
